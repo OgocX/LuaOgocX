@@ -20,13 +20,14 @@ function RankingsView.PrintRankings()
 	for i in ipairs(RANKING_VIEW_INFOS) do
 		if RANKING_VIEW_INFOS[i].Ranking_Value == RANKING_VIEW_NEXT
 		then
+			local db = DataBase.getDb()
 			local Query = string.format("SELECT TOP %d %s, %s FROM %s ORDER BY %s %s", RANKING_VIEW_INFOS[i].Ranking_Count, RANKING_VIEW_INFOS[i].Ranking_Column, RANKING_VIEW_INFOS[i].Ranking_User, RANKING_VIEW_INFOS[i].Ranking_Table, RANKING_VIEW_INFOS[i].Ranking_Column, RANKING_VIEW_INFOS[i].Ranking_Type)
-			local ret = DataBaseExec(Query)
+			local ret = db:exec(Query)
 			
 			if ret == 0
 			then
 				LogAddC(2,string.format("Não foi possível executar a query: %s", Query))
-				DataBaseClear()
+				db:clear()
 				return
 			end
 			
@@ -36,21 +37,21 @@ function RankingsView.PrintRankings()
 			local Ranking = 1
 
 			while Ranking do
-				local nFecth = DataBaseFetch()
+				local nFecth = db:fetch()
 				
 				if nFecth == SQL_NO_DATA
 				then
 					break
 				end
 				
-				SendMessageGlobal(string.format("%dº %s - (%d)", Ranking, DataBaseGetStr(RANKING_VIEW_INFOS[i].Ranking_User), DataBaseGetInt(RANKING_VIEW_INFOS[i].Ranking_Column)), 0)
+				SendMessageGlobal(string.format("%dº %s - (%d)", Ranking, db:getStr(RANKING_VIEW_INFOS[i].Ranking_User), db:getInt(RANKING_VIEW_INFOS[i].Ranking_Column)), 0)
 				
 				Ranking = Ranking + 1
 			end
 			
 			SendMessageGlobal(string.format("==================="), 0)
 			
-			DataBaseClear()
+			db:clear()
 		end
 	end
 	
