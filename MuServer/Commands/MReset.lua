@@ -217,7 +217,7 @@ function MReset.Command(aIndex)
 	local rel = MRESET_RELOGAR[vip]
 	
 	--Reward coins
-	for i = 1 , #MRESET_AMOUNT_TABLES do
+	for i = 0 , #MRESET_AMOUNT_TABLES do
 		DataBase.SetAddValue(MRESET_AMOUNT_TABLES[i], MRESET_AMOUNT_COLUNS[i], MRESET_AMOUNT[vip][i], MRESET_AMOUNT_WHERE[i], player:getAccountID())
 	end
 	

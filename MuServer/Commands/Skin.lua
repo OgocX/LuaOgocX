@@ -26,8 +26,9 @@ function Skin.Command(aIndex, Arguments)
 	end
 	
 	local Skin = command:getNumber(Arguments, 2)
+	local player_target = User.new(TargetIndex)
 	
-	player:setSkin(Skin)
+	player_target:setSkin(Skin)
 	ViewportCreate(TargetIndex)
 	
 	

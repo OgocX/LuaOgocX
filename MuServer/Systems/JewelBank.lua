@@ -8,7 +8,7 @@ JewelBank_Packet = 0x01
 JewelBank_Table = "MEMB_INFO"
 
 --Where da conta onde fica as informações
-JewelBank_Where = JewelBank_Where
+JewelBank_Where = "memb___id"
 
 -- ListID (tem que ser o mesmo da configuração no cliente)(tem que começar no 1 e não pode pular)
 -- Index da jóia unitaria
@@ -54,14 +54,18 @@ JewelBank_Messages["Spn"] = {
 -- INÍCIO DO CÓDIGO, SÓ MEXA SE SOUBER O QUE ESTÁ FAZENDO --
 JewelBank = {}
 
+function JewelBank.CreateColumns()
+	for i in ipairs(JewelBank_Jewels) do
+		DataBase.CreateColumn(JewelBank_Table, JewelBank_Jewels[i].Coluna, "INT NOT NULL DEFAULT 0")
+	end
+end
+
 function JewelBank.Init()
 	if not JewelBank_Ativado then return end
 	
 	GameServerFunctions.GameServerProtocol(JewelBank.Protocol)
 	
-	for i in ipairs(JewelBank_Jewels) do
-		DataBase.CreateColumn(JewelBank_Table, JewelBank_Jewels[i].Coluna, "INT NOT NULL DEFAULT 0")
-	end
+	Timer.TimeOut(5, JewelBank.CreateColumns)
 end
 
 function JewelBank.Protocol(aIndex, Packet, PacketName)

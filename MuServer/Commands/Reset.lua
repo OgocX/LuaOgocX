@@ -233,7 +233,7 @@ function Reset.Command(aIndex, Arguments)
 		SendMessage(string.format(RESET_MESSAGES[Language][11]), aIndex, 1)
 	end
 	
-	pl = nil
+	player = nil
 end
 
 function Reset.Make(player)
