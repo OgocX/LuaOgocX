@@ -1,0 +1,38 @@
+======================================
+===  CHAOSBOX GENESIS PLAYER LUA  ====
+======================================
+
+NOTE:
+
+you need declare function by aIndex example:
+
+playerChaosBoxGenesis = ChaosBoxGenesis.new(aIndex)
+playerTargetChaosBoxGenesis = ChaosBoxGenesis.new(TargetIndex)
+
+playerChaosBoxGenesis:isItem(1)
+playerTargetChaosBoxGenesis:isItem(1)
+
+-------------------
+
+OBS:
+in the example above, it is not mandatory to use with TargetIndex, I just left an example as I would use for 2 or 3 or 4 index! you can use it only for an aIndex or within a FOR
+you need to use ":" for every trade function you want to use, see the examples below
+
+-------------------
+
+getIndex(slot) -> return ItemIndex on item by slot, if return -1 don't have item
+isItem(slot) -> return 1 if this slot have item
+isExc(slot) -> return 1 if this slot have item exc
+getLevel(slot) -> returns level of the item through the slot
+getName(slot) -> returns name of the item through the slot
+getSection(slot) -> returns section of the item through the slot
+getIndex2(slot) -> returns index of the item through the slot
+getSerial(slot) -> returns serial of the item through the slot
+getItemTable(slot, type) -> returns options of item through the slot
+
+type: 1 -> returns exc value
+type: 2 -> returns option1 value
+type: 3 -> returns option2 value
+type: 4 -> returns option3 value
+type: 5 -> returns ancient value
+type: 6 -> returns JoH value

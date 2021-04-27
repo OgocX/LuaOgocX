@@ -1,0 +1,244 @@
+==================================================
+======  FUNCTIONS CALL GAMESERVER TO LUA  ========
+==================================================
+
+NOTE:
+
+this part is the documentation that has the gameserver's functions that pass to the lua. these functions you can "hook" in your own lua
+
+--------------------------
+
+OBS:
+
+in this documentation only the functions that come from the gameserver will be placed, there are several scripts that use most of these functions so you just have to look in the scripts that you will have an "example"
+
+--------------------------
+
+EXAMPLE:
+
+i want check if  player kill a monster so i can use like this:
+
+function CheckMonsterDie(aIndex, TargetIndex)
+	local player = User.new(aIndex)
+	local monster = User.new(TargetIndex)
+	
+	if monster:getClass() == 500
+	then
+		SendMessageGlobal(string.format('Player %s kill monster %s', player:getName(), monster:getName()), 1)
+	end
+end
+
+
+GameServerFunctions.MonsterDie(CheckMonsterDie)
+
+--------------------------
+
+FUNCTIONS:
+
+GameServerFunctions.PlayerDropItem(aIndex, x, y, slot) ->
+
+When player drop item call this function and return "slot" with the slot you can get with "Inventory" class and know what item is, you can see example in DropSystem.lua!
+
+---
+
+GameServerFunctions.CharacterSet(aIndex) ->
+
+When CalCharacter player is updates, call this function and you can increase defense, attack, etc...
+
+---
+
+GameServerFunctions.MonsterDie(Player, Monster) ->
+
+When monster die, this function is called
+
+---
+
+GameServerFunctions.MonsterDieGiveItem(Player, Monster) ->
+
+When monster drop item, this function is called
+
+---
+
+GameServerFunctions.PlayerDie(aIndex, TargetIndex) ->
+
+When player die, this function is called
+
+---
+
+GameServerFunctions.PlayerAttack(aIndex, TargetIndex) ->
+
+When player are attacking, this function is called
+
+---
+
+GameServerFunctions.PlayerSendTrade(aIndex, TargetIndex) ->
+
+When player send trade for another, this function is called
+
+---
+
+GameServerFunctions.PlayerLevelUp(aIndex) ->
+
+When player receive level up, this function is called
+
+---
+
+GameServerFunctions.PlayerRingEquiped(aIndex) ->
+
+When player equip some ring, this function is called
+
+---
+
+GameServerFunctions.PlayerTradeOk(aIndex, TargetIndex) ->
+
+When player click "ok" on trade, this function is called
+
+---
+
+GameServerFunctions.PlayerLogout(aIndex) ->
+
+When player logout of game, this function is called
+
+---
+
+GameServerFunctions.GuildWarProc(GuildName1, GuildPoints1, GuildName2, GuildPoints2) ->
+
+When guild are in "war", this function is called
+
+---
+
+GameServerFunctions.EnterCharacter(aIndex) ->
+
+When player log on game, this function is called
+
+---
+
+GameServerFunctions.CharacterMove(aIndex, map, x, y) ->
+
+When player teleport, this function is called
+
+---
+
+GameServerFunctions.PlayerMove(aIndex, map, x, y, sx, sy) ->
+
+When player has walking on map, this function is called
+
+---
+
+GameServerFunctions.RunningSkill(aIndex, TargetIndex, SkillNumber) ->
+
+When player has attacking, this function is called
+
+---
+
+GameServerFunctions.NpcTalk(NpcIndex, PlayerIndex) ->
+
+When player talk with npc, this function is called
+
+---
+
+GameServerFunctions.PlayerSellItem(aIndex, slot) ->
+
+When player try sell item, this function is called
+
+---
+
+GameServerFunctions.PlayerRepairItem(aIndex, slot) ->
+
+When player repair some item, this function is called
+
+---
+
+GameServerFunctions.PlayerCanMove(aIndex) ->
+
+When player try walk, this function is called
+
+---
+
+GameServerFunctions.PlayerMoveItem(aIndex, SourceSlot, TargetSlot, Type) ->
+
+When player move item, this function is called
+
+---
+
+GameServerFunctions.PlayerVaultOpen(aIndex) ->
+
+When player open vault, this function is called
+
+---
+
+GameServerFunctions.DeclareWar(aIndex) ->
+
+When player declare war, this function is called
+
+---
+
+GameServerFunctions.PlayerUseItem(aIndex, SourceSlot, TargetSlot) ->
+
+When player use item with right click, this function is called
+
+---
+
+GameServerFunctions.PlayerVaultClose(aIndex) ->
+
+When player close vault , this function is called
+
+---
+
+GameServerFunctions.PlayerSendTradeX(aIndex, TargetIndex) ->
+
+When player try send TradeX, this function  is called
+
+---
+
+GameServerFunctions.PlayerTradeXOk(aIndex, TargetIndex) ->
+
+When player click "ok" on tradex, this function is called
+
+---
+
+GameServerFunctions.PlayerOpenShop(aIndex) ->
+
+When player try open personal shop, this function is called
+
+---
+
+GameServerFunctions.PlayerCloseShop(aIndex) ->
+
+When player close personal shop, this function is called
+
+---
+
+GameServerFunctions.PlayerCanEquipItem(aIndex, SourceSlot, TargetSlot) ->
+
+When player try equip item, this function is called
+
+---
+
+GameServerFunctions.GameServerProtocol(aIndex, Packet, PacketName) ->
+
+When player receive packet custom of client, this function is called
+
+---
+
+GameServerFunctions.MacAddressPlayer(aIndex, HWID) ->
+
+Receive HWID of player from client
+
+---
+
+GameServerFunctions.PlayerAttackFenrirSkill(aIndex, TargetIndex) ->
+
+When player user skill fenrir on target, this function is called
+
+---
+
+GameServerFunctions.RespawnUser(aIndex) ->
+
+When player die and you set type 5, this function is called
+
+---
+
+GameServerFunctions.MonsterReload() ->
+
+When monster is reloaded, this function is called

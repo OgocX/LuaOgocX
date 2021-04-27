@@ -1,0 +1,12 @@
+======================================
+===========  COMMAND LUA  ============
+======================================
+
+NOTE:
+
+the Command function is declared on GameServer.lua, so you don't need declare again!
+
+you can use the syntax: commands!
+
+commands:getNumber(String, Position) -> returns number if the player has entered the number of the command, the position you want, each position counts as "space"
+commands:getString(String, Position, FullString) -> returns the string of the desired position, if it is FULL STRING it will return the complete string, only without the command
