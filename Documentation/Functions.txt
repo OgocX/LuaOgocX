@@ -1,0 +1,117 @@
+======================================
+=======  FUNCTIONS GAMESERVER  =======
+======================================
+
+NOTE: 
+in some cases aIndex can be used by Monster and Player!
+
+
+LogAdd(string) -> print log in GameServer
+
+SendMessage(string, aIndex, type) -> send message for player by aIndex
+
+SendMessageGlobal(string, type) -> send message for all players
+
+MoneySend(aIndex, Money) -> send for client value of your money
+
+LevelUpSend(aIndex) -> update character information of "c"
+
+PkLevelSend(aIndex, level) -> send player pk level
+
+GetIndex(name) -> return aIndex by Name
+
+Teleport(aIndex, map, x, y) -> move player for map and coords
+
+TeleportMap(aIndex, range) -> teleport player in some rand coord (work only on the map player is on)
+
+CloseChar(aIndex, type) -> can disconnect player or move for select char or select server depends of type
+
+SkillSend(aIndex) -> update skill on client player
+
+ViewportCreate(aIndex) -> create a new viewport for player
+
+GetTick() -> return tickcount of gameserver
+
+TrocarBauPlayer(aIndex, VaultID) -> change vault of player
+
+AddMonster(map) -> add a monster to the map and return MonsterIndex
+
+SetPositionMonster(MonsterIndex, map) -> put monster on map
+
+SetMonster(MonsterIndex, Class) -> set class on monster
+
+SetMapMonster(MonsterIndex, map, x, y) -> set monster map and coords x, y
+
+gObjDel(aIndex) -> del monster or player
+
+gObjMonsterTopHitDamageUser(MonsterIndex) -> return aIndex of top player hit on monster
+
+ItemSerialCreate(aIndex, map, x, y, ItemIndex, Level, dur, op1, op2, op3, exc) -> create item, if you use map 236 will create on inventory
+
+InventoryDeleteItem(aIndex, slot) -> delete the player's inventory item from the chosen slot
+
+SendInventoryDeleteItem(aIndex, slot) -> update delete item on client player
+
+ItemListSend(aIndex) -> send list item of inventory for player client
+
+GetWarehouseList(aIndex) -> send list item of warehouse for player client
+
+ChatTargetSend(aIndex, string, MonsterIndex) -> send chat message like "NPC"
+
+CalCharacter(aIndex) -> update character calc GameServer
+
+LifeUpdate(aIndex) -> Send client life of player
+
+ManaUpdate(aIndex) -> Send cliente mana of player
+
+NextExpCalc(aIndex) -> Calc next experience for player
+
+SetBP(aIndex) -> Calc BP on gameserver for player
+
+MakePreview(aIndex) -> Update preview on GameServer
+
+ResetSkills(aIndex) -> Reset skill list of player
+
+ClearViewPort(aIndex) -> delete viewport
+
+StateInfoSend(aIndex, state, effect) -> send state effect for main
+
+LevelExperience(level) -> get experience by level
+
+RefreshCharacter(aIndex) -> Refresh character infos on client
+
+FireWorks(aIndex, map, x, y) -> drop fireworks, if you use -1 in aIndex it will drop on the map and coordinate x, y
+
+GetMapAttr(map, x, y, att) -> get the map attribute and coordinate that a player is in, the attributes are: 0, 1, 2, 4, 8, 16
+
+gObjAdd(Socket, IpAddres, aIndex) -> Add player on gameserver, you can see example in BootSystem.lua
+
+CharacterInfoSend(aIndex, name) -> Send character infor for DataServer, you can see example in BootSystem.lua
+
+AccountInfoSend(aIndex, account, IpAddress) -> log account on joinserver, you can see example in BootSystem.lua
+
+gObjSetPosition(aIndex, x, y) -> set position of player
+
+MoveObject(aIndex) -> send move for client by coord x and y of player or monster or boot
+
+InserCounter(aIndex, slot, skills) -> insert count of "kills" or "resets" or something you config on system
+
+DecreaseCounter(aIndex, slot, skills) -> decrease count of "kills" or "resets" or something you config on system
+
+UpdateCounter(aIndex) -> send client update of count
+
+ClearAllBuff(aIndex) -> delete all buff of player
+
+CheckBuffPlayer(aIndex, effect) -> return 1 if player have buff "effect" is the number of effects on effects.txt
+
+InventoryCheckSpaceByItem(aIndex, ItemIndex) -> return 1 if inventory have space for item you want put
+
+ResetQuest(aIndex) -> reset quest of player
+
+gObjIsConnectedGP(aIndex) -> return 1 if player is online and playing
+
+gObjCheckOffAttack(aIndex) -> return 1 if player has in off attack
+
+gObjCheckOffStore(aIndex) -> return 1 if player has in off store
+
+DamageSend(aIndex, TargetIndex, isreflet, damage, damagetype, shieldDamage) -> you can send animation "damage" on player
