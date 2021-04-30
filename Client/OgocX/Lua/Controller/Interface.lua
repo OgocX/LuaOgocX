@@ -148,6 +148,18 @@ function InterfaceController.FinalBoot(callback)
 	FinalBoot_Handle[callback] = { callback = callback }
 end
 
+local LoadImages_Handle = {}
+
+function LoadImages()
+	for i in pairs(LoadImages_Handle) do
+		LoadImages_Handle[i].callback()
+	end
+end
+
+function InterfaceController.LoadImages(callback)
+	LoadImages_Handle[callback] = { callback = callback }
+end
+
 --[[
 CALL FOLDER NEED STAY HERE
 --]]

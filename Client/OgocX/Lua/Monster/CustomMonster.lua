@@ -6,6 +6,7 @@ Configs
 
 local CUSTOM_MONSTER_CONFIG = { 
 	{ MonsterID = 580, MonsterType = 1, Size = 1.0, Map = -1, PosX = -1, PosY = -1, MonsterName = "Chaos Machine Genesis 1", MonsterModel = "ChaosBoxGenesis"},
+	{ MonsterID = 581, MonsterType = 1, Size = 0.75, Map = -1, PosX = -1, PosY = -1, MonsterName = "Npc Rescue", MonsterModel = "NpcRescue"},
 }
 
 --[[

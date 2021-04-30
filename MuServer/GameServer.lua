@@ -8,9 +8,9 @@ command = Command.new()
 Initial System
 ]]--
 OpenExtension('LuaSystem')
+OpenExtension('Utils')
 OpenExtension('Configs\\Commands')
 OpenExtension('Configs')
-OpenExtension('Utils')
 OpenExtension('Character')
 OpenExtension('Systems')
 OpenExtension('Commands')
@@ -18,5 +18,5 @@ OpenExtension('Commands')
 function GameServer()
 	LogAddC(1,"Lua Carregado com sucesso!")
 	
-	DataBase.Connect(3, "MuOnline", "sa", "123")
+	DataBase.Connect(3, "MuOnlines6", "sa", "123")
 end
