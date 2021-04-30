@@ -333,7 +333,8 @@ end
 
 function JewelBank.Protocol(Packet, PacketName)
 	if Packet == JewelBank_Packet then
-		if PacketName == "JewelBank_Open" then
+		local nome = UserGetName()
+		if PacketName == string.format("JBOpe_%s",nome) then
 			JewelBank_Saldo = {}
 			local count = GetBytePacket(PacketName, -1)
 			for i = 1, count do
@@ -348,7 +349,7 @@ function JewelBank.Protocol(Packet, PacketName)
 			return true
 		end
 		
-		if PacketName == "JewelBank_GBalance" then
+		if PacketName == string.format("JBBal_%s",nome) then
 			if UICustomInterface == JewelBank_WindowId then
 				local listid = GetBytePacket(PacketName, -1)
 				local valor = GetWordPacket(PacketName, -1)
@@ -363,15 +364,16 @@ function JewelBank.Protocol(Packet, PacketName)
 end
 
 function JewelBank.KeyListener(key)
-	if CheckWindowOpen(UIChatWindow) == 0 then
+	if CheckWindowOpen(UIChatWindow) == 0 and CheckWindowOpen(UIStore) == 0then
 		if key == Keys.J then
 			if JewelBank_Enabled then
 				if UICustomInterface == JewelBank_WindowId then
 					JewelBank.Close()
 				else
-					CreatePacket("JewelBank_Open", JewelBank_Packet)
-					SendPacket("JewelBank_Open")
-					ClearPacket("JewelBank_Open")
+					local nome = UserGetName()
+					CreatePacket(string.format("JBOpe_%s",nome), JewelBank_Packet)
+					SendPacket(string.format("JBOpe_%s",nome))
+					ClearPacket(string.format("JBOpe_%s",nome))
 					return
 				end
 				return
@@ -433,11 +435,12 @@ function JewelBank.ClickEvent()
 			if JewelBank_Selected.ListID == nil or JewelBank_Selected.ListID == 0 or JewelBank_ButtonSelected == 0 then
 				return
 			end
-			CreatePacket("JewelBank_Sacar", JewelBank_Packet)
-			SetBytePacket("JewelBank_Sacar", JewelBank_Selected.ListID)
-			SetBytePacket("JewelBank_Sacar", JewelBank_ButtonSelected)
-			SendPacket("JewelBank_Sacar")
-			ClearPacket("JewelBank_Sacar")
+			local nome = UserGetName()
+			CreatePacket(string.format("JBSac_%s",nome), JewelBank_Packet)
+			SetBytePacket(string.format("JBSac_%s",nome), JewelBank_Selected.ListID)
+			SetBytePacket(string.format("JBSac_%s",nome), JewelBank_ButtonSelected)
+			SendPacket(string.format("JBSac_%s",nome))
+			ClearPacket(string.format("JBSac_%s",nome))
 			return
 		end
 		
@@ -465,10 +468,12 @@ function JewelBank.ClickRightEvent()
 	if CheckRepeatKey(Keys.ControlKey) ~= 0 then
 		local slot = GetInventoryMouseSlot()
 		if slot >= 12 then
-			CreatePacket("JewelBank_Deposit", JewelBank_Packet)
-			SetBytePacket("JewelBank_Deposit", slot)			
-			SendPacket("JewelBank_Deposit")
-			ClearPacket("JewelBank_Deposit")
+			local nome = UserGetName()
+			
+			CreatePacket(string.format("JBDep_%s",nome), JewelBank_Packet)
+			SetBytePacket(string.format("JBDep_%s",nome), slot)			
+			SendPacket(string.format("JBDep_%s",nome))
+			ClearPacket(string.format("JBDep_%s",nome))
 			return
 		end
 		
