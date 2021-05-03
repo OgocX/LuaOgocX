@@ -115,3 +115,7 @@ gObjCheckOffAttack(aIndex) -> return 1 if player has in off attack
 gObjCheckOffStore(aIndex) -> return 1 if player has in off store
 
 DamageSend(aIndex, TargetIndex, isreflet, damage, damagetype, shieldDamage) -> you can send animation "damage" on player
+
+KillPlayer(aIndex) -> kill the player, will do the animation etc
+
+AddEffect(aIndex, type, effectID, count, value1, value2, value3, value4) -> add effect on player, effectID = you can see in effects.txt folder Data, count = timer in seconds

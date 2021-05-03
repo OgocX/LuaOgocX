@@ -81,20 +81,21 @@ function Evo.Command(aIndex, Arguments)
 		then
 			if(n ~= 3 or player:getClass() == CLASS_DK)
 			then
-				AddQuestList(aIndex,n,1);
-				InsertQuestReward(aIndex,n);
-				AddQuestList(aIndex,n,2);
+				AddQuestList(aIndex,n,1)
+				InsertQuestReward(aIndex,n)
+				AddQuestList(aIndex,n,2)
 			end
 		end
 	end
 	
 	player:setSendQuestInfo(0)
-	
 	GCQuestInfoSend(aIndex)
 	
+	MakePreview(aIndex)
+	ClearViewPort(aIndex)
+	ViewportCreate(aIndex)
+	
 	SendMessage(string.format(EVO_MESSAGE[Language][8]), aIndex, 1)
-	
-	
 end
 
 Commands.Register(COMMAND_EVO, Evo.Command)

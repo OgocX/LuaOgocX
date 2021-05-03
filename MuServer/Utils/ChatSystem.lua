@@ -109,11 +109,14 @@ function ChatProc(index, text)
 		end
 	elseif string.sub(text, 0, 1) == '$'
 	then
-		if player:getAuthority() ~= 1
+		if string.sub(text, 3, 3) == '$'
 		then
-			SendMessageGlobal(string.format("[%s]", player:getName()), 0)
-			SendMessageGlobal(string.format("%s", string.sub(text, 2, #text)), 0)
-			return 1
+			if player:getAuthority() ~= 1
+			then
+				SendMessageGlobal(string.format("[%s]", player:getName()), 0)
+				SendMessageGlobal(string.format("%s", string.sub(text, 4, #text)), 0)
+				return 1
+			end
 		end
 	end
 	

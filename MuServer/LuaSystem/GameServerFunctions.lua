@@ -420,7 +420,7 @@ end
 -- Quando o player abre uma lojinha
 -- retrun 1 impede de abrir
 local PlayerOpenShop_Handles = {}
-function PlayerOpenShop(aIndex, TargetIndex)
+function PlayerOpenShop(aIndex)
 	for i in pairs(PlayerOpenShop_Handles) do
 		if PlayerOpenShop_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerOpenShop_Handles[i].args)) == 1
 		then
@@ -436,7 +436,7 @@ end
 -- Quando o player fecha uma lojinha
 -- retrun 1 impede de fechar
 local PlayerCloseShop_Handles = {}
-function PlayerCloseShop(aIndex, TargetIndex)
+function PlayerCloseShop(aIndex)
 	for i in pairs(PlayerCloseShop_Handles) do
 		if PlayerCloseShop_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerCloseShop_Handles[i].args)) == 1
 		then

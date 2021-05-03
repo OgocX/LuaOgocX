@@ -18,5 +18,5 @@ OpenExtension('Commands')
 function GameServer()
 	LogAddC(1,"Lua Carregado com sucesso!")
 	
-	DataBase.Connect(3, "MuOnlines6", "sa", "123")
+	DataBase.Connect(3, "MuOnline", "sa", "123")
 end

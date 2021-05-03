@@ -3,14 +3,14 @@
 Timer = {}
 
 local Handles = {}
-local id = 0
+local id = 1
 
 unpack = unpack and unpack or table.unpack
 
 function Timer.RunRepeat(timer)
 	timer.running = timer.running + 1
 
-	if timer.running < timer.time
+	if timer.running < timer.timerRun
 	then 
 		return false
 	end
@@ -30,7 +30,7 @@ end
 function Timer.RunInterval(timer)
 	timer.running = timer.running + 1
 
-	if timer.running < timer.time
+	if timer.running < timer.timerRun
 	then 
 		return false
 	end
@@ -41,36 +41,52 @@ function Timer.RunInterval(timer)
 end
 
 function Timer.RunTimerOut(timer)
-	if timer.running >= timer.time 
+	if timer.running >= timer.timerRun 
 	then 
 		return false
 	end
 
 	timer.running = timer.running + 1
 
-	if timer.running >= timer.time 
+	if timer.running >= timer.timerRun 
 	then
 		timer.callback(unpack(timer.args))
 		return true
 	end
-		return false
+	
+	return false
 end
 
-function Timer.Repeater(time, counts, call, ...)
+function Timer.Repeater(timer, counts, call, ...)
+	if call == nil
+	then
+		return -1
+	end
+	
 	id = id + 1
-	table.insert(Handles, {time = time, callback = call, args = {...}, running = 0, count = counts + 2, update = Timer.RunRepeat, number = id})
+	Handles[id] = { timerRun = timer, callback = call, args = {...}, running = 0, count = counts + 2, update = Timer.RunRepeat, number = id }
 	return id
 end
 
-function Timer.Interval(time, call, ...)
+function Timer.Interval(timer, call, ...)
+	if call == nil
+	then
+		return -1
+	end
+	
 	id = id + 1
-	table.insert(Handles, {time = time, callback = call, args = {...}, running = 0, count = 0, update = Timer.RunInterval, number = id})
+	Handles[id] = { timerRun = timer, callback = call, args = {...}, running = 0, count = 0, update = Timer.RunInterval, number = id }
 	return id
 end
 
-function Timer.TimeOut(time, call, ...)
+function Timer.TimeOut(timer, call, ...)
+	if call == nil
+	then
+		return -1
+	end
+	
 	id = id + 1
-	table.insert(Handles, {time = time, callback = call, args = {...}, running = 0, count = 0, update = Timer.RunTimerOut, number = id})
+	Handles[id] = { timerRun = timer, callback = call, args = {...}, running = 0, count = 0, update = Timer.RunTimerOut, number = id }
 	return id
 end
 
@@ -85,16 +101,19 @@ function Timer.Cancel(id)
 		return
 	end
 	
-	for i in ipairs(Handles) do
-		if Handles[i].number == id
-		then
-			table.remove(Handles, i)
-		end
+	if Handles[id] ~= nil
+	then
+		Handles[id] = nil
 	end
 end
 
 function Timer.Update()
-	for i in ipairs(Handles) do
+	for i in pairs(Handles) do
+		if Handles[i] == nil
+		then
+			goto continue
+		end
+		
 		if Handles[i].update ~= nil
 		then
 			if Handles[i].update(Handles[i]) == true
@@ -105,6 +124,8 @@ function Timer.Update()
 				end
 			end
 		end
+		
+		::continue::
 	end
 end
 

@@ -169,11 +169,11 @@ function ChangeClass.Command(aIndex, Arguments, Type)
 		
 		player:setClass(class)
 		player:setDbClass(dbclass)
-		player:setChangeUP(player:getDbClass()%16)
+		player:setChangeUP(dbclass%16)
 		
-		local NewClass = player:getDbClass() * 16
-		NewClass = NewClass - (NewClass/32);
-		NewClass = NewClass + (player:getClass()*32);
+		local NewClass = player:getChangeUP() * 16
+		NewClass = NewClass - (NewClass/32)
+		NewClass = NewClass + (player:getClass()*32)
 		
 		SendQuestPrize(aIndex, 201, NewClass)
 		ResetQuest(aIndex)
@@ -184,15 +184,13 @@ function ChangeClass.Command(aIndex, Arguments, Type)
 		player:setMasterExperience(0)
 	
 		--Refresh
-		ClearAllBuff(aIndex)
-		MakePreview(aIndex)
 		ClearViewPort(aIndex)
-		ViewportCreate(aIndex)
+		MakePreview(aIndex)
+		ClearAllBuff(aIndex)
 		ResetSkills(aIndex)
+		ViewportCreate(aIndex)
 		CalCharacter(aIndex)
 	end
-	
-	
 end
 
 Commands.Register(COMMAND_CHANGE_CLASS_SM, ChangeClass.Command, 1)

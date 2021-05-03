@@ -70,9 +70,7 @@ end
 
 function JewelBank.Protocol(aIndex, Packet, PacketName)
 	if Packet == JewelBank_Packet then
-		local player = User.new(aIndex)
-		local nome = player:getName()
-		if PacketName == string.format("JBOpe_%s",nome) then
+		if PacketName == "JewelBank_Open" then
 			ClearPacket(PacketName)
 			local t = JewelBank.GetBalance(aIndex)
 			CreatePacket(PacketName, JewelBank_Packet)
@@ -86,14 +84,14 @@ function JewelBank.Protocol(aIndex, Packet, PacketName)
 			return true
 		end
 		
-		if PacketName == string.format("JBDep_%s",nome) then
+		if PacketName == "JewelBank_Deposit" then
 			local slot = GetBytePacket(PacketName, -1)		
 			ClearPacket(PacketName)
 			JewelBank.Deposit(aIndex, slot)
 			return true
 		end
 		
-		if PacketName == string.format("JBSac_%s",nome) then
+		if PacketName == "JewelBank_Sacar" then
 			local listid = GetBytePacket(PacketName, -1)
 			local botao = GetBytePacket(PacketName, -1)		
 			JewelBank.Withdraw(aIndex, listid, botao)			
@@ -134,8 +132,6 @@ function JewelBank.Withdraw(aIndex, ListID, Button)
 		SendMessage(string.format(JewelBank_Messages[Language][2]), aIndex, 1)
 		return
 	end
-	
-	
 	
 	ItemSerialCreateComplete(aIndex, 236, 0, 0, Index, Level, 0, 0, 0, 0, aIndex, 0, 0, 0)
 	DataBase.SetDecreaseValue(JewelBank_Table, Item.Coluna, valor, JewelBank_Where, player:getAccountID())
@@ -189,13 +185,11 @@ function JewelBank.Deposit(aIndex, Slot)
 end
 
 function JewelBank.SendBalance(aIndex, ListID, Valor)
-	local player = User.new(aIndex)
-	local nome = player:getName()
-	CreatePacket(string.format("JBBal_%s",nome), JewelBank_Packet)
-	SetBytePacket(string.format("JBBal_%s",nome), ListID)
-	SetWordPacket(string.format("JBBal_%s",nome), Valor)
-	SendPacket(string.format("JBBal_%s",nome), aIndex)
-	ClearPacket(string.format("JBBal_%s",nome))
+	CreatePacket("JewelBank_GBalance", JewelBank_Packet)
+	SetBytePacket("JewelBank_GBalance", ListID)
+	SetWordPacket("JewelBank_GBalance", Valor)
+	SendPacket("JewelBank_GBalance", aIndex)
+	ClearPacket("JewelBank_GBalance")
 	return
 end
 

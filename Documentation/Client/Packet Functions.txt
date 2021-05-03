@@ -1,0 +1,22 @@
+======================================
+====  PACKET CLIENT - GAMESERVER  ====
+======================================
+
+NOTE:
+
+Here are just the names of the available options, you can see better examples at: JewelBank.lua, LogInAndWin.lua, NpcRescueItens.lua
+
+
+CreatePacket(packetName, packet) -> create packet for send main
+SetDwordPacket(packetName, position) -> set value dword
+GetDwordPacket(packetName, position) -> get value dword
+SetWordPacket(packetName, position) -> set value word
+GetWordPacket(packetName, position) -> get value word
+SetBytePacket(packetName, position) -> set value byte
+GetBytePacket(packetName, position) -> get value byte
+SetCharPacket(packetName, string) -> set a string with a maximum of 10 characters
+GetCharPacket(packetName, position) -> get string
+SetCharPacketLength(packetName, string, length) -> set a string the size you set
+GetCharPacketLength(packetName, string, length) -> get a string
+SendPacket(packetName, aIndex) -> send packet for player
+ClearPacket(packetName) -> always when you create a packet you need clear!

@@ -1,0 +1,223 @@
+======================================
+=========  PLAYER CLASS LUA  =========
+======================================
+
+NOTE:
+
+you need declare function by aIndex example:
+
+player = User.new(aIndex)
+playerTarget = User.new(TargetIndex)
+
+player:getName()
+playerTarget:getName()
+
+player:getIndex()
+playerTarget:getIndex()
+
+player:setLife(100)
+playerTarget:setLife(100)
+
+-------------------
+
+OBS:
+in the example above, it is not mandatory to use with TargetIndex, I just left an example as I would use for 2 or 3 or 4 index! you can use it only for an aIndex or within a FOR
+you need to use ":" for every trade function you want to use, see the examples below
+
+-------------------
+
+
+getIndex() -> return "aIndex"
+getAccountID() -> return Account if is player
+getName() -> return Name if is player
+getConnected() -> return number of state on gameserver returns: 0 = Offline, 1 = Connected, 2 = Logged, 3 = Online
+getLive() -> return 1 if is live
+getType() -> return type of player: 0 = none, 1 = user, 2 = monster, 3 = npc
+getClass() -> return class if is player, if is monster return number in monster.txt 
+setClass(value) -> set class
+getDbClass() -> return class of database
+setDbClass(value) -> set class db 
+getChangeUP() -> return changup 
+setchangeUP(value) -> set change up 
+getLevel() -> return level 
+setLevel(value) -> set level 
+getLevelUpPoint() -> return level up point 
+setLevelUpPoint(value) -> set level up point 
+getMoney() -> return money 
+setMoney() -> set money
+getStrength() -> get strength of player
+setStrength(value) -> set strength of player
+getDexterity() -> get dexterity of player
+setDexterity(value) -> set dexterity of player
+getVitality() -> get vitality of player
+setVitality(value) -> set vitality of player
+getEnergy() -> get energy of player
+setEnergy(value) -> set energy of player
+getLeaderShip() -> get leadership of player
+setLeaderShip(value) -> set leadership of player
+getPKCount() -> get pk count of player
+setPKCount(value) -> set pk count of player
+getPKLevel() -> get pk level of player
+setPKLevel(value) -> set pk level of player
+getPKTime() -> get pk time of player
+setPKTime(value) -> set pk time of player
+getX() -> get position x on map
+setX(value) -> set position x on map
+getY() -> get position y on map
+setY(value) -> set position y on map
+getTX() -> get position TX
+setTX(value) -> set position TX
+getTY() -> get position TY 
+setTY(value) -> set position TY 
+getMTX() -> get position MTX
+setMTX(value) -> set position MTX
+getMTY() -> get position MTY
+setMTY(value) -> set position MTY
+getMapNumber() -> get the number of the map the player is on
+setMapNumber(value) -> set the number of the map the player
+getAuthority() -> get authority
+setAuthority(value) -> set authority
+getAuthorityCode() -> get authority code
+setAuthorityCode(value) -> set authority code
+getSkin() -> get number of the skin the player
+setSkin(value) -> set number of the skin the player
+getExp() -> get experience
+setExp(value) -> set experience
+getTargetState(viewport_ID) -> get target state on the viewport player
+getTargetNumber(viewport_ID) -> get the aIndex number of the player that is in the viewport
+getTargetType(viewport_ID) -> get the "type" of the player that is in the viewport
+getInterfaceUse() -> get 1 if interface is using
+setInterfaceUse(value) -> set value on interface use
+getInterfaceState() -> get interface state
+setInterfaceState(value) -> set interface state
+getInterfaceType() -> get interface type (returns the value of the interface that is open)
+setInterfaceType(value) -> set interface type
+getDefense() -> get value defense of the player
+setDefense(value) -> set value defense
+getDefensePvP() -> get value defense pvp of the player
+setDefensePvP(value) -> set valeu defense pvp of the player
+getSuccessBlock() -> get success defense of the player
+setSuccessBlock(value) -> set success defense
+getSuccessBlockPvP() -> get success defense pvp of the player
+setSuccessBlockPvP(value) -> set success defense pvp
+getState() -> get state of the player
+setState(value) -> set state
+getDieRegen() -> get if the player is dead
+setDieRegen(value) -> set player is dead
+getTeleport() -> get if the player is teleporting
+setTeleport(value) -> set player are teleporting
+getTargetShopNumber() -> get the number of the mall that the player is open (npc)
+setTargetShopNumber(value) -> set the number
+getReqWarehouseOpen() -> get if warehouse is open return 1
+setReqWarehouseOpen(value) -> set warehouse open
+getWarehouseCount() -> get numbers of warehouse
+setWarehouseCount(value) -> set numbers of warehouse
+getDir() -> get direction of the player
+setDir(value) -> set direction
+getNextExp() -> get next experience level
+setNextExp(value) -> set next experience level
+getLife() -> get life player in real time
+setLife(value) -> set life player
+getMana() -> get mana player in real time
+setMana(value) -> set mana player
+getMaxLife() -> get max life player
+setMaxLife(value) -> set max life player
+getMaxMana() -> get max mana player
+setMaxMana(value) -> set max mana
+getVitalityToLife() -> get vitality to life of the player
+setVitalityToLife(value) -> set vitality to life
+getEnergyToMana() -> get energy to mana of the player
+setEnergyToMana(value) -> set energy to mana
+getOption() -> get option player if can receive trade party etc...
+setOption(value) -> set option
+getAddLife() -> get add life of the player
+setAddLife(value) -> set add life
+getAddMana() -> get add mana of the player
+setAddMana(value) -> set add mana
+getAttackSpeed() -> get attack speed
+setAttackSpeed(value) -> set attack speed
+getMagicSpeed() -> get magic speed
+setMagicSpeed(value) -> set magic speed
+getMagicDamageMin() -> get damage min
+setMagicDamageMin(value) -> set damage min
+getMagicDamageMax() -> get damage max
+setMagicDamageMax(value) -> set damage max
+getAttackDamageMinLeft() -> get attack damage min left
+setAttackDamageMinLeft(value) -> set attack damage min left
+getAttackDamageMaxLeft() -> get attack damage max left
+setAttackDamageMaxLeft(value) -> set attack damage max left
+getAttackDamageMinRight() -> get attack damage min right
+setAttackDamageMinRight(value) -> set attack damage min right
+getAttackDamageMaxRight() -> get attack damage max right
+setAttackDamageMaxRight(value) -> set attack damage max right
+getRegenTime() -> get regen time of the player
+setRegenTime(value) -> set regen time
+getViewSkillState() -> get viewskill state (work good only in season 2)
+setViewSkillState(value) -> set viewskill state (work good only in season 2)
+getGetRegen() -> get regen is ok
+setGetRegen(value) -> set regen is ok
+getMagicSkill() -> get magic skill player are using
+setMagicSkill(value) -> set magic skill
+getKillerType() -> get killer type 
+setKillerType(value) -> set killer type
+getConnectCheckTime() -> get connected check time
+setConnectCheckTime(value) -> set connected check time
+getCheckSumTime() -> get checksum time
+setCheckSumTime(value) -> set checksum time
+getPathCount() -> get patch count
+setPathCount(value) -> set path count
+getRegenMapNumber() -> get regen map
+setRegenMapNumber(value) -> set regen map
+getRegenMapX() -> get regen coord x
+setRegenMapX(value) -> set regen coord x
+getRegenMapY() -> get regen coord y
+setRegenMapY(value) -> set regen coord y
+getPathCur() -> get path cur
+setPathCur(value) -> set path cur
+getPathX(pathID) -> get path x
+setPathX(pathID, value) -> set path x
+getPathY(pathID) -> get path y
+setPathY(pathID, value) -> set path y
+getPathDir(pathID) -> get path dir
+setPathDir(pathID, value) -> set path dir
+getTradeTarget() -> get aIndex of the player target are in trade
+setTradeTarget(value) -> set aIndex of the player target are in trade
+getVip() -> get vip number
+setVip(value) -> set vip number
+getReset() -> get resets
+setReset(value) -> set resets
+getLoginMessageSend() -> get login msg send
+setLoginMessageSend(value) -> set login msg send
+getLoginMessageCount() -> get login msg count
+setLoginMessageCount(value) -> set login msg count
+getPatent() -> get patent number
+setPatent(value) -> set patent number
+getPatentType() -> get patent type (work only on season 6 >)
+setPatentType(value) -> set patent type (work only on season 6 >)
+getSendQuestInfo() -> get if quest is send
+setSendQuestInfo(value) -> set quest send
+getMacAddress() -> get mac address player
+setMacAddress(value) -> set mac address
+getStateTradeX() -> get state of transation trade X
+setStateTradeX(value) -> set state of transation trade x
+getUsingTradeX() -> get if player are using trade x
+setUsingTradeX(value) -> set value player using trade x
+getExpRate() -> get experience rate
+setExpRate(value) -> set experience rate (you can use for add experience for a STAFF, SWORD etc...)
+getShopOpen() -> get if personal shop is open (0 : disable, 1: active)
+setShopOpen(value) -> set personal shop is open
+getMasterLevel() -> get number of the master level
+setMasterLevel(value) -> set number of the master level
+getMasterPoint() -> get master level point
+setMasterPoint(value) -> set master level point
+getMasterExperience() -> get experience master level
+setMasterExperience(value) -> set experience master level
+getLanguage() -> get language of the player: Por: Portuguese, Eng: Enlighs, Spn: Spanish
+getExtInventory() -> get count extended inventory
+setExtInventory(value) -> set count extended inventory
+getExtWarehouse() -> get count extended warehouse
+setExtWarehouse(value) -> set count extended warehouse
+getChatLimitTime() -> get chat limit time
+setChatLimitTime(value) -> set chat limit time
+getGuildNumber() -> get guild number 
+getGuildName() -> get guild name

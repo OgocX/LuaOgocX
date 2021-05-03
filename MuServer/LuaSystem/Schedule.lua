@@ -3,6 +3,7 @@
 Schedule = {}
 
 local Handles = {}
+local countCron = 1
 
 local jobs = {}
 local jobs_mt = {__index = jobs}
@@ -17,25 +18,43 @@ local function checkPositiveInteger(name, value)
 end
 
 function Schedule.SetDayAndHourAndMinute(Day, Hour, Minute, call, ...)
+	if call == nil
+	then
+		return
+	end
+	
 	checkPositiveInteger('Day', Day)
 	checkPositiveInteger('Hour', Hour)
 
-	table.insert(Handles, {state = STATE_WAIT, dayofweek = -1, day = Day, hour = Hour, minute = Minute, callback = call, args = {...}})
+	Handles[countCron] = {state = STATE_WAIT, dayofweek = -1, day = Day, hour = Hour, minute = Minute, callback = call, args = {...}}
+	countCron = countCron + 1
 end
 
 function Schedule.SetHourAndMinute(Hour, Minute, call, ...)
+	if call == nil
+	then
+		return
+	end
+	
 	checkPositiveInteger('Hour', Hour)
 	checkPositiveInteger('Minute', Minute)
 	
-	table.insert(Handles, {state = STATE_WAIT, dayofweek = -1, day = -1, hour = Hour, minute = Minute, callback = call, args = {...}})
+	Handles[countCron] = {state = STATE_WAIT, dayofweek = -1, day = -1, hour = Hour, minute = Minute, callback = call, args = {...}}
+	countCron = countCron + 1
 end
 
 function Schedule.SetDayOfWeek(DayOfWeek, Hour, Minute, call, ...)
+	if call == nil
+	then
+		return
+	end
+	
 	checkPositiveInteger('DayOfWeek', DayOfWeek)
 	checkPositiveInteger('Hour', Hour)
 	checkPositiveInteger('Minute', Minute)
 	
-	table.insert(Handles, {state = STATE_WAIT, dayofweek = DayOfWeek, day = -1, hour = Hour, minute = Minute, callback = call, args = {...}})
+	Handles[countCron] = {state = STATE_WAIT, dayofweek = DayOfWeek, day = -1, hour = Hour, minute = Minute, callback = call, args = {...}}
+	countCron = countCron + 1
 end
 
 function Schedule.GetScheduler(DayOfWeek, Day, Hour, Minute)
@@ -69,7 +88,7 @@ function Schedule.GetScheduler(DayOfWeek, Day, Hour, Minute)
 end
 
 function Schedule.Running()
-	for i in ipairs(Handles) do
+	for i in pairs(Handles) do
 		if Schedule.GetScheduler(Handles[i].dayofweek, Handles[i].day, Handles[i].hour, Handles[i].minute) == true
 		then
 			if Handles[i].state == STATE_WAIT

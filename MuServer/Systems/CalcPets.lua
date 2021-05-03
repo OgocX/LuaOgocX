@@ -22,7 +22,7 @@ Fiz desse jeito para quem não sabe mexer apenas configurar acima, mas você pode 
 function CalcAttackPets(aIndex, TargetIndex, Damage)
 	if PETS_DAMAGE_SWITCH == 0
 	then
-		return
+		return Damage
 	end
 
 	local pInv = Inventory.new(aIndex)
@@ -36,7 +36,7 @@ function CalcAttackPets(aIndex, TargetIndex, Damage)
 		then
 			if player:getType() == 1
 			then
-				if pInv:isItem(a8) ~= 0
+				if pInv:isItem(8) ~= 0
 				then
 					if PETS_DAMAGE_DEFENSE[i].PetIndex == pInv:getIndex(8)
 					then
@@ -50,7 +50,7 @@ function CalcAttackPets(aIndex, TargetIndex, Damage)
 		
 			if target_player:getType() == 1
 			then
-				if tInv:isItem() ~= 0
+				if tInv:isItem(8) ~= 0
 				then
 					if PETS_DAMAGE_DEFENSE[i].PetIndex == tInv:getIndex(8)
 					then

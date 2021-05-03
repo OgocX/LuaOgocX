@@ -151,7 +151,7 @@ function ChangeNick.Command(aIndex, Arguments)
 		return
 	end
 	
-	if UserGuildNumber(aIndex) > 0
+	if player:getGuildNumber() ~= 0
 	then
 		SendMessage(string.format(CHANGE_NICK_MESSAGE[Language][12]), aIndex, 1)
 		return

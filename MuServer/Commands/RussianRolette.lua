@@ -93,15 +93,15 @@ function RussianRolette.HitPlayer(playerInfo)
 	
 	SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[playerInfo.Language][27]), playerInfo.PlayerIndex, 1)
 	
-	Teleport(playerInfo.PlayerIndex, RUSSIAN_ROLETTE_TELEPORT_LOSE_MAP, RUSSIAN_ROLETTE_TELEPORT_LOSE_X, RUSSIAN_ROLETTE_TELEPORT_LOSE_Y)
+	KillPlayer(playerInfo.PlayerIndex)
+	
+	--Teleport(playerInfo.PlayerIndex, RUSSIAN_ROLETTE_TELEPORT_LOSE_MAP, RUSSIAN_ROLETTE_TELEPORT_LOSE_X, RUSSIAN_ROLETTE_TELEPORT_LOSE_Y)
 	
 	playerInfo = nil
 end
 
 function RussianRolette.FireOnPlayer()
 	local UsersLucky =  RussianRolette.GetUsersLucky()
-	
-	LogAdd(string.format('%d here', #UsersLucky))
 	
 	if #UsersLucky > 0
 	then
@@ -305,7 +305,7 @@ function RussianRolette.StartEvent()
 	--Print player start event
 	RussianRolette.TimeStart()
 	--Create timer for count minutes for event open
-	Timer.Repeater(5, RussianRoletteTimer, RussianRolette.TimeStart)
+	Timer.Repeater(60, RussianRoletteTimer, RussianRolette.TimeStart)
 end
 
 --[[
