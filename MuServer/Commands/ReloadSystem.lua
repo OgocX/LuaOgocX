@@ -58,6 +58,9 @@ function ReloadSystem.Command(aIndex, Arguments)
 	elseif arg == RELOAD_COMMAND_LUA
 	then
 		ReloadLua()
+	elseif arg == RELOAD_COMMAND_LUA2
+	then
+		ReloadLua2()
 	end
 	
 	SendMessage(string.format('System %s reload', arg), aIndex, 1)

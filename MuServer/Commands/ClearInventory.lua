@@ -8,6 +8,12 @@ function ClearInventory.Command(aIndex, Arguments)
 	
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
+
+	if player:getInterfaceUse() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
+	then
+		SendMessage(string.format(CLEAR_INVENTORY_MESSAGES[Language][8]), aIndex, 1)
+		return
+	end
 	
 	if player:getLevel() < CLEAR_INVENTORY_LEVEL
 	then

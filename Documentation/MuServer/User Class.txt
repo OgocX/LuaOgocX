@@ -221,3 +221,9 @@ getChatLimitTime() -> get chat limit time
 setChatLimitTime(value) -> set chat limit time
 getGuildNumber() -> get guild number 
 getGuildName() -> get guild name
+getGuildWarDeclareState() -> get war declare state
+getGuildWarState() -> get war state
+getGuildWarType() -> get war type
+getGuildTotalScore() -> get total score guild player
+getPartyNumber() -> get partynumber if player have party returns > 0
+setPartyNumber(value) -> set party number

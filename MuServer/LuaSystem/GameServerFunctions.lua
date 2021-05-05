@@ -545,4 +545,33 @@ function GameServerFunctions.ChaosMachineGenesisMix(callback, ...)
 	ChaosMachineGenesis_Handles[callback] = { callback = callback, args = {...} }
 end
 
+--When run only reload lua
+local ReloadLuaMonster_Handles = {}
+
+function ReloadLuaMonster()
+	for i in pairs(ReloadLuaMonster_Handles) do
+		ReloadLuaMonster_Handles[i].callback(table.unpack(ReloadLuaMonster_Handles[i].args))	
+	end
+end
+
+function GameServerFunctions.ReloadLuaMonster(callback, ...)
+	ReloadLuaMonster_Handles[callback] = { callback = callback, args = {...} }
+end
+
+--When player send party
+local PlayerSendParty_Handles = {}
+
+function PlayerSendParty(aIndex, TargetIndex)
+	for i in pairs(PlayerSendParty_Handles) do
+		if PlayerSendParty_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerSendParty_Handles[i].args)) == 1
+		then
+			return 1
+		end
+	end
+end
+
+function GameServerFunctions.PlayerSendParty(callback, ...)
+	PlayerSendParty_Handles[callback] = { callback = callback, args = {...} }
+end
+
 return GameServerFunctions

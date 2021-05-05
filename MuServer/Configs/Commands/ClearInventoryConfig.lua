@@ -23,6 +23,7 @@ CLEAR_INVENTORY_MESSAGES["Por"] = {
 [5] = "[Sistema] Você precisa de %d M.Resets para utilizar o limpar inventário",
 [6] = "[Sistema] Seu inventário já está limpo!",
 [7] = "[Sistema] Inventário limpo com sucesso!",
+[8] = "[Sistema] Você está ocupado no momento!",
 }
 
 CLEAR_INVENTORY_MESSAGES["Eng"] = {
@@ -33,6 +34,7 @@ CLEAR_INVENTORY_MESSAGES["Eng"] = {
 [5] = "[System] You need %d M.Resets to use clear inventory",
 [6] = "[System] Your inventory is already clean!",
 [7] = "[System] Inventory successfully cleaned!",
+[8] = "[System] You are currently busy!",
 }
 
 CLEAR_INVENTORY_MESSAGES["Spn"] = {
@@ -43,4 +45,5 @@ CLEAR_INVENTORY_MESSAGES["Spn"] = {
 [5] = "[Sistema] Necesitas %d M.Resets para usar inventario limpio",
 [6] = "[Sistema] ¡Tu inventario ya está limpio!",
 [7] = "¡[Sistema] Inventario limpiado correctamente!",
+[8] = "[Sistema] ¡Actualmente estás ocupado!",
 }

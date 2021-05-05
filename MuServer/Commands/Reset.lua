@@ -33,7 +33,7 @@ function Reset.MonsterReload()
 	for i, key in ipairs(RESET_NPC_CREATE) do
 		local npc = User.new(RESET_NPC_CREATE[key].NpcIndex)
 		
-		if npc:getConnected() >= 2
+		if npc:getConnected() > 0
 		then
 			gObjDel(RESET_NPC_CREATE[key].NpcIndex)
 		end
@@ -44,6 +44,19 @@ function Reset.MonsterReload()
 	for i in ipairs(RESET_NPC) do
 		Reset.CreateNpc(RESET_NPC[i].Class, RESET_NPC[i].Map, RESET_NPC[i].CoordX, RESET_NPC[i].CoordY, RESET_NPC[i].Dir)
 	end
+end
+
+function Reset.ReloadLuaMonster()
+	if RESET_NPC_SWITCH == 0
+	then
+		return
+	end
+
+	for i in pairs(RESET_NPC_CREATE) do
+		gObjDel(RESET_NPC_CREATE[i].NpcIndex)
+	end
+
+	RESET_NPC_CREATE = {}
 end
 
 function Reset_Running_AutoReset()
@@ -536,6 +549,7 @@ Commands.Register(AUTO_RESET_COMMAND, Reset.AutoResetCommand)
 GameServerFunctions.NpcTalk(ResetNpcTalk)
 GameServerFunctions.PlayerLevelUp(Reset.AutoResetProc)
 GameServerFunctions.MonsterReload(Reset.MonsterReload)
+GameServerFunctions.ReloadLuaMonster(Reset.ReloadLuaMonster)
 GameServerFunctions.PlayerLogout(Reset.PlayerLogout)
 
 return Reset

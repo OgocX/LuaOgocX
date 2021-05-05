@@ -101,7 +101,7 @@ function RussianRolette.HitPlayer(playerInfo)
 end
 
 function RussianRolette.FireOnPlayer()
-	local UsersLucky =  RussianRolette.GetUsersLucky()
+	local UsersLucky = RussianRolette.GetUsersLucky()
 	
 	if #UsersLucky > 0
 	then
@@ -268,6 +268,7 @@ function RussianRolette.CheckUser()
 			then
 				SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[Language][22]), playerInfo.PlayerIndex, 1)
 				RussianRolettePlayers[i] = nil
+				goto continue
 			end
 		end
 		
@@ -376,7 +377,7 @@ function RussianRolette.CommandStart(aIndex, Arguments)
 	
 	local player = User.new(aIndex)
 	
-	if player:getAuthority(aIndex) == 1
+	if player:getAuthority() == 1
 	then
 		return
 	end

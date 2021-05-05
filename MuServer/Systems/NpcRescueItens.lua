@@ -60,7 +60,7 @@ function NpcRescueItem.Open(player, npc)
 	end
 	
 	local db = DataBase.getDb()
-	local Query = string.format("SELECT * FROM NPC_RESCUE_ITENS WHERE account='%s' and Delivered=0", player:getAccountID())
+	local Query = string.format("SELECT * FROM NPC_RESCUE_ITENS WHERE account='%s' and Delivered=0 and TimeExpire >= GETDATE()", player:getAccountID())
 	local ret = db:exec(Query)
 	
 	if ret == 0
@@ -175,7 +175,7 @@ function NpcRescueItem.GetItem(aIndex, PacketName)
 	local ItemID = GetDwordPacket(PacketName, -1)
 	
 	local db = DataBase.getDb()
-	local Query = string.format("SELECT * FROM NPC_RESCUE_ITENS WHERE account='%s' and Delivered=0 and ID='%d'", player:getAccountID(), ItemID)
+	local Query = string.format("SELECT * FROM NPC_RESCUE_ITENS WHERE account='%s' and Delivered=0 and ID='%d' and TimeExpire >= GETDATE()", player:getAccountID(), ItemID)
 	local ret = db:exec(Query)
 	
 	if ret == 0
@@ -268,7 +268,7 @@ function NpcRescueItem.Protocol(aIndex, Packet, PacketName)
 end
 
 function NpcRescueItem.RunSQL()
-	local query = string.format("CREATE TABLE [dbo].[NPC_RESCUE_ITENS]([ID] [int] IDENTITY(1,1) NOT NULL,[Account] [varchar](10) NOT NULL,[ItemIndex] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_ItemIndex]  DEFAULT ((0)),[Level] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Level]  DEFAULT ((0)),[Option1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option1]  DEFAULT ((0)),[Option2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option2]  DEFAULT ((0)),[Option3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option3]  DEFAULT ((0)),[Exc] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Exc]  DEFAULT ((0)),[Ancient] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Ancient]  DEFAULT ((0)),[JoH] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_JoH]  DEFAULT ((0)),[SockBonus] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_SockBonus]  DEFAULT ((0)),[Sock1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock1]  DEFAULT ((0)),[Sock2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock2]  DEFAULT ((0)),[Sock3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock3]  DEFAULT ((0)),[Sock4] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock4]  DEFAULT ((0)),[Sock5] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock5]  DEFAULT ((0)), [Delivered] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Delivered]  DEFAULT ((0)), [TimeExpire] [datetime] NOT NULL, [TimeDelivered] [datetime] NULL ) ON [PRIMARY]")
+	local query = string.format("IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NPC_RESCUE_ITENS]') AND type in (N'U')) BEGIN CREATE TABLE [dbo].[NPC_RESCUE_ITENS] ([ID] [int] IDENTITY(1,1) NOT NULL,[Account] [varchar](10) NOT NULL,[ItemIndex] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_ItemIndex]  DEFAULT ((0)),[Level] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Level]  DEFAULT ((0)),[Option1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option1]  DEFAULT ((0)),[Option2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option2]  DEFAULT ((0)),[Option3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option3]  DEFAULT ((0)),[Exc] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Exc]  DEFAULT ((0)),[Ancient] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Ancient]  DEFAULT ((0)),[JoH] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_JoH]  DEFAULT ((0)),[SockBonus] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_SockBonus]  DEFAULT ((0)),[Sock1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock1]  DEFAULT ((0)),[Sock2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock2]  DEFAULT ((0)),[Sock3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock3]  DEFAULT ((0)),[Sock4] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock4]  DEFAULT ((0)),[Sock5] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock5]  DEFAULT ((0)), [Delivered] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Delivered]  DEFAULT ((0)), [TimeExpire] [datetime] NOT NULL, [TimeDelivered] [datetime] NULL ) ON [PRIMARY] END")
 	
 	db = DataBase.getDb()
 	db:exec(query)

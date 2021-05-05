@@ -119,3 +119,11 @@ DamageSend(aIndex, TargetIndex, isreflet, damage, damagetype, shieldDamage) -> y
 KillPlayer(aIndex) -> kill the player, will do the animation etc
 
 AddEffect(aIndex, type, effectID, count, value1, value2, value3, value4) -> add effect on player, effectID = you can see in effects.txt folder Data, count = timer in seconds
+
+RemoveEffect(aIndex, effectID) -> remove effect of the player
+
+TeleportMapRange(aIndex, map, x, y, range) -> teleport the player on the map next to the range coordinate
+
+MoveGate(aIndex, gateIndex) -> move player based on gateIndex = gate.txt
+
+DestroyParty(PartyNumber) -> destroy party
