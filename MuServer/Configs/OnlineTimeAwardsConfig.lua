@@ -30,13 +30,13 @@ Command Message
 ONLINE_TIME_AWARDS_MESSAGES = {  }
 
 ONLINE_TIME_AWARDS_MESSAGES['Por'] = {
-[1] = 'Você acabou de ser premiado com %s %d por ficar online',
+[1] = 'Você acabou de ser premiado com %d %s por ficar online',
 }
 
 ONLINE_TIME_AWARDS_MESSAGES['Eng'] = {
-[1] = 'You have just been awarded %s %d for being online',
+[1] = 'You have just been awarded %d %s for being online',
 }
 
-ONLINE_TIME_AWARDS_MESSAGES['Eng'] = {
-[1] = 'Acabas de recibir %s %d por estar en línea',
+ONLINE_TIME_AWARDS_MESSAGES['Spn'] = {
+[1] = 'Acabas de recibir %d %s por estar en línea',
 }

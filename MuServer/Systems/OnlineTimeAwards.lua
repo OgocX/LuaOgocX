@@ -11,7 +11,7 @@ function OnlineTimeAwards.RewardPlayerOnline(aIndex)
 		local rewardInfo = ONLINE_TIME_AWARDS_COINS_CONFIG[i]
 		
 		DataBase.SetAddValue(rewardInfo.Table, rewardInfo.Column, rewardInfo.Coins, rewardInfo.Where, Account)
-		SendMessage(string.format(ONLINE_TIME_AWARDS_MESSAGES[Language][1], rewardInfo.CoinName, rewardInfo.Coins), aIndex, 1)
+		SendMessage(string.format(ONLINE_TIME_AWARDS_MESSAGES[Language][1], rewardInfo.Coins, rewardInfo.CoinName), aIndex, 1)
 	end
 	
 	player = nil

@@ -97,7 +97,9 @@ function RussianRolette.HitPlayer(playerInfo)
 	
 	--Teleport(playerInfo.PlayerIndex, RUSSIAN_ROLETTE_TELEPORT_LOSE_MAP, RUSSIAN_ROLETTE_TELEPORT_LOSE_X, RUSSIAN_ROLETTE_TELEPORT_LOSE_Y)
 	
-	playerInfo = nil
+	local Index = playerInfo.PlayerIndex
+
+	RussianRolettePlayers[Index] = nil
 end
 
 function RussianRolette.FireOnPlayer()
@@ -107,6 +109,7 @@ function RussianRolette.FireOnPlayer()
 	then
 		math.randomseed(os.time())
 		math.random(0, 200)
+		math.random(1, 100)
 		
 		hit = math.random(1, #UsersLucky)
 		
@@ -114,7 +117,7 @@ function RussianRolette.FireOnPlayer()
 		
 		if player ~= nil
 		then
-			testLucky = math.random(0, 2)
+			testLucky = math.random(0, 4)
 			
 			if testLucky >= 1
 			then
@@ -267,6 +270,7 @@ function RussianRolette.CheckUser()
 				or player:getX() >= RUSSIAN_ROLLETTE_CHECK_AREA_X2 or player:getY() >= RUSSIAN_ROLLETTE_CHECK_AREA_Y2
 			then
 				SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[Language][22]), playerInfo.PlayerIndex, 1)
+				MoveGate(playerInfo.PlayerIndex, 17)
 				RussianRolettePlayers[i] = nil
 				goto continue
 			end

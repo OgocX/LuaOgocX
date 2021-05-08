@@ -779,7 +779,7 @@ function ZombieAttack.PlayerDie(aIndex, TargetIndex)
         then
             if ZOMBIE_ATTACK_INFECTION_PLAYER_POINT_RATE > 0
             then
-                local pointsRemove = math.abs((targetInfo.PointsEvent * ZOMBIE_ATTACK_INFECTION_PLAYER_POINT_RATE) / 100)
+                local pointsRemove = math.floor((targetInfo.PointsEvent * ZOMBIE_ATTACK_INFECTION_PLAYER_POINT_RATE) / 100)
 
                 if pointsRemove > 0
                 then    
@@ -809,7 +809,7 @@ function ZombieAttack.PlayerDie(aIndex, TargetIndex)
         then
             if ZOMBIE_ATTACK_INFECTION_DEFENSE_POINT_RATE > 0
             then
-                local pointsRemove = math.abs((targetInfo.PointsEvent * ZOMBIE_ATTACK_INFECTION_DEFENSE_POINT_RATE) / 100)
+                local pointsRemove = math.floor((targetInfo.PointsEvent * ZOMBIE_ATTACK_INFECTION_DEFENSE_POINT_RATE) / 100)
 
                 if pointsRemove > 0
                 then    

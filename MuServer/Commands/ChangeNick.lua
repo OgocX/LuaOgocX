@@ -62,7 +62,7 @@ function ChangeNick.ChangeAccountCharacterNick(newnick, account, name, position)
 end
 
 function ChangeNick.getPositionCharacter(account, name)
-	local str = string.format("Select GameID1, GameID2, GameID3, GameID4, GameID5 FROM AccountCharacter WHERE Id='%s'", account)
+	local str = string.format("Select GameID1, GameID2, GameID3, GameID4, GameID5, GameID6, GameID7, GameID8, GameID9, GameID10 FROM AccountCharacter WHERE Id='%s'", account)
 	local db = DataBase.getDb()
 	
 	if db:exec(str) == 0
@@ -85,6 +85,11 @@ function ChangeNick.getPositionCharacter(account, name)
 	local GameID3 = db:getStr('GameID3')
 	local GameID4 = db:getStr('GameID4')
 	local GameID5 = db:getStr('GameID5')
+	local GameID6 = db:getStr('GameID6')
+	local GameID7 = db:getStr('GameID7')
+	local GameID8 = db:getStr('GameID8')
+	local GameID9 = db:getStr('GameID9')
+	local GameID10 = db:getStr('GameID10')
 	
 	if GameID1 == name
 	then
@@ -101,6 +106,21 @@ function ChangeNick.getPositionCharacter(account, name)
 	elseif GameID5 == name
 	then
 		result = 5
+	elseif GameID6 == name
+	then
+		result = 6
+	elseif GameID7 == name
+	then
+		result = 7
+	elseif GameID8 == name
+	then
+		result = 8
+	elseif GameID9 == name
+	then
+		result = 9
+	elseif GameID10 == name
+	then
+		result = 10
 	end
 	
 	db:clear()
