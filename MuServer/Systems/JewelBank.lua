@@ -70,7 +70,9 @@ end
 
 function JewelBank.Protocol(aIndex, Packet, PacketName)
 	if Packet == JewelBank_Packet then
-		if PacketName == "JewelBank_Open" then
+		local player = User.new(aIndex)
+		local nome = player:getName()
+		if PacketName == string.format("JBOpe_%s",nome) then
 			ClearPacket(PacketName)
 			local t = JewelBank.GetBalance(aIndex)
 			CreatePacket(PacketName, JewelBank_Packet)
@@ -84,14 +86,14 @@ function JewelBank.Protocol(aIndex, Packet, PacketName)
 			return true
 		end
 		
-		if PacketName == "JewelBank_Deposit" then
+		if PacketName == string.format("JBDep_%s",nome) then
 			local slot = GetBytePacket(PacketName, -1)		
 			ClearPacket(PacketName)
 			JewelBank.Deposit(aIndex, slot)
 			return true
 		end
 		
-		if PacketName == "JewelBank_Sacar" then
+		if PacketName == string.format("JBSac_%s",nome) then
 			local listid = GetBytePacket(PacketName, -1)
 			local botao = GetBytePacket(PacketName, -1)		
 			JewelBank.Withdraw(aIndex, listid, botao)			
@@ -133,6 +135,8 @@ function JewelBank.Withdraw(aIndex, ListID, Button)
 		return
 	end
 	
+	
+	
 	ItemSerialCreateComplete(aIndex, 236, 0, 0, Index, Level, 0, 0, 0, 0, aIndex, 0, 0, 0)
 	DataBase.SetDecreaseValue(JewelBank_Table, Item.Coluna, valor, JewelBank_Where, player:getAccountID())
 	saldo = saldo-valor
@@ -163,9 +167,17 @@ function JewelBank.Deposit(aIndex, Slot)
 		
 		for i in ipairs(JewelBank_Jewels) do
 			if Index == JewelBank_Jewels[i].Index then
+				local IsStack = GetStackItem(Index)
+				local JewelsInsert = 1
+
+				if IsStack ~= 0
+				then
+					JewelsInsert = pInv:getDurability(Slot)
+				end
+				
 				InventoryDeleteItem(aIndex, Slot)
 				SendInventoryDeleteItem(aIndex, Slot)
-				DataBase.SetAddValue(JewelBank_Table, JewelBank_Jewels[i].Coluna, 1, JewelBank_Where, player:getAccountID())
+				DataBase.SetAddValue(JewelBank_Table, JewelBank_Jewels[i].Coluna, JewelsInsert, JewelBank_Where, player:getAccountID())
 				change = 1
 			elseif Index == JewelBank_Jewels[i].BundleIndex then
 				InventoryDeleteItem(aIndex, Slot)
@@ -185,11 +197,13 @@ function JewelBank.Deposit(aIndex, Slot)
 end
 
 function JewelBank.SendBalance(aIndex, ListID, Valor)
-	CreatePacket("JewelBank_GBalance", JewelBank_Packet)
-	SetBytePacket("JewelBank_GBalance", ListID)
-	SetWordPacket("JewelBank_GBalance", Valor)
-	SendPacket("JewelBank_GBalance", aIndex)
-	ClearPacket("JewelBank_GBalance")
+	local player = User.new(aIndex)
+	local nome = player:getName()
+	CreatePacket(string.format("JBBal_%s",nome), JewelBank_Packet)
+	SetBytePacket(string.format("JBBal_%s",nome), ListID)
+	SetWordPacket(string.format("JBBal_%s",nome), Valor)
+	SendPacket(string.format("JBBal_%s",nome), aIndex)
+	ClearPacket(string.format("JBBal_%s",nome))
 	return
 end
 

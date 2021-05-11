@@ -153,7 +153,7 @@ function PegaPega.CommandOpen(aIndex, Arguments)
 	end
 	
 	local player = User.new(aIndex)
-	local Language = player.getLanguage()
+	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
 	then
@@ -179,8 +179,6 @@ function PegaPega.CommandOpen(aIndex, Arguments)
 	idtimer = Timer.Repeater(1, timer, PegaPega.Running)
 	
 	SendMessageGlobal(string.format(CATCH_MESSAGE[Language][12], player:getName(), CATCH_COMMAND_GO), 1)
-	
-	
 end
 
 function PegaPega.CommandResult(aIndex, Arguments)
@@ -273,6 +271,8 @@ function PegaPega.CommandGo(aIndex, Arguments)
 	
 	if player:getAuthority(aIndex) == 1
 	then
+		local pInv = Inventory.new(aIndex)
+
 		for i, number in ipairs({0, 1, 2, 3, 4, 5, 7}) do
 			if pInv:isItem(number) == 1
 			then
@@ -307,8 +307,6 @@ function PegaPega.CommandGo(aIndex, Arguments)
 	else
 		SendMessage(string.format(CATCH_MESSAGE[Language][25]), aIndex, 1)
 	end
-	
-	
 end
 
 function PegaPega.Move(aIndex, map, x, y, sx, sy)
@@ -316,7 +314,7 @@ function PegaPega.Move(aIndex, map, x, y, sx, sy)
 	then
 		return
 	end
-	
+
 	if map ~= CATCH_MAP
 	then
 		return
@@ -332,29 +330,32 @@ function PegaPega.Move(aIndex, map, x, y, sx, sy)
 		RemoverTable(Participantes, player:getName())
 		return
 	end
-	
+
 	if player:getAuthority() == 1
 	then
 		return
 	end
-	
+
 	playercatch = {}
 	
-	for i = 0, 75 do
-		if (player:getTargetState(aIndex, i) == 1 or player:getTargetState(aIndex, i) == 2) and player:getTargetType(aIndex, i) == 1
+	for i = 0, 74 do
+		if (player:getTargetState(i) == 1 or player:getTargetState(i) == 2) and player:getTargetType(i) == 1
 		then
-			local TargetIndex = player:getTargetNumber(aIndex, i)
+			local TargetIndex = player:getTargetNumber(i)
+			local viewport_target = User.new(TargetIndex)
 			
-			if player:getAuthority(TargetIndex) == 1
+			if viewport_target:getAuthority() == 1
 			then
-				local distanc = Distance(player:getX(), player:getX(TargetIndex), player:getY(), player:getY(TargetIndex))
+				local distanc = Distance(player:getX(), viewport_target:getX(), player:getY(), viewport_target:getY())
 				
 				if distanc ~= 0 and distanc < 3
 				then
-					InsertKey(playercatch, player:getName(TargetIndex))
-					playercatch[player:getName(TargetIndex)] = TargetIndex
+					InsertKey(playercatch, viewport_target:getName())
+					playercatch[viewport_target:getName()] = TargetIndex
 				end
 			end
+
+			viewport_target = nil
 		end
 	end
 	

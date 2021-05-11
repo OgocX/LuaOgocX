@@ -54,6 +54,9 @@ function LoadEngMessage()
 	SetEngMsg(42, "Value in WCoinP: %d")
 	SetEngMsg(43, "Value in GoblinPoint: %d")
 	SetEngMsg(44, "Value in Soul Point: %d")
+	
+	--JewelStack
+	SetEngMsg(45, "Number of jewels: %d")
 end
 
 function LoadPorMessage()
@@ -112,6 +115,9 @@ function LoadPorMessage()
 	SetPorMsg(42, "Valor em WCoinP: %d")
 	SetPorMsg(43, "Valor em GoblinPoint: %d")
 	SetPorMsg(44, "Valor em Soul Point: %d")
+	
+	--JewelStack
+	SetPorMsg(45, "Número de jóias: %d")
 end
 
 function LoadSpnMessage()
@@ -170,4 +176,7 @@ function LoadSpnMessage()
 	SetSpnMsg(42, "Valor en WCoinP: %d")
 	SetSpnMsg(43, "Valor en GoblinPoint: %d")
 	SetSpnMsg(44, "Valor en punto del alma: %d")
+	
+	--JewelStack
+	SetSpnMsg(45, "Numero de joyas: %d")
 end

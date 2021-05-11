@@ -134,7 +134,13 @@ function ChaosMachineGenesis.CheckItens(aIndex, ItemIndex, Quantity, Level)
 			if ItemIndex == item:getIndex(i) and (Level == -1 or item:getLevel(i) == Level)
 			then
 				itemFind = 1
-				itemQuantity = itemQuantity + 1
+
+				if GetStackItem(item:getIndex(i)) ~= 0
+				then
+					itemQuantity = itemQuantity + item:getDurability(i)
+				else
+					itemQuantity = itemQuantity + 1
+				end
 			end
 		end
 	end
