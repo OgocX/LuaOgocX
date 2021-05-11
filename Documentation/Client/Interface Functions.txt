@@ -1,0 +1,88 @@
+=========================================
+======  INTERFACE FUNCTIONS LUA  ========
+=========================================
+
+NOTE:
+
+you can see exemples in: LogInAndWin.lua / NpcRescue.lua / ChaosMachine.lua / JewelBank.lua
+
+--------------
+
+RenderImage(ImageID, x, y, width, height) -> render image
+
+RenderImage2(ImageID, x, y, width, height, u, v, uwidth, vheight, scale, startscale, alpha) -> render image with specific definitions
+
+RenderText(text, x, y, width, color, align) -> render text color need be RGBA
+
+RenderText2(x, y, string, size, align) -> render text align size
+
+RenderText3(x, y, string, align) -> render text align
+
+CheckWindowOpen(windowID) -> return 1 if window is open, you can see number of window in Defines.lua
+
+CloseWindow(windowID) -> close window opening
+
+OpenWindow(windowID) -> open window
+
+EnableAlphaTest() -> used when you are rendering images and text
+
+DisableAlphaBlend() -> used to terminate EnableAlphaTest()
+
+glColor3f(r, g, b) -> set color
+
+glColor4f(r, g, b, a) -> set color rgba
+
+DrawBar(x, y, width, height) -> draw bar like party bar
+
+SetBlend() -> enable blend
+
+GLSwitchBlend() -> enable switch blend
+
+GLSwitch() -> open gl switch
+
+EndDrawBar() -> used to terminate DrawBar
+
+MousePosX() -> return mouse position X
+
+MousePosY() -> return mouse position Y
+
+SetFontType(type) -> set font type: 1 = Bold, 2 = Big, 0 = normal
+
+SetTextBg(r, g, b, a) -> set text bg
+
+SetTextColor(r, g, b, a) -> set text color
+
+SetLockInterfaces() -> lock interface click need use in UpdateMouse
+
+SetUnlockInterfaces() -> unlock interface click
+
+LockPlayerWalk() -> lock player walk in map
+
+UnlockPlayerWalk() -> unlock player walk
+
+CheckRepeatKey(key) -> return 1 if key is repeat you can see number of keys in Defines.lua
+
+CheckPressedKey(key) -> return 1 if key is pressed you can see number of keys in Defines.lua
+
+CheckReleasedKey(key) -> return 1 if key is drop you can see number of keys in Defines.lua
+
+CheckClickClient() -> check if player click
+
+DisableClickClient() -> disable click client this can block click in interface
+
+CreateItem(x, y, width, height, ItemIndex, level, ancient, unknow) -> render item on the screen or interface
+
+ShowItemDescription(x, y, ItemIndex, level, op1, op2, op3, durability, exc, ancient) -> render description item on the screen or interface
+
+ShowDescriptionComplete(x, y, level, op1, op2, op3, exc, ancient, joh, sockbonus, sock1, sock2, sock3, sock4, sock5)
+
+CreateGuildMark(markIndex) -> create guild mark "image"
+
+CheckDistance(arrayIndex, distance) -> check distance of the another player or monster
+
+getFPS() -> return fps of the client
+
+GetImageWidth(imageID) -> return real width from main of the image
+
+GetImageHeight(imageID) -> return real height from main of the image
+

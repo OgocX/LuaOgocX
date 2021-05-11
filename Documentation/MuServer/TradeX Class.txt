@@ -28,11 +28,25 @@ getName(slot) -> returns name of the item through the slot
 getSection(slot) -> returns section of the item through the slot
 getIndex2(slot) -> returns index of the item through the slot
 getSerial(slot) -> returns serial of the item through the slot
+getDurability(slot) -> returns durability of the item through the slot (max: 255)
+setDurability(slot, value) -> set durability of the item through the slot (max: 255)
+convertItem(slot) -> update the item after you modify the excellent or something of the same
 getItemTable(slot, type) -> returns options of item through the slot
+setItemTable(slot, type, value) -> set options of item through the slot
 
-type: 1 -> returns exc value
-type: 2 -> returns option1 value
-type: 3 -> returns option2 value
-type: 4 -> returns option3 value
-type: 5 -> returns ancient value
-type: 6 -> returns JoH value
+ItemTable Types:
+
+type: 1 -> exc value
+type: 2 -> option1 value
+type: 3 -> option2 value
+type: 4 -> option3 value
+type: 5 -> ancient value
+type: 6 -> JoH value
+type: 7 -> Ex option
+type: 8 -> socket bonus option
+type: 9 -> socket option 1
+type: 10 -> socket option 2
+type: 11 -> socket option 3
+type: 12 -> socket option 4
+type: 13 -> socket option 5
+

@@ -1,0 +1,63 @@
+=========================================
+=========  INTERFACE CALL LUA  ==========
+=========================================
+
+NOTE:
+
+this part is the documentation that has the main functions that pass to the lua. these functions you can "hook" in your own lua
+
+--------------------------
+
+OBS:
+
+in this documentation only the functions that come from the main will be placed, there are several scripts that use most of these functions so you just have to look in the scripts that you will have an "example"
+
+
+--------------------------
+
+EXAMPLE:
+
+i want print hellow world on the screen:
+
+function InterfaceProc()
+	SetFontType(1)
+	
+	SetTextBg(0, 0, 0, 200)
+	
+	SetTextColor(255, 255, 255, 255)
+	
+	RenderText2(250, 275, "Hellow World", ALIGN_LEFT)
+end
+
+
+InterfaceController.MainProc(InterfaceProc)
+
+--------------------------
+
+INTERFACE CALLS:
+
+InterfaceController.MainProc() -> render interface
+
+InterfaceController.BeforeMainProc() -> render interface before original interface like "C" "V" etc...
+
+InterfaceController.ClientProtocol(Packet, PacketName) -> receive packet from gameserver
+
+InterfaceController.MainProcWorldKey() -> detect when a key is pressed on the keyboard
+
+InterfaceController.ScrollMouse(value) -> detect when mouse scroll value > 0 is up < 0 is down
+
+InterfaceController.InterfaceClickRightEvent() -> detect right click mouse
+
+InterfaceController.InterfaceClickEvent() -> detect click mouse
+
+InterfaceController.UpdateProc() -> update used for detect functions mouse in interface etc
+
+InterfaceController.UpdateMouse() -> specifically to detect things on the mouse to use in the interface
+
+InterfaceController.UpdateKey() -> specifically to detect key press
+
+InterfaceController.PlayerDraw() -> when you want render something in player like healthbar
+
+InterfaceController.FinalBoot() -> if you want load some image etc use this
+
+InterfaceController.LoadImages() -> when main will load images this function is called

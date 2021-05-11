@@ -127,3 +127,29 @@ TeleportMapRange(aIndex, map, x, y, range) -> teleport the player on the map nex
 MoveGate(aIndex, gateIndex) -> move player based on gateIndex = gate.txt
 
 DestroyParty(PartyNumber) -> destroy party
+
+GetMemberCountParty(PartyNumber) -> return number of member in party
+
+CreateParty(aIndex) -> create party
+
+AddMemberParty(PartyNumber, aIndex) -> add member in party
+
+GCPartyResultSend(aIndex, result) -> send main player result party: 2 = fail
+
+GCPartyDelMemberSend(aIndex) -> send main player member removed from party
+
+GCPartyListSend(aIndex) -> send main player list party
+
+IsLeaderParty(PartyNumber, aIndex) -> return 1 if player if leader of the party
+
+IsMemberParty(PartyNumber, aIndex) -> return 1 if is member of the party
+
+IsParty(PartyNumber) -> return 1 if party exist
+
+GetMemberIndexParty(PartyNumber, number) -> number 0 to 4, returns the party number index
+
+GetStackItem(ItemIndex) -> return > 0 if item is stack
+
+GetInventoryEmptySlotCount(aIndex) -> return number of empty slot in inventory
+
+GetInventoryItemCount(aIndex, ItemIndex, Level) -> return number of itens in inventory of the player, level -1 = any level
