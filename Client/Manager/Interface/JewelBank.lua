@@ -51,7 +51,7 @@ JewelBank_Texts["Spn"] = {
 
 
 
--- INÍCIO DO CÓDIGO, SÓ MEXA SE SOUBER O QUE ESTÁ FAZENDO --
+-- INÝCIO DO CÓDIGO, SÓ MEXA SE SOUBER O QUE ESTÝ FAZENDO --
 JewelBank = {}
 JewelBank_Buttons = {}
 JewelBank_WorkArea = {X1 = 260, X2 = 450, Y1 = 0, Y2 = 429}
@@ -364,7 +364,8 @@ function JewelBank.Protocol(Packet, PacketName)
 end
 
 function JewelBank.KeyListener(key)
-	if CheckWindowOpen(UIChatWindow) == 0 and CheckWindowOpen(UIStore) == 0then
+	if CheckWindowOpen(UIChatWindow) == 0 and CheckWindowOpen(UIStore) == 0 
+	then
 		if key == Keys.J then
 			if JewelBank_Enabled then
 				if UICustomInterface == JewelBank_WindowId then

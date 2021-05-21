@@ -404,7 +404,7 @@ function DuelCommand.CommandDuel(aIndex, Arguments)
 	
 	local target_player = User.new(TargetIndex)
 	
-	if (target_player:getOption() & 1) ~= 1
+	if bit.band(target_player:getOption(), 1) ~= 1
 	then
 		SendMessage(string.format(DUEL_MESSAGE[Language][4], TargetName), aIndex, 1)
 		return

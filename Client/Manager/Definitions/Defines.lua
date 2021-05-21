@@ -1,7 +1,7 @@
 ITEM_BASE          = 1171
 
 function CONVERT_RGBA(r, g, b, a)
-	return ((a << 24) + (b << 16) + (g << 8) + r)
+	return (bit.lshift(a, 24) + bit.lshift(b, 16) + bit.lshift(g, 8) + r)
 end
 
 function GET_ITEM(x, y)

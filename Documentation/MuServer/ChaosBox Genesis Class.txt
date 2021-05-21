@@ -31,6 +31,8 @@ getSerial(slot) -> returns serial of the item through the slot
 getDurability(slot) -> returns durability of the item through the slot (max: 255)
 setDurability(slot, value) -> set durability of the item through the slot (max: 255)
 convertItem(slot) -> update the item after you modify the excellent or something of the same
+getIsPeriodic(slot) -> return 1 if this slot have item periodic
+getPeriodicTime(slot) -> return time if this slot have item periodic
 getItemTable(slot, type) -> returns options of item through the slot
 setItemTable(slot, type, value) -> set options of item through the slot
 

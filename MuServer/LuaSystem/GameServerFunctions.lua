@@ -6,7 +6,7 @@ local PlayerDropItem_Handles = {}
 
 function PlayerDropItem(aIndex, x, y, slot)
 	for i in pairs(PlayerDropItem_Handles) do
-		if PlayerDropItem_Handles[i].callback(aIndex, x, y, slot, table.unpack(PlayerDropItem_Handles[i].args)) == 1 then
+		if PlayerDropItem_Handles[i].callback(aIndex, x, y, slot, unpack(PlayerDropItem_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -21,7 +21,7 @@ end
 local CharacterSet_Handles = {}
 function CharacterSet(aIndex)
 	for i in pairs(CharacterSet_Handles) do
-		CharacterSet_Handles[i].callback(aIndex, table.unpack(CharacterSet_Handles[i].args))
+		CharacterSet_Handles[i].callback(aIndex, unpack(CharacterSet_Handles[i].args))
 	end
 end
 function GameServerFunctions.CharacterSet(callback, ...)
@@ -32,7 +32,7 @@ end
 local MonsterDie_Handles = {}
 function MonsterDie(Player, Monster)
 	for i in pairs(MonsterDie_Handles) do
-		MonsterDie_Handles[i].callback(Player, Monster, table.unpack(MonsterDie_Handles[i].args))
+		MonsterDie_Handles[i].callback(Player, Monster, unpack(MonsterDie_Handles[i].args))
 	end
 end
 function GameServerFunctions.MonsterDie(callback, ...)
@@ -44,7 +44,7 @@ end
 local MonsterDieGiveItem_Handles = {}
 function MonsterDieGiveItem(Player, Monster)
 	for i in pairs(MonsterDieGiveItem_Handles) do
-		if MonsterDieGiveItem_Handles[i].callback(Player, Monster, table.unpack(MonsterDieGiveItem_Handles[i].args)) == 1 then
+		if MonsterDieGiveItem_Handles[i].callback(Player, Monster, unpack(MonsterDieGiveItem_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -59,7 +59,7 @@ end
 local PlayerDie_Handles = {}
 function PlayerDie(aIndex, TargetIndex)
 	for i in pairs(PlayerDie_Handles) do
-		PlayerDie_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerDie_Handles[i].args))
+		PlayerDie_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerDie_Handles[i].args))
 	end
 end
 function GameServerFunctions.PlayerDie(callback, ...)
@@ -70,7 +70,7 @@ end
 local PlayerAttack_Handles = {}
 function PlayerAttack(aIndex, TargetIndex)
 	for i in pairs(PlayerAttack_Handles) do
-		if PlayerAttack_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerAttack_Handles[i].args)) == 1 then
+		if PlayerAttack_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerAttack_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -81,12 +81,28 @@ function GameServerFunctions.PlayerAttack(callback, ...)
 	PlayerAttack_Handles[callback] = { callback = callback, args = {...} }
 end
 
+-- when player try add point in "c"
+local LevelUpPointAdd_Handles = {}
+function LevelUpPointAdd(aIndex, Type)
+	for i in pairs(LevelUpPointAdd_Handles) do
+		if LevelUpPointAdd_Handles[i].callback(aIndex, TargetIndex, unpack(LevelUpPointAdd_Handles[i].args)) == 1 then
+			return 1
+		end
+	end
+	
+	return
+end
+
+function GameServerFunctions.LevelUpPointAdd(callback, ...)
+	LevelUpPointAdd_Handles[callback] = { callback = callback, args = {...} }
+end
+
 -- Quando um player envia pedido de trade para outro jogador
 -- retorno 1 impede o evnio do pedidod e trade
 local PlayerSendTrade_Handles = {}
 function PlayerSendTrade(aIndex, TargetIndex)
 	for i in pairs(PlayerSendTrade_Handles) do
-		if PlayerSendTrade_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerSendTrade_Handles[i].args)) == 1 then
+		if PlayerSendTrade_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerSendTrade_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -102,7 +118,7 @@ end
 local PlayerLevelUp_Handles = {}
 function PlayerLevelUp(aIndex)
 	for i in pairs(PlayerLevelUp_Handles) do
-		if PlayerLevelUp_Handles[i].callback(aIndex, table.unpack(PlayerLevelUp_Handles[i].args)) == 1 then
+		if PlayerLevelUp_Handles[i].callback(aIndex, unpack(PlayerLevelUp_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -118,7 +134,7 @@ end
 local BlockReflet_Handles = {}
 function BlockReflet(aIndex)
 	for i in pairs(BlockReflet_Handles) do
-		if BlockReflet_Handles[i].callback(aIndex, table.unpack(BlockReflet_Handles[i].args)) == 1 then
+		if BlockReflet_Handles[i].callback(aIndex, unpack(BlockReflet_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -134,7 +150,7 @@ end
 local PlayerRingEquiped_Handles = {}
 function PlayerRingEquiped(aIndex)
 	for i in pairs(PlayerRingEquiped_Handles) do
-		if PlayerRingEquiped_Handles[i].callback(aIndex, table.unpack(PlayerRingEquiped_Handles[i].args)) == 1 then
+		if PlayerRingEquiped_Handles[i].callback(aIndex, unpack(PlayerRingEquiped_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -150,7 +166,7 @@ end
 local PlayerTradeOk_Handles = {}
 function PlayerTradeOk(aIndex, TargetIndex)
 	for i in pairs(PlayerTradeOk_Handles) do
-		if PlayerTradeOk_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerTradeOk_Handles[i].args)) == 1	then
+		if PlayerTradeOk_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerTradeOk_Handles[i].args)) == 1	then
 			return 1
 		end
 	end
@@ -165,7 +181,7 @@ end
 local PlayerLogout_Handles = {}
 function PlayerLogout(aIndex, Name, Account)
 	for i in pairs(PlayerLogout_Handles) do
-		PlayerLogout_Handles[i].callback(aIndex, Name, Account, table.unpack(PlayerLogout_Handles[i].args))
+		PlayerLogout_Handles[i].callback(aIndex, Name, Account, unpack(PlayerLogout_Handles[i].args))
 	end
 end
 function GameServerFunctions.PlayerLogout(callback, ...)
@@ -176,7 +192,7 @@ end
 local GuildWarProc_Handles = {}
 function GuildWarProc(GuildName1, GuildPoints1, GuildName2, GuildPoints2)
 	for i in pairs(GuildWarProc_Handles) do
-		GuildWarProc_Handles[i].callback(GuildName1, GuildPoints1, GuildName2, GuildPoints2, table.unpack(GuildWarProc_Handles[i].args))
+		GuildWarProc_Handles[i].callback(GuildName1, GuildPoints1, GuildName2, GuildPoints2, unpack(GuildWarProc_Handles[i].args))
 	end
 end
 function GameServerFunctions.GuildWarProc(callback, ...)
@@ -187,18 +203,29 @@ end
 local EnterCharacter_Handles = {}
 function EnterCharacter(aIndex)
 	for i in pairs(EnterCharacter_Handles) do
-		EnterCharacter_Handles[i].callback(aIndex, table.unpack(EnterCharacter_Handles[i].args))
+		EnterCharacter_Handles[i].callback(aIndex, unpack(EnterCharacter_Handles[i].args))
 	end
 end
 function GameServerFunctions.EnterCharacter(callback, ...)
 	EnterCharacter_Handles[callback] = { callback = callback, args = {...} }
 end
 
+-- Quando um player deleta um personagem
+local DeleteCharacter_Handles = {}
+function DeleteCharacter(aIndex, name)
+	for i in pairs(DeleteCharacter_Handles) do
+		DeleteCharacter_Handles[i].callback(aIndex, name, unpack(DeleteCharacter_Handles[i].args))
+	end
+end
+function GameServerFunctions.DeleteCharacter(callback, ...)
+	DeleteCharacter_Handles[callback] = { callback = callback, args = {...} }
+end
+
 -- Quando o player é movido usando a função Teleport()
 local CharacterMove_Handles = {}
 function CharacterMove(aIndex, map, x, y)
 	for i in pairs(CharacterMove_Handles) do
-		if CharacterMove_Handles[i].callback(aIndex, map, x, y, table.unpack(CharacterMove_Handles[i].args)) == 1 then
+		if CharacterMove_Handles[i].callback(aIndex, map, x, y, unpack(CharacterMove_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -213,7 +240,7 @@ end
 local PlayerMove_Handles = {}
 function PlayerMove(aIndex, map, x, y, sx, sy)
 	for i in pairs(PlayerMove_Handles) do
-		PlayerMove_Handles[i].callback(aIndex, map, x, y, sx, sy, table.unpack(PlayerMove_Handles[i].args))
+		PlayerMove_Handles[i].callback(aIndex, map, x, y, sx, sy, unpack(PlayerMove_Handles[i].args))
 	end
 end
 function GameServerFunctions.PlayerMove(callback, ...)
@@ -225,7 +252,7 @@ end
 local RunningSkill_Handles = {}
 function RunningSkill(aIndex, TargetIndex, MagicNumber)
 	for i in pairs(RunningSkill_Handles) do
-		if RunningSkill_Handles[i].callback(aIndex, TargetIndex, MagicNumber, table.unpack(RunningSkill_Handles[i].args)) == 1 then
+		if RunningSkill_Handles[i].callback(aIndex, TargetIndex, MagicNumber, unpack(RunningSkill_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -241,7 +268,7 @@ end
 local NpcTalk_Handles = {}
 function NpcTalk(Npc, Player)
 	for i in pairs(NpcTalk_Handles) do
-		if NpcTalk_Handles[i].callback(Npc, Player, table.unpack(NpcTalk_Handles[i].args)) == 1 then
+		if NpcTalk_Handles[i].callback(Npc, Player, unpack(NpcTalk_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -257,7 +284,7 @@ end
 local PlayerSellItem_Handles = {}
 function PlayerSellItem(aIndex, Position)
 	for i in pairs(PlayerSellItem_Handles) do
-		if PlayerSellItem_Handles[i].callback(aIndex, Position, table.unpack(PlayerSellItem_Handles[i].args)) == 1 then
+		if PlayerSellItem_Handles[i].callback(aIndex, Position, unpack(PlayerSellItem_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -273,7 +300,7 @@ end
 local PlayerRepairItem_Handles = {}
 function PlayerRepairItem(aIndex, Position)
 	for i in pairs(PlayerRepairItem_Handles) do
-		if PlayerRepairItem_Handles[i].callback(aIndex, Position, table.unpack(PlayerRepairItem_Handles[i].args)) == 1 then
+		if PlayerRepairItem_Handles[i].callback(aIndex, Position, unpack(PlayerRepairItem_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -289,7 +316,7 @@ end
 local PlayerCanMove_Handles = {}
 function PlayerCanMove(aIndex)
 	for i in pairs(PlayerCanMove_Handles) do
-		if PlayerCanMove_Handles[i].callback(aIndex, table.unpack(PlayerCanMove_Handles[i].args)) == 1 then
+		if PlayerCanMove_Handles[i].callback(aIndex, unpack(PlayerCanMove_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -304,7 +331,7 @@ end
 local PlayerMoveItem_Handles = {}
 function PlayerMoveItem(aIndex, SourceSlot, TargetSlot, Type)
 	for i in pairs(PlayerMoveItem_Handles) do
-		PlayerMoveItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, Type, table.unpack(PlayerMoveItem_Handles[i].args))
+		PlayerMoveItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, Type, unpack(PlayerMoveItem_Handles[i].args))
 	end
 	return
 end
@@ -316,7 +343,7 @@ end
 local PlayerVaultOpen_Handles = {}
 function PlayerVaultOpen(aIndex)
 	for i in pairs(PlayerVaultOpen_Handles) do
-		PlayerVaultOpen_Handles[i].callback(aIndex, table.unpack(PlayerVaultOpen_Handles[i].args))
+		PlayerVaultOpen_Handles[i].callback(aIndex, unpack(PlayerVaultOpen_Handles[i].args))
 	end
 	return
 end
@@ -329,7 +356,7 @@ end
 local DeclareWar_Handles = {}
 function DeclareWar(aIndex)
 	for i in pairs(DeclareWar_Handles) do
-		if DeclareWar_Handles[i].callback(aIndex, table.unpack(DeclareWar_Handles[i].args)) == 1 then
+		if DeclareWar_Handles[i].callback(aIndex, unpack(DeclareWar_Handles[i].args)) == 1 then
 			return 1
 		end	
 	end
@@ -345,7 +372,7 @@ end
 local PlayerUseItem_Handles = {}
 function PlayerUseItem(aIndex, SourceSlot, TargetSlot)
 	for i in pairs(PlayerUseItem_Handles) do
-		if PlayerUseItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, table.unpack(PlayerUseItem_Handles[i].args)) == 1 then
+		if PlayerUseItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, unpack(PlayerUseItem_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -360,7 +387,7 @@ end
 local PlayerVaultClose_Handles = {}
 function PlayerVaultClose(aIndex)
 	for i in pairs(PlayerVaultClose_Handles) do
-		PlayerVaultClose_Handles[i].callback(aIndex, table.unpack(PlayerVaultClose_Handles[i].args))
+		PlayerVaultClose_Handles[i].callback(aIndex, unpack(PlayerVaultClose_Handles[i].args))
 	end
 	return
 end
@@ -373,7 +400,7 @@ end
 local PlayerSendTradeX_Handles = {}
 function PlayerSendTradeX(aIndex, TargetIndex)
 	for i in pairs(PlayerSendTradeX_Handles) do
-		if PlayerSendTradeX_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerSendTradeX_Handles[i].args)) == 1 then
+		if PlayerSendTradeX_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerSendTradeX_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -389,7 +416,7 @@ end
 local PlayerTradeXOk_Handles = {}
 function PlayerTradeXOk(aIndex, TargetIndex)
 	for i in pairs(PlayerTradeXOk_Handles) do
-		if PlayerTradeXOk_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerTradeXOk_Handles[i].args)) == 1 then
+		if PlayerTradeXOk_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerTradeXOk_Handles[i].args)) == 1 then
 			return 1
 		end
 	end
@@ -405,7 +432,7 @@ end
 local ElementSlot_Handles = {}
 function CanEquipElementSlot(aIndex)
 	for i in pairs(ElementSlot_Handles) do
-		if ElementSlot_Handles[i].callback(aIndex, table.unpack(ElementSlot_Handles[i].args)) == 1
+		if ElementSlot_Handles[i].callback(aIndex, unpack(ElementSlot_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -422,7 +449,7 @@ end
 local PlayerOpenShop_Handles = {}
 function PlayerOpenShop(aIndex)
 	for i in pairs(PlayerOpenShop_Handles) do
-		if PlayerOpenShop_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerOpenShop_Handles[i].args)) == 1
+		if PlayerOpenShop_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerOpenShop_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -438,7 +465,7 @@ end
 local PlayerCloseShop_Handles = {}
 function PlayerCloseShop(aIndex)
 	for i in pairs(PlayerCloseShop_Handles) do
-		if PlayerCloseShop_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerCloseShop_Handles[i].args)) == 1
+		if PlayerCloseShop_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerCloseShop_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -454,7 +481,7 @@ end
 local PlayerCanEquipItem_Handles = {}
 function PlayerCanEquipItem(aIndex, SourceSlot, TargetSlot)
 	for i in pairs(PlayerCanEquipItem_Handles) do
-		if PlayerCanEquipItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, table.unpack(PlayerCanEquipItem_Handles[i].args)) == 1
+		if PlayerCanEquipItem_Handles[i].callback(aIndex, SourceSlot, TargetSlot, unpack(PlayerCanEquipItem_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -469,7 +496,7 @@ end
 local GameServerProtocol_Handles = {}
 function GameServerProtocol(aIndex, Packet, PacketName)
 	for i in pairs(GameServerProtocol_Handles) do
-		if GameServerProtocol_Handles[i].callback(aIndex, Packet, PacketName, table.unpack(GameServerProtocol_Handles[i].args)) then return end
+		if GameServerProtocol_Handles[i].callback(aIndex, Packet, PacketName, unpack(GameServerProtocol_Handles[i].args)) then return end
 	end
 	ClearPacket(PacketName)
 end
@@ -482,7 +509,7 @@ end
 local MacAddressPlayer_Handles = {}
 function MacAddressPlayer(aIndex, HWID)
 	for i in pairs(MacAddressPlayer_Handles) do
-		MacAddressPlayer_Handles[i].callback(aIndex, HWID, table.unpack(MacAddressPlayer_Handles[i].args))
+		MacAddressPlayer_Handles[i].callback(aIndex, HWID, unpack(MacAddressPlayer_Handles[i].args))
 	end
 end
 
@@ -495,7 +522,7 @@ local PlayerAttackFenrirSkill_Handles = {}
 
 function PlayerAttackFenrirSkill(aIndex, TargetIndex)
 	for i in pairs(PlayerAttackFenrirSkill_Handles) do
-		if PlayerAttackFenrirSkill_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerAttackFenrirSkill_Handles[i].args)) == 1
+		if PlayerAttackFenrirSkill_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerAttackFenrirSkill_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -511,7 +538,7 @@ local RespawnUser_Handles = {}
 
 function RespawnUser(aIndex)
 	for i in pairs(RespawnUser_Handles) do
-		RespawnUser_Handles[i].callback(aIndex, table.unpack(RespawnUser_Handles[i].args))	
+		RespawnUser_Handles[i].callback(aIndex, unpack(RespawnUser_Handles[i].args))	
 	end
 end
 
@@ -524,7 +551,7 @@ local MonsterReload_Handles = {}
 
 function MonsterReload()
 	for i in pairs(MonsterReload_Handles) do
-		MonsterReload_Handles[i].callback(table.unpack(MonsterReload_Handles[i].args))	
+		MonsterReload_Handles[i].callback(unpack(MonsterReload_Handles[i].args))	
 	end
 end
 
@@ -537,7 +564,7 @@ local ChaosMachineGenesis_Handles = {}
 
 function ChaosMachineGenesisMix(aIndex)
 	for i in pairs(ChaosMachineGenesis_Handles) do
-		ChaosMachineGenesis_Handles[i].callback(aIndex, table.unpack(ChaosMachineGenesis_Handles[i].args))	
+		ChaosMachineGenesis_Handles[i].callback(aIndex, unpack(ChaosMachineGenesis_Handles[i].args))	
 	end
 end
 
@@ -550,7 +577,7 @@ local ReloadLuaMonster_Handles = {}
 
 function ReloadLuaMonster()
 	for i in pairs(ReloadLuaMonster_Handles) do
-		ReloadLuaMonster_Handles[i].callback(table.unpack(ReloadLuaMonster_Handles[i].args))	
+		ReloadLuaMonster_Handles[i].callback(unpack(ReloadLuaMonster_Handles[i].args))	
 	end
 end
 
@@ -563,7 +590,7 @@ local PlayerSendParty_Handles = {}
 
 function PlayerSendParty(aIndex, TargetIndex)
 	for i in pairs(PlayerSendParty_Handles) do
-		if PlayerSendParty_Handles[i].callback(aIndex, TargetIndex, table.unpack(PlayerSendParty_Handles[i].args)) == 1
+		if PlayerSendParty_Handles[i].callback(aIndex, TargetIndex, unpack(PlayerSendParty_Handles[i].args)) == 1
 		then
 			return 1
 		end
@@ -573,5 +600,22 @@ end
 function GameServerFunctions.PlayerSendParty(callback, ...)
 	PlayerSendParty_Handles[callback] = { callback = callback, args = {...} }
 end
+
+--When BC, DS, CC reward player
+local RewardNativeEvents_Handles = {}
+
+function ReceiveEventReward(aIndex, EventType)
+	for i in pairs(RewardNativeEvents_Handles) do
+		if RewardNativeEvents_Handles[i].callback(aIndex, EventType, unpack(RewardNativeEvents_Handles[i].args)) == 1
+		then
+			return 1
+		end
+	end
+end
+
+function GameServerFunctions.ReceiveEventReward(callback, ...)
+	RewardNativeEvents_Handles[callback] = { callback = callback, args = {...} }
+end
+
 
 return GameServerFunctions

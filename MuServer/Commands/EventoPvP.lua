@@ -519,7 +519,7 @@ function EventPvP.SendMessagePlayer(message, messageKey, ...)
 		then
 			local Language = player:getLanguage()
 			local arg = {...}
-			SendMessage(string.format(message[Language][messageKey], table.unpack(arg)), EVENTPVP_PARTICIPANTS[key].Index, 0)
+			SendMessage(string.format(message[Language][messageKey], unpack(arg)), EVENTPVP_PARTICIPANTS[key].Index, 0)
 		end
 		
 		

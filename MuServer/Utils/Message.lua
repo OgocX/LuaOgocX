@@ -56,7 +56,7 @@ function Message.SendMessageGlobalMultLangArgs(messageSource, messageKey, messag
 			goto continue
 		end
 		
-		SendMessagePlayer(i, messageType, string.format(messageSource[Language][messageKey], table.unpack(arg)))
+		SendMessagePlayer(i, messageType, string.format(messageSource[Language][messageKey], unpack(arg)))
 		
 		player = nil
 		
@@ -69,7 +69,7 @@ end
 function Message.SendGlobalMultLangeDirect(messageSource, messageType, ...)
 	local arg = {...}
 	
-	local unpack_arg = table.unpack(arg)
+	local unpack_arg = unpack(arg)
 	
 	for i = OBJECT_START_USER, MAX_OBJECT
 	do
