@@ -28,7 +28,8 @@ function InterfaceInfos.Render()
 	if	CheckWindowOpen(UIExpandInventory)	== 1	then	return							end
 	if	CheckWindowOpen(UIExpandWarehouse)	== 1	then	return							end
 	if	CheckWindowOpen(UIMuHelper)			== 1	then	return							end
-	if	CheckWindowOpen(UIInventory)			== 1	then	return							end
+	if	CheckWindowOpen(UIInventory)		== 1	then	return							end
+	if	QuestSystem.CheckOpen()				== 1	then	return							end
 
 	EnableAlphaTest()
 	

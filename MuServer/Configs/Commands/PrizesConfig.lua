@@ -27,9 +27,23 @@ PRIZES_MESSAGES["Por"] = {
 }
 
 PRIZES_MESSAGES["Eng"] = {
-
+[1] = "[System] %s is offline or does not exist",
+[2] = "[%s]",
+[3] = "Event Prize %s",
+[4] = "Added to <%s>",
+[5] = "[System] Your prize has been added!",
+[6] = "[System] Awards added successfully!",
+[7] = "Added for < %s and %s >",
+[8] = "%s, %s and %s",
 }
 
 PRIZES_MESSAGES["Spn"] = {
-
+[1] = "[Sistema] %s está desconectado o no existe",
+[2] = "[%s]",
+[3] = "Recompensa %s evento",
+[4] = "Agregado a < %s >",
+[5] = "[Sistema] ¡Tu premio ha sido agregado!",
+[6] = "¡Recompensas de [Sistema] agregadas correctamente!",
+[7] = "Agregado para < %s y %s >",
+[8] = "%s, %s y %s",
 }

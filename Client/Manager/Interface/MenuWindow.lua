@@ -6,18 +6,21 @@ MENU_WINDOW_MESSAGES['Por'] = {
 [1] = 'Menu Rápido',
 [2] = 'Banco de jóias',
 [3] = 'Procurar Party',
+[4] = 'Procurar Lojas',
 }
 
 MENU_WINDOW_MESSAGES['Eng'] = {
 [1] = 'Quick Menu',
 [2] = 'Jewel Bank',
 [3] = 'Party Search',
+[4] = 'Store Search',
 }
 
 MENU_WINDOW_MESSAGES['Spn'] = {
 [1] = 'Menú rápido',
 [2] = 'Banco de joyas',
 [3] = 'Grupo de búsqueda',
+[4] = 'Explorar tiendas',
 }
 
 MenuWindow = {}
@@ -26,12 +29,20 @@ local MenuWindowVisible = 0
 local MenuWindowImage1 = -1
 local MenuWindowImage2 = -1
 
+local m_PosX = 157
+local m_PosY = 0
+
 function MenuWindow.Render()
+    if MenuWindow.CheckRender() == 0
+    then
+        return
+    end
+
     EnableAlphaTest()
 
-    RenderImage(MenuWindowImage2, 157, 0, 36, 18)
+    RenderImage(MenuWindowImage2, m_PosX, 0, 36, 18)
 
-    if (MousePosX() >= 157 and MousePosX() <= 157 + 16)
+    if (MousePosX() >= m_PosX and MousePosX() <= m_PosX + 16)
         and (MousePosY() >= 2 and MousePosY() <= 2 + 12)
     then
         glColor3f(1.00, 1.00, 1.00)
@@ -39,9 +50,9 @@ function MenuWindow.Render()
         glColor3f(0.80, 0.80, 0.80)
     end
 
-    RenderImage(MenuWindowImage1, 158, 2, 16, 12)
+    RenderImage(MenuWindowImage1, m_PosX + 1, 2, 16, 12)
 
-    if (MousePosX() >= 157 and MousePosX() <= 157 + 16)
+    if (MousePosX() >= m_PosX and MousePosX() <= m_PosX + 16)
         and (MousePosY() >= 2 and MousePosY() <= 2 + 12)
     then
         --Text
@@ -113,7 +124,7 @@ function MenuWindow.RenderButtons(x, y)
 
     local addY = 50.0
 
-    for i = 1, 2 do
+    for i = 1, 3 do
         if (MousePosX() >= x + ((230 / 2) - (110 / 2)) and MousePosX() <= x + ((230 / 2) - (110 / 2)) + 130)
             and (MousePosY() >= y + addY and MousePosY() <= y + addY + 30)
         then
@@ -140,7 +151,24 @@ function MenuWindow.RenderText(x, y)
 end
 
 function MenuWindow.UpdateMouse()
-    if (MousePosX() >= 157 and MousePosX() <= 157 + 16)
+    if MenuWindow.CheckRender() == 0
+    then
+        return
+    end
+
+    local WindowWidth = GetWindowWidth()
+
+    m_PosX = 80 + 79
+
+    if (WindowWidth == 800)
+    then
+        m_PosX = 112 + 79
+    elseif (WindowWidth == 1024)
+    then
+        m_PosX = 96 + 79
+    end
+
+    if (MousePosX() >= m_PosX and MousePosX() <= m_PosX + 16)
         and (MousePosY() >= 2 and MousePosY() <= 2 + 12)
     then
         if (CheckClickClient() == 1)
@@ -174,7 +202,7 @@ function MenuWindow.UpdateMouse()
 
     local addY = 50.0
 
-    for i = 1, 2 do
+    for i = 1, 3 do
         if (MousePosX() >= PosX + ((230 / 2) - (110 / 2)) and MousePosX() <= PosX + ((230 / 2) - (110 / 2)) + 130)
             and (MousePosY() >= PosY + addY and MousePosY() <= PosY + addY + 30)
         then
@@ -187,6 +215,9 @@ function MenuWindow.UpdateMouse()
                 elseif (i == 2)
                 then
                     PartySearch.Open()
+                elseif (i == 3)
+                then
+                    StoreSearch.Open()
                 end
 
                 MenuWindowVisible = 0
@@ -211,6 +242,20 @@ function MenuWindow.UpdateKeyEvent()
 	then
 		MenuWindowVisible = 0
 	end
+end
+
+function MenuWindow.CheckRender()
+    if CheckWindowOpen(UIMoveList) == 1 or CheckWindowOpen(UICashShop) == 1 or CheckWindowOpen(UISkillTree) == 1 or CheckWindowOpen(UIFullMap) == 1
+		or (CheckWindowOpen(UIInventory) == 1 and CheckWindowOpen(UIExpandInventory) == 1 and CheckWindowOpen(UIStore) == 1)
+		or (CheckWindowOpen(UIInventory) == 1 and CheckWindowOpen(UIExpandInventory) == 1 and CheckWindowOpen(UICharacter) == 1)
+		or (CheckWindowOpen(UIInventory) == 1 and CheckWindowOpen(UIWarehouse) == 1 and CheckWindowOpen(UIExpandWarehouse) == 1)
+        or (CheckWindowOpen(UIInventory) == 1 and CheckWindowOpen(UIWarehouse) == 1 and CheckWindowOpen(UIExpandInventory) == 1)
+        or (CheckWindowOpen(UIChaosBox) == 1 and CheckWindowOpen(UIExpandInventory) == 1)
+    then
+        return 0
+    end
+
+    return 1
 end
 
 function MenuWindow.Open()

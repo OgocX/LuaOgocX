@@ -51,7 +51,7 @@ JewelBank_Texts["Spn"] = {
 
 
 
--- INÝCIO DO CÓDIGO, SÓ MEXA SE SOUBER O QUE ESTÝ FAZENDO --
+-- INÍCIO DO CÓDIGO, SÓ MEXA SE SOUBER O QUE ESTÁ FAZENDO --
 JewelBank = {}
 JewelBank_Buttons = {}
 JewelBank_WorkArea = {X1 = 260, X2 = 450, Y1 = 0, Y2 = 429}
@@ -158,7 +158,7 @@ function JewelBank.CheckButton(IdBotao, X, Y)
 	return false
 end
 
-function JewelBank.BeforeInterface()	
+function JewelBank.BeforeInterface()
 	if UICustomInterface == JewelBank_WindowId then
 		if	CheckWindowOpen(UIInventory) 		== 0	then	JewelBank.Close()	end
 		if	CheckWindowOpen(UIFriendList) 		== 1	then	JewelBank.Close()	end
@@ -218,7 +218,9 @@ function JewelBank.BeforeInterface()
 			DrawBar(285-JewelBank_WindowOffset, ItemY, 130, 1)
 			ItemY = ItemY+25
 		end
-		if JewelBank_Selected.ListID ~= nil then
+		
+		if JewelBank_Selected.ListID ~= nil 
+		then
 			CreateItem((280+JewelBank_Selected.Position.X)-JewelBank_WindowOffset, (43+JewelBank_Selected.Position.Y), JewelBank_Selected.Position.W, JewelBank_Selected.Position.H, JewelBank_Selected.Index, 0, 0, 0)
 		end
 		

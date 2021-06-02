@@ -124,6 +124,14 @@ getMaxLife() -> get max life player
 setMaxLife(value) -> set max life player
 getMaxMana() -> get max mana player
 setMaxMana(value) -> set max mana
+getBP() -> get BP player
+setBP(value) -> set BP
+getMaxBP() -> get max BP player
+setMaxBP(value) -> set max BP
+getShield() -> get shield player
+setShield(value) -> set shield
+getMaxShield() -> get max shield player
+setMaxShield(value) -> set max shield
 getVitalityToLife() -> get vitality to life of the player
 setVitalityToLife(value) -> set vitality to life
 getEnergyToMana() -> get energy to mana of the player
@@ -134,6 +142,10 @@ getAddLife() -> get add life of the player
 setAddLife(value) -> set add life
 getAddMana() -> get add mana of the player
 setAddMana(value) -> set add mana
+getAddBP() -> get add bp of the player
+setAddBP(value) -> set add bp
+getAddBP() -> get add shield of the player
+setAddBP(value) -> set add shield
 getAttackSpeed() -> get attack speed
 setAttackSpeed(value) -> set attack speed
 getMagicSpeed() -> get magic speed

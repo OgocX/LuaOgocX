@@ -161,7 +161,7 @@ function MataMata.CommandOpen(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	
 	if player:getAuthority() == 1
 	then
@@ -198,7 +198,7 @@ function MataMata.CommandGo(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if open == false
@@ -260,7 +260,7 @@ function MataMata.CommandInit(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	
 	if player:getAuthority() == 1
 	then
@@ -280,7 +280,7 @@ function MataMata.CommandFinish(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -316,7 +316,7 @@ function MataMata.CommandStep(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -360,7 +360,7 @@ function MataMata.CommandWins(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -453,7 +453,7 @@ function MataMata.CommandCall(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -537,7 +537,7 @@ function MataMata.CommandStepEnd(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -566,7 +566,7 @@ function MataMata.CommandStepSemi(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1
@@ -602,7 +602,7 @@ function MataMata.CommandDisp3(aIndex, Arguments)
 		return
 	end
 	
-	local player = User.new(index)
+	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
 	if player:getAuthority() == 1

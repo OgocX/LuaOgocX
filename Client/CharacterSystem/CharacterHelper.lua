@@ -2,7 +2,7 @@ OpenFolder("Definitions")
 
 local HELPER_CONFIG = {
 
-{ ItemIndex = GET_ITEM_MODEL(13, 200), Type = 0, Movement = 0, Height = 20.0, Size = 0.60, Model = 'Helper201' , ObjectModel = '' },
+{ ItemIndex = GET_ITEM_MODEL(13, 200), Type = 0, Movement = 2, Height = 20.0, Size = 0.60, Model = 'Helper201' , ObjectModel = '' },
 { ItemIndex = GET_ITEM_MODEL(13, 201), Type = 1, Movement = 0, Height = 0.0, Size = 1.0, Model = 'Helper03' , ObjectModel = 'Rider01' },
 { ItemIndex = GET_ITEM_MODEL(13, 202), Type = 2, Movement = 0, Height = 0.0, Size = 0.90, Model = 'Helper04' , ObjectModel = 'Rider02' },
 { ItemIndex = GET_ITEM_MODEL(13, 203), Type = 3, Movement = 0, Height = 0.0, Size = 0.88, Model = 'FR_6' , ObjectModel = 'fenril_black' },

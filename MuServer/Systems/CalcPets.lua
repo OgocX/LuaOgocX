@@ -63,6 +63,11 @@ function CalcAttackPets(aIndex, TargetIndex, Damage)
 			end
 		end
 	end
+	
+	player = nil
+	target_player = nil
+	pInv = nil
+	tInv = nil
 
 	return Damage
 end
