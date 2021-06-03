@@ -18,8 +18,13 @@ function NpcRescueItem.NpcTalk(NpcIndex, PlayerIndex)
 	player = nil
 end
 
-function NpcRescueItem.InsertItem(Account, Item, Itemlevel, iOp1, iOp2, iOp3, iExc, iAncient, iJoH, iSockCount, iSock1, iSock2, iSock3, iSock4, iSock5, DaysExpire)
-	local query = string.format("INSERT INTO [dbo].[NPC_RESCUE_ITENS] ([Account],[ItemIndex],[Level],[Option1],[Option2],[Option3],[Exc],[Ancient],[JoH],[SockBonus],[Sock1],[Sock2],[Sock3],[Sock4],[Sock5],[Delivered],[TimeExpire]) VALUES ('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,0,DATEADD(day,%d,GETDATE()))", Account, Item, Itemlevel, iOp1, iOp2, iOp3, iExc, iAncient, iJoH, iSockCount, iSock1, iSock2, iSock3, iSock4, iSock5, DaysExpire)
+function NpcRescueItem.InsertItem(Account, Item, Itemlevel, iOp1, iOp2, iOp3, iExc, iAncient, iJoH, iSockCount, iSock1, iSock2, iSock3, iSock4, iSock5, DaysExpire, ItemTimeExpire)
+	if ItemTimeExpire == nil
+	then
+		ItemTimeExpire = 0
+	end
+
+	local query = string.format("INSERT INTO [dbo].[NPC_RESCUE_ITENS] ([Account],[ItemIndex],[Level],[Option1],[Option2],[Option3],[Exc],[Ancient],[JoH],[SockBonus],[Sock1],[Sock2],[Sock3],[Sock4],[Sock5],[Delivered],[ItemTimeExpire],[TimeExpire]) VALUES ('%s',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,0,%d,DATEADD(day,%d,GETDATE()))", Account, Item, Itemlevel, iOp1, iOp2, iOp3, iExc, iAncient, iJoH, iSockCount, iSock1, iSock2, iSock3, iSock4, iSock5, ItemTimeExpire, DaysExpire)
 	
 	if db:exec(query) == 0
 	then
@@ -207,6 +212,7 @@ function NpcRescueItem.GetItem(aIndex, PacketName)
 	local getSock3 = db:getInt('Sock3')
 	local getSock4 = db:getInt('Sock4')
 	local getSock5 = db:getInt('Sock5')
+	local getItemTimeExpire = db:getInt('ItemTimeExpire')
 	
 	db:clear()
 	
@@ -238,7 +244,7 @@ function NpcRescueItem.GetItem(aIndex, PacketName)
 	
 	NpcRescueItemPlayers[player:getIndex()] = GetTick()
 	
-	CreateItemInventory(player:getIndex(), getItemIndex, getLevel, getOp1, getOp2, getOp3, getExc, getAncient, getJoH, getSockBonus, getSock1, getSock2, getSock3, getSock4, getSock5, 0)
+	CreateItemInventory(player:getIndex(), getItemIndex, getLevel, getOp1, getOp2, getOp3, getExc, getAncient, getJoH, getSockBonus, getSock1, getSock2, getSock3, getSock4, getSock5, getItemTimeExpire)
 	
 	ClearPacket(PacketName)
 	
@@ -268,12 +274,14 @@ function NpcRescueItem.Protocol(aIndex, Packet, PacketName)
 end
 
 function NpcRescueItem.RunSQL()
-	local query = string.format("IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NPC_RESCUE_ITENS]') AND type in (N'U')) BEGIN CREATE TABLE [dbo].[NPC_RESCUE_ITENS] ([ID] [int] IDENTITY(1,1) NOT NULL,[Account] [varchar](10) NOT NULL,[ItemIndex] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_ItemIndex]  DEFAULT ((0)),[Level] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Level]  DEFAULT ((0)),[Option1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option1]  DEFAULT ((0)),[Option2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option2]  DEFAULT ((0)),[Option3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option3]  DEFAULT ((0)),[Exc] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Exc]  DEFAULT ((0)),[Ancient] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Ancient]  DEFAULT ((0)),[JoH] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_JoH]  DEFAULT ((0)),[SockBonus] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_SockBonus]  DEFAULT ((0)),[Sock1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock1]  DEFAULT ((0)),[Sock2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock2]  DEFAULT ((0)),[Sock3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock3]  DEFAULT ((0)),[Sock4] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock4]  DEFAULT ((0)),[Sock5] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock5]  DEFAULT ((0)), [Delivered] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Delivered]  DEFAULT ((0)), [TimeExpire] [datetime] NOT NULL, [TimeDelivered] [datetime] NULL ) ON [PRIMARY] END")
+	local query = string.format("IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NPC_RESCUE_ITENS]') AND type in (N'U')) BEGIN CREATE TABLE [dbo].[NPC_RESCUE_ITENS] ([ID] [int] IDENTITY(1,1) NOT NULL,[Account] [varchar](10) NOT NULL,[ItemIndex] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_ItemIndex]  DEFAULT ((0)),[Level] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Level]  DEFAULT ((0)),[Option1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option1]  DEFAULT ((0)),[Option2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option2]  DEFAULT ((0)),[Option3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Option3]  DEFAULT ((0)),[Exc] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Exc]  DEFAULT ((0)),[Ancient] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Ancient]  DEFAULT ((0)),[JoH] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_JoH]  DEFAULT ((0)),[SockBonus] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_SockBonus]  DEFAULT ((0)),[Sock1] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock1]  DEFAULT ((0)),[Sock2] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock2]  DEFAULT ((0)),[Sock3] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock3]  DEFAULT ((0)),[Sock4] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock4]  DEFAULT ((0)),[Sock5] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Sock5]  DEFAULT ((0)), [Delivered] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_Delivered]  DEFAULT ((0)), [ItemTimeExpire] [int] NOT NULL CONSTRAINT [DF_NPC_RESCUE_ITENS_ItemTimeExpire]  DEFAULT ((0)), [TimeExpire] [datetime] NOT NULL, [TimeDelivered] [datetime] NULL ) ON [PRIMARY] END")
 	
 	db = DataBase.getDb()
 	db:exec(query)
 	
 	db:clear()
+
+	DataBase.CreateColumn('NPC_RESCUE_ITENS', 'ItemTimeExpire', "INT NOT NULL DEFAULT 0")
 end
 
 function NpcRescueItem.Init()
