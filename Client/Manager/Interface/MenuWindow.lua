@@ -7,6 +7,7 @@ MENU_WINDOW_MESSAGES['Por'] = {
 [2] = 'Banco de jóias',
 [3] = 'Procurar Party',
 [4] = 'Procurar Lojas',
+[5] = 'Sistema de quest',
 }
 
 MENU_WINDOW_MESSAGES['Eng'] = {
@@ -14,6 +15,7 @@ MENU_WINDOW_MESSAGES['Eng'] = {
 [2] = 'Jewel Bank',
 [3] = 'Party Search',
 [4] = 'Store Search',
+[5] = 'Quest System',
 }
 
 MENU_WINDOW_MESSAGES['Spn'] = {
@@ -21,6 +23,7 @@ MENU_WINDOW_MESSAGES['Spn'] = {
 [2] = 'Banco de joyas',
 [3] = 'Grupo de búsqueda',
 [4] = 'Explorar tiendas',
+[5] = 'Sistema de misiones',
 }
 
 MenuWindow = {}
@@ -124,7 +127,7 @@ function MenuWindow.RenderButtons(x, y)
 
     local addY = 50.0
 
-    for i = 1, 3 do
+    for i = 1, 4 do
         if (MousePosX() >= x + ((230 / 2) - (110 / 2)) and MousePosX() <= x + ((230 / 2) - (110 / 2)) + 130)
             and (MousePosY() >= y + addY and MousePosY() <= y + addY + 30)
         then
@@ -202,7 +205,7 @@ function MenuWindow.UpdateMouse()
 
     local addY = 50.0
 
-    for i = 1, 3 do
+    for i = 1, 4 do
         if (MousePosX() >= PosX + ((230 / 2) - (110 / 2)) and MousePosX() <= PosX + ((230 / 2) - (110 / 2)) + 130)
             and (MousePosY() >= PosY + addY and MousePosY() <= PosY + addY + 30)
         then
@@ -218,6 +221,9 @@ function MenuWindow.UpdateMouse()
                 elseif (i == 3)
                 then
                     StoreSearch.Open()
+                elseif (i == 4)
+                then
+                    QuestSystem.SendOpenQuest()
                 end
 
                 MenuWindowVisible = 0
