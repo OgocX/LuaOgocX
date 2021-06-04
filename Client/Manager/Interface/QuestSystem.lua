@@ -706,6 +706,7 @@ function QuestSystem.Open(PacketName)
         QuestSystemInfoItensCount[i] = ItensCount[i]
     end
 
+    QuestSystemFinishedQuest = 0
     QuestSystemVisible = 1
 end
 

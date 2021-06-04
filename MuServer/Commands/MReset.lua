@@ -230,7 +230,7 @@ function MReset.Command(aIndex)
 	local rel = MRESET_RELOGAR[vip]
 	
 	--Reward coins
-	for i = 0 , #MRESET_AMOUNT_TABLES do
+	for i = 1 , #MRESET_AMOUNT_TABLES do
 		DataBase.SetAddValue(MRESET_AMOUNT_TABLES[i], MRESET_AMOUNT_COLUNS[i], MRESET_AMOUNT[vip][i], MRESET_AMOUNT_WHERE[i], player:getAccountID())
 	end
 	
@@ -242,7 +242,7 @@ function MReset.Command(aIndex)
 	if ChargeResets == 1
 	then
 		for i = 0 , #COLUMN_RESET do
-		DataBase.SetDecreaseValue(TABLE_RESET, COLUMN_RESET[i], ResetsRemove, WHERE_RESET, player:getName())
+			DataBase.SetDecreaseValue(TABLE_RESET, COLUMN_RESET[i], ResetsRemove, WHERE_RESET, player:getName())
 		end
 	end
 	
@@ -270,8 +270,6 @@ function MReset.Command(aIndex)
 		MoneySend(aIndex)
 		CalCharacter(aIndex)
 	end
-	
-	
 end
 
 MReset.Init()

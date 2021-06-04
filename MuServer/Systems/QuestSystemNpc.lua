@@ -1,34 +1,56 @@
-QuestSystem = {}
+QuestSystemNpc = {}
 
-local QuestSystemPlayersInfo = {}
+local QuestSystemNpcPlayersInfo = {}
 
-function QuestSystem.OpenQuest(player)
+function QuestSystemNpc.OpenQuest(player, NpcQuestIdentification, CheckAnotherQuest)
     local Language = player:getLanguage()
 	
 	if player:getInterfaceUse() ~= 0 or player:getInterfaceType() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
 	then
-		SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][1]), player:getIndex(), 1)
+		SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][1]), player:getIndex(), 1)
 		return
 	end
 
-    if QuestSystem.CheckQuestFinished(player:getAccountID(), player:getName()) > 0
+    local PlayerQuest = QuestSystemNpc.GetDbQuestIdentification(player:getAccountID(), player:getName())
+	local QuestFinished = QuestSystemNpc.CheckQuestFinished(player:getAccountID(), player:getName())
+
+    if QuestFinished > 0
     then
-        QuestSystem.OpenContinueQuest(player)
-        return
+        if PlayerQuest == NpcQuestIdentification
+        then
+            QuestSystemNpc.OpenFinishedQuest(player)
+            return
+        end
+    end
+
+    if CheckAnotherQuest == 1
+    then
+        if PlayerQuest ~= 0
+        then
+			if QuestFinished == 1
+			then
+				QuestSystemNpc.DeleteQuestInfo(player:getAccountID(), player:getName())
+            elseif PlayerQuest ~= NpcQuestIdentification
+            then
+                QuestSystemNpc.OpenDismissQuest(player, NpcQuestIdentification)
+                return
+            end
+        end
     end
 
     --get db function
     local db = DataBase.getDb()
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s'", player:getAccountID())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s'", player:getAccountID())
     else
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
     end
 
-    local QuestIdentification = -1
+    local QuestIdentification = NpcQuestIdentification
+    local Started = 0
     local Level = 0
     local Resets = 0
     local MResets = 0
@@ -46,6 +68,7 @@ function QuestSystem.OpenQuest(player)
     then
         if db:fetch() ~= SQL_NO_DATA
         then
+            Started = 1
             QuestIdentification = db:getInt('QuestIdentification')
             Kills = db:getInt('Kills')
             KillsMonster[1] = db:getInt('KillsMonster1')
@@ -60,7 +83,7 @@ function QuestSystem.OpenQuest(player)
 
             db:clear()
 
-            local questInfo = QuestSystem.GetQuestIdentification(QuestIdentification)
+            local questInfo = QuestSystemNpc.GetQuestIdentification(QuestIdentification)
 
             if questInfo ~= nil
             then
@@ -86,22 +109,22 @@ function QuestSystem.OpenQuest(player)
 
                 if questInfo.Coin1 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN1_CONFIG.Table, QUEST_SYSTEM_COIN1_CONFIG.Column, QUEST_SYSTEM_COIN1_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN1_CONFIG.Table, QUEST_SYSTEM_NPC_COIN1_CONFIG.Column, QUEST_SYSTEM_NPC_COIN1_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin2 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN2_CONFIG.Table, QUEST_SYSTEM_COIN2_CONFIG.Column, QUEST_SYSTEM_COIN2_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN2_CONFIG.Table, QUEST_SYSTEM_NPC_COIN2_CONFIG.Column, QUEST_SYSTEM_NPC_COIN2_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin3 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN3_CONFIG.Table, QUEST_SYSTEM_COIN3_CONFIG.Column, QUEST_SYSTEM_COIN3_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN3_CONFIG.Table, QUEST_SYSTEM_NPC_COIN3_CONFIG.Column, QUEST_SYSTEM_NPC_COIN3_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin4 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN4_CONFIG.Table, QUEST_SYSTEM_COIN4_CONFIG.Column, QUEST_SYSTEM_COIN4_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN4_CONFIG.Table, QUEST_SYSTEM_NPC_COIN4_CONFIG.Column, QUEST_SYSTEM_NPC_COIN4_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Vip ~= 0
@@ -109,7 +132,7 @@ function QuestSystem.OpenQuest(player)
                     Vip = player:getVip()
                 end
 
-                local questRequirementInfo = QUEST_SYSTEM_REQUIREMENTS_ITEMS[QuestIdentification]
+                local questRequirementInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_ITEMS[QuestIdentification]
 
                 if questRequirementInfo ~= nil
                 then
@@ -167,9 +190,10 @@ function QuestSystem.OpenQuest(player)
         db:clear()
     end
 
-    local packetIdentification = string.format("%s_%s",QUEST_SYSTEM_PACKET_OPEN_NAME, player:getName())
-    CreatePacket(packetIdentification, QUEST_SYSTEM_PACKET)
+    local packetIdentification = string.format("%s_%s",QUEST_SYSTEM_NPC_PACKET_OPEN_NAME, player:getName())
+    CreatePacket(packetIdentification, QUEST_SYSTEM_NPC_PACKET)
     SetDwordPacket(packetIdentification, QuestIdentification)
+    SetDwordPacket(packetIdentification, Started)
     SetDwordPacket(packetIdentification, Level)
     SetDwordPacket(packetIdentification, Resets)
     SetDwordPacket(packetIdentification, MResets)
@@ -194,34 +218,44 @@ function QuestSystem.OpenQuest(player)
     ClearPacket(packetIdentification)
 end
 
-function QuestSystem.StartQuest(player)
+function QuestSystemNpc.StartQuest(player, QuestIdentification)
     local Language = player:getLanguage()
 	
 	if player:getInterfaceUse() ~= 0 or player:getInterfaceType() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
 	then
-		SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][1]), player:getIndex(), 1)
+		SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][1]), player:getIndex(), 1)
 		return
 	end
 
-    if QuestSystemPlayersInfo[player:getIndex()] ~= nil
+    if QuestSystemNpcPlayersInfo[player:getIndex()] ~= nil
     then
-        SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][5]), player:getIndex(), 1)
-		return
+        if QuestSystemNpcPlayersInfo[player:getIndex()].Finished == 0
+        then
+            SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][5]), player:getIndex(), 1)
+            return
+        end
     end
 
-    local getFirstQuest = QUEST_SYSTEM_INFO[1]
+    local getFirstQuest = QuestSystemNpc.GetQuestIdentification(QuestIdentification)
 
     if getFirstQuest == nil
     then
-        SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][2]), player:getIndex(), 1)
+        SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][2]), player:getIndex(), 1)
 		return
     end
 
-    QuestSystem.InsertPlayer(player:getAccountID(), player:getName(), getFirstQuest.QuestIdentification)
+    local QuestExist = QuestSystemNpc.CheckQuestExist(player:getAccountID(), player:getName())
 
-    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][3], getFirstQuest.QuestName), player:getIndex(), 1)
+    if QuestExist == 1
+    then
+        QuestSystemNpc.DeleteQuestInfo(player:getAccountID(), player:getName())
+    end
 
-    QuestSystemPlayersInfo[player:getIndex()] = {
+    QuestSystemNpc.InsertPlayer(player:getAccountID(), player:getName(), getFirstQuest.QuestIdentification)
+
+    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][3], getFirstQuest.QuestName), player:getIndex(), 1)
+
+    QuestSystemNpcPlayersInfo[player:getIndex()] = {
         PlayerIndex = player:getIndex(),
         PlayerName = player:getName(),
         PlayerAccount = player:getAccountID(),
@@ -233,20 +267,20 @@ function QuestSystem.StartQuest(player)
     }
 
     for i = 1, 9 do
-        QuestSystemPlayersInfo[player:getIndex()].KillsMonster[i] = { value = 0 }
+        QuestSystemNpcPlayersInfo[player:getIndex()].KillsMonster[i] = { value = 0 }
     end
 
-    QuestSystem.OpenQuest(player)
+    QuestSystemNpc.OpenQuest(player, getFirstQuest.QuestIdentification, 0)
 end
 
-function QuestSystem.GetReward(player)
-    if QuestSystemPlayersInfo[player:getIndex()] == nil
+function QuestSystemNpc.GetReward(player)
+    if QuestSystemNpcPlayersInfo[player:getIndex()] == nil
     then
-        SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][4]), player:getIndex(), 1)
+        SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][4]), player:getIndex(), 1)
         return
     end
 
-    if QuestSystemPlayersInfo[player:getIndex()].Finished == 1
+    if QuestSystemNpcPlayersInfo[player:getIndex()].Finished == 1
     then
         return
     end
@@ -255,7 +289,7 @@ function QuestSystem.GetReward(player)
 	
 	if player:getInterfaceUse() ~= 0 or player:getInterfaceType() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
 	then
-		SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][1]), player:getIndex(), 1)
+		SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][1]), player:getIndex(), 1)
 		return
 	end
 
@@ -263,11 +297,11 @@ function QuestSystem.GetReward(player)
     local db = DataBase.getDb()
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s'", player:getAccountID())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s'", player:getAccountID())
     else
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
     end
 
     local QuestIdentification = -1
@@ -302,7 +336,7 @@ function QuestSystem.GetReward(player)
 
             db:clear()
 
-            local questInfo = QuestSystem.GetQuestIdentification(QuestIdentification)
+            local questInfo = QuestSystemNpc.GetQuestIdentification(QuestIdentification)
 
             if questInfo ~= nil
             then
@@ -328,22 +362,22 @@ function QuestSystem.GetReward(player)
 
                 if questInfo.Coin1 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN1_CONFIG.Table, QUEST_SYSTEM_COIN1_CONFIG.Column, QUEST_SYSTEM_COIN1_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN1_CONFIG.Table, QUEST_SYSTEM_NPC_COIN1_CONFIG.Column, QUEST_SYSTEM_NPC_COIN1_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin2 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN2_CONFIG.Table, QUEST_SYSTEM_COIN2_CONFIG.Column, QUEST_SYSTEM_COIN2_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN2_CONFIG.Table, QUEST_SYSTEM_NPC_COIN2_CONFIG.Column, QUEST_SYSTEM_NPC_COIN2_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin3 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN3_CONFIG.Table, QUEST_SYSTEM_COIN3_CONFIG.Column, QUEST_SYSTEM_COIN3_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN3_CONFIG.Table, QUEST_SYSTEM_NPC_COIN3_CONFIG.Column, QUEST_SYSTEM_NPC_COIN3_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Coin4 ~= 0
                 then
-                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_COIN4_CONFIG.Table, QUEST_SYSTEM_COIN4_CONFIG.Column, QUEST_SYSTEM_COIN4_CONFIG.Where, player:getAccountID())
+                    Coin1 = DataBase.GetValue(QUEST_SYSTEM_NPC_COIN4_CONFIG.Table, QUEST_SYSTEM_NPC_COIN4_CONFIG.Column, QUEST_SYSTEM_NPC_COIN4_CONFIG.Where, player:getAccountID())
                 end
 
                 if questInfo.Vip ~= 0
@@ -351,7 +385,7 @@ function QuestSystem.GetReward(player)
                     Vip = player:getVip()
                 end
 
-                local questRequirementInfo = QUEST_SYSTEM_REQUIREMENTS_ITEMS[QuestIdentification]
+                local questRequirementInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_ITEMS[QuestIdentification]
 
                 if questRequirementInfo ~= nil
                 then
@@ -409,7 +443,7 @@ function QuestSystem.GetReward(player)
         db:clear()
     end
 
-    local questInfoCheck = QuestSystem.GetQuestIdentification(QuestIdentification)
+    local questInfoCheck = QuestSystemNpc.GetQuestIdentification(QuestIdentification)
 
     if questInfoCheck ~= nil
     then
@@ -424,11 +458,11 @@ function QuestSystem.GetReward(player)
             or Vip < questInfoCheck.Vip
             or Kills < questInfoCheck.Kills
         then
-            SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][6]), player:getIndex(), 1)
+            SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][6]), player:getIndex(), 1)
             return
         end
 
-        local questMonsterInfo = QUEST_SYSTEM_REQUIREMENTS_MONSTER[QuestIdentification]
+        local questMonsterInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_MONSTER[QuestIdentification]
         if questMonsterInfo ~= nil
         then
             local count = 1
@@ -443,7 +477,7 @@ function QuestSystem.GetReward(player)
 
                 if monster.Quantity > KillsMonster[count]
                 then
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][6]), player:getIndex(), 1)
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][6]), player:getIndex(), 1)
                     return
                 end
 
@@ -451,7 +485,7 @@ function QuestSystem.GetReward(player)
             end
         end
 
-        local questItemInfo = QUEST_SYSTEM_REQUIREMENTS_ITEMS[QuestIdentification]
+        local questItemInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_ITEMS[QuestIdentification]
 
         if questItemInfo ~= nil
         then
@@ -466,7 +500,7 @@ function QuestSystem.GetReward(player)
 
                 if item.Quantity > ItensRequirement[count]
                 then
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][6]), player:getIndex(), 1)
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][6]), player:getIndex(), 1)
                     return
                 end
 
@@ -475,7 +509,7 @@ function QuestSystem.GetReward(player)
         end
 
         --Remove things
-        if QUEST_SYSTEM_REMOVE_RESETS == 1
+        if QUEST_SYSTEM_NPC_REMOVE_RESETS == 1
         then
             if questInfoCheck.Reset > 0
             then
@@ -483,7 +517,7 @@ function QuestSystem.GetReward(player)
             end
         end
 
-        if QUEST_SYSTEM_REMOVE_MRESETS == 1
+        if QUEST_SYSTEM_NPC_REMOVE_MRESETS == 1
         then
             if questInfoCheck.MReset > 0
             then
@@ -491,39 +525,39 @@ function QuestSystem.GetReward(player)
             end
         end
 
-        if QUEST_SYSTEM_REMOVE_COIN1 == 1
+        if QUEST_SYSTEM_NPC_REMOVE_COIN1 == 1
         then
             if questInfoCheck.Coin1 > 0
             then
-                DataBase.SetDecreaseValue(QUEST_SYSTEM_COIN1_CONFIG.Table, QUEST_SYSTEM_COIN1_CONFIG.Column, questInfoCheck.Coin1, QUEST_SYSTEM_COIN1_CONFIG.Where, player:getAccountID())
+                DataBase.SetDecreaseValue(QUEST_SYSTEM_NPC_COIN1_CONFIG.Table, QUEST_SYSTEM_NPC_COIN1_CONFIG.Column, questInfoCheck.Coin1, QUEST_SYSTEM_NPC_COIN1_CONFIG.Where, player:getAccountID())
             end
         end
 
-        if QUEST_SYSTEM_REMOVE_COIN2 == 1
+        if QUEST_SYSTEM_NPC_REMOVE_COIN2 == 1
         then
             if questInfoCheck.Coin2 > 0
             then
-                DataBase.SetDecreaseValue(QUEST_SYSTEM_COIN2_CONFIG.Table, QUEST_SYSTEM_COIN2_CONFIG.Column, questInfoCheck.Coin2, QUEST_SYSTEM_COIN2_CONFIG.Where, player:getAccountID())
+                DataBase.SetDecreaseValue(QUEST_SYSTEM_NPC_COIN2_CONFIG.Table, QUEST_SYSTEM_NPC_COIN2_CONFIG.Column, questInfoCheck.Coin2, QUEST_SYSTEM_NPC_COIN2_CONFIG.Where, player:getAccountID())
             end
         end
 
-        if QUEST_SYSTEM_REMOVE_COIN3 == 1
+        if QUEST_SYSTEM_NPC_REMOVE_COIN3 == 1
         then
             if questInfoCheck.Coin3 > 0
             then
-                DataBase.SetDecreaseValue(QUEST_SYSTEM_COIN3_CONFIG.Table, QUEST_SYSTEM_COIN3_CONFIG.Column, questInfoCheck.Coin3, QUEST_SYSTEM_COIN3_CONFIG.Where, player:getAccountID())
+                DataBase.SetDecreaseValue(QUEST_SYSTEM_NPC_COIN3_CONFIG.Table, QUEST_SYSTEM_NPC_COIN3_CONFIG.Column, questInfoCheck.Coin3, QUEST_SYSTEM_NPC_COIN3_CONFIG.Where, player:getAccountID())
             end
         end
 
-        if QUEST_SYSTEM_REMOVE_COIN4 == 1
+        if QUEST_SYSTEM_NPC_REMOVE_COIN4 == 1
         then
             if questInfoCheck.Coin4 > 0
             then
-                DataBase.SetDecreaseValue(QUEST_SYSTEM_COIN4_CONFIG.Table, QUEST_SYSTEM_COIN4_CONFIG.Column, questInfoCheck.Coin4, QUEST_SYSTEM_COIN4_CONFIG.Where, player:getAccountID())
+                DataBase.SetDecreaseValue(QUEST_SYSTEM_NPC_COIN4_CONFIG.Table, QUEST_SYSTEM_NPC_COIN4_CONFIG.Column, questInfoCheck.Coin4, QUEST_SYSTEM_NPC_COIN4_CONFIG.Where, player:getAccountID())
             end
         end
 
-        local questItemInfo = QUEST_SYSTEM_REQUIREMENTS_ITEMS[QuestIdentification]
+        local questItemInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_ITEMS[QuestIdentification]
 
         if questItemInfo ~= nil
         then
@@ -543,7 +577,7 @@ function QuestSystem.GetReward(player)
         end
 
         --Reward player
-        local questRewardItem = QUEST_SYSTEM_REWARD_ITEMS[QuestIdentification]
+        local questRewardItem = QUEST_SYSTEM_NPC_REWARD_ITEMS[QuestIdentification]
 
         if questRewardItem ~= nil
         then
@@ -554,7 +588,7 @@ function QuestSystem.GetReward(player)
             end
         end
 
-        local questRewardCoins = QUEST_SYSTEM_REWARD_COINS[QuestIdentification]
+        local questRewardCoins = QUEST_SYSTEM_NPC_REWARD_COINS[QuestIdentification]
 
         if questRewardCoins ~= nil
         then
@@ -563,25 +597,25 @@ function QuestSystem.GetReward(player)
 
                 if coin.CoinIdentification == 1
                 then
-                    DataBase.SetAddValue(QUEST_SYSTEM_COIN1_CONFIG.Table, QUEST_SYSTEM_COIN1_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_COIN1_CONFIG.Where, player:getAccountID())
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
+                    DataBase.SetAddValue(QUEST_SYSTEM_NPC_COIN1_CONFIG.Table, QUEST_SYSTEM_NPC_COIN1_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_NPC_COIN1_CONFIG.Where, player:getAccountID())
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
                 elseif coin.CoinIdentification == 2
                 then
-                    DataBase.SetAddValue(QUEST_SYSTEM_COIN2_CONFIG.Table, QUEST_SYSTEM_COIN2_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_COIN2_CONFIG.Where, player:getAccountID())
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
+                    DataBase.SetAddValue(QUEST_SYSTEM_NPC_COIN2_CONFIG.Table, QUEST_SYSTEM_NPC_COIN2_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_NPC_COIN2_CONFIG.Where, player:getAccountID())
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
                 elseif coin.CoinIdentification == 3
                 then
-                    DataBase.SetAddValue(QUEST_SYSTEM_COIN3_CONFIG.Table, QUEST_SYSTEM_COIN3_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_COIN3_CONFIG.Where, player:getAccountID())
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
+                    DataBase.SetAddValue(QUEST_SYSTEM_NPC_COIN3_CONFIG.Table, QUEST_SYSTEM_NPC_COIN3_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_NPC_COIN3_CONFIG.Where, player:getAccountID())
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
                 elseif coin.CoinIdentification == 4
                 then
-                    DataBase.SetAddValue(QUEST_SYSTEM_COIN4_CONFIG.Table, QUEST_SYSTEM_COIN4_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_COIN4_CONFIG.Where, player:getAccountID())
-                    SendMessage(string.format(QUEST_SYSTEM_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
+                    DataBase.SetAddValue(QUEST_SYSTEM_NPC_COIN4_CONFIG.Table, QUEST_SYSTEM_NPC_COIN4_CONFIG.Column, coin.CoinAmount, QUEST_SYSTEM_NPC_COIN4_CONFIG.Where, player:getAccountID())
+                    SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[player:getLanguage()][7], coin.CoinAmount, coin.CoinName), player:getIndex(), 1)
                 end
             end
         end
 
-        local questRewardBuff = QUEST_SYSTEM_REWARD_BUFF[QuestIdentification]
+        local questRewardBuff = QUEST_SYSTEM_NPC_REWARD_BUFF[QuestIdentification]
 
         if questRewardBuff ~= nil
         then
@@ -592,118 +626,69 @@ function QuestSystem.GetReward(player)
             end
         end
 
-        QuestSystemPlayersInfo[player:getIndex()].Finished = 1
+        QuestSystemNpcPlayersInfo[player:getIndex()].Finished = 1
 
-        if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+        if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
         then
-            DataBase.SetAddValue('QUEST_SYSTEM', 'Finished', 1, 'AccountID', player:getAccountID())
+            DataBase.SetAddValue('QUEST_SYSTEM_NPC', 'Finished', 1, 'AccountID', player:getAccountID())
         else
-            DataBase.SetAddValue('QUEST_SYSTEM', 'Finished', 1, 'Name', player:getName())
+            DataBase.SetAddValue('QUEST_SYSTEM_NPC', 'Finished', 1, 'Name', player:getName())
         end
 
-        QuestSystem.OpenContinueQuest(player)
+        QuestSystemNpc.OpenFinishedQuest(player)
     end
 end
 
-function QuestSystem.ContinueQuest(player)
-    local Language = player:getLanguage()
-	
-	if player:getInterfaceUse() ~= 0 or player:getInterfaceType() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
-	then
-		SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][1]), player:getIndex(), 1)
-		return
-	end
-
-    if QuestSystemPlayersInfo[player:getIndex()].Finished ~= 1
+function QuestSystemNpc.DismissQuest(player, QuestIdentification)
+    if QuestSystemNpcPlayersInfo[player:getIndex()] == nil
     then
         return
     end
 
-    if QuestSystem.CheckQuestFinished(player:getAccountID(), player:getName()) == 0
-    then
-        return
-    end
+    QuestSystemNpc.DeleteQuestInfo(player:getAccountID(), player:getName())
+    QuestSystemNpcPlayersInfo[player:getIndex()] = nil
 
-    local currentQuest = -1
-
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
-    then
-        currentQuest = DataBase.GetValue('QUEST_SYSTEM', 'QuestIdentification', 'AccountID', player:getAccountID())
-    else
-        currentQuest = DataBase.GetValue('QUEST_SYSTEM', 'QuestIdentification', 'Name', player:getName())
-    end
-
-    local getNextQuest = QuestSystem.GetQuestIdentification(currentQuest + 1)
-
-    if getNextQuest ~= nil
-    then
-        QuestSystem.ResetQuestInfo(player:getAccountID(), player:getName(), currentQuest + 1)
-
-        QuestSystemPlayersInfo[player:getIndex()] = nil
-
-        QuestSystemPlayersInfo[player:getIndex()] = {
-            PlayerIndex = player:getIndex(),
-            PlayerName = player:getName(),
-            PlayerAccount = player:getAccountID(),
-            Language = player:getLanguage(),
-            QuestIdentification = currentQuest + 1,
-            Kills = 0,
-            KillsMonster = {},
-            Finished = 0
-        }
-    
-        for i = 1, 9 do
-            QuestSystemPlayersInfo[player:getIndex()].KillsMonster[i] = { value = 0 }
-        end
-
-        QuestSystem.OpenQuest(player)
-    else
-        SendMessage(string.format(QUEST_SYSTEM_MESSAGES[Language][8]), player:getIndex(), 1)
-    end
+    QuestSystemNpc.StartQuest(player, QuestIdentification)
 end
 
-function QuestSystem.Protocol(aIndex, Packet, PacketName)
-    if Packet == QUEST_SYSTEM_PACKET
+function QuestSystemNpc.Protocol(aIndex, Packet, PacketName)
+    if Packet == QUEST_SYSTEM_NPC_PACKET
     then
         local player = User.new(aIndex)
 
-        if string.format("%s_%s",QUEST_SYSTEM_PACKET_OPEN_NAME, player:getName()) == PacketName
+        if string.format("%s_%s",QUEST_SYSTEM_NPC_PACKET_START_NAME, player:getName()) == PacketName
+        then
+            QuestSystemNpc.StartQuest(player, GetDwordPacket(PacketName, -1))
+            ClearPacket(PacketName)
+        elseif string.format("%s_%s",QUEST_SYSTEM_NPC_PACKET_GET_REWARD_NAME, player:getName()) == PacketName
         then
             ClearPacket(PacketName)
-            QuestSystem.OpenQuest(player)
-        elseif string.format("%s_%s",QUEST_SYSTEM_PACKET_START_NAME, player:getName()) == PacketName
+            QuestSystemNpc.GetReward(player)
+        elseif string.format("%s_%s",QUEST_SYSTEM_NPC_PACKET_DISMISS_QUEST_NAME, player:getName()) == PacketName
         then
+            QuestSystemNpc.DismissQuest(player, GetDwordPacket(PacketName, -1))
             ClearPacket(PacketName)
-            QuestSystem.StartQuest(player)
-        elseif string.format("%s_%s",QUEST_SYSTEM_PACKET_GET_REWARD_NAME, player:getName()) == PacketName
-        then
-            ClearPacket(PacketName)
-            QuestSystem.GetReward(player)
-        elseif string.format("%s_%s",QUEST_SYSTEM_PACKET_CONTINUE_QUEST_NAME, player:getName()) == PacketName
-        then
-            ClearPacket(PacketName)
-            QuestSystem.ContinueQuest(player)
         end
 
         player = nil
     end
 end
 
-function QuestSystem.GetQuestIdentification(id)
-    for i in pairs(QUEST_SYSTEM_INFO) do
-        if QUEST_SYSTEM_INFO[i].QuestIdentification == id
+function QuestSystemNpc.GetQuestIdentification(id)
+    for i in pairs(QUEST_SYSTEM_NPC_INFO) do
+        if QUEST_SYSTEM_NPC_INFO[i].QuestIdentification == id
         then
-            return QUEST_SYSTEM_INFO[i]
+            return QUEST_SYSTEM_NPC_INFO[i]
         end
     end
 
     return nil
 end
 
-function QuestSystem.PlayerJoin(aIndex)
-    if QuestSystemPlayersInfo[aIndex] ~= nil
+function QuestSystemNpc.PlayerJoin(aIndex)
+    if QuestSystemNpcPlayersInfo[aIndex] ~= nil
     then
-        QuestSystemPlayersInfo[aIndex] = nil
+        QuestSystemNpcPlayersInfo[aIndex] = nil
     end
 
     local player = User.new(aIndex)
@@ -711,18 +696,18 @@ function QuestSystem.PlayerJoin(aIndex)
     local db = DataBase.getDb()
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s'", player:getAccountID())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s'", player:getAccountID())
     else
-        query = string.format("SELECT * FROM QUEST_SYSTEM where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
+        query = string.format("SELECT * FROM QUEST_SYSTEM_NPC where AccountID='%s' and Name='%s'", player:getAccountID(), player:getName())
     end
 
     if db:exec(query) ~= 0
     then
         if db:fetch() ~= SQL_NO_DATA
         then
-            QuestSystemPlayersInfo[aIndex] = {
+            QuestSystemNpcPlayersInfo[aIndex] = {
                 PlayerIndex = aIndex,
                 PlayerName = player:getName(),
                 PlayerAccount = player:getAccountID(),
@@ -734,7 +719,7 @@ function QuestSystem.PlayerJoin(aIndex)
             }
 
             for i = 1, 9 do
-                QuestSystemPlayersInfo[aIndex].KillsMonster[i] = { value = db:getInt(string.format('KillsMonster%d', i)) }
+                QuestSystemNpcPlayersInfo[aIndex].KillsMonster[i] = { value = db:getInt(string.format('KillsMonster%d', i)) }
             end
         end
     end
@@ -742,22 +727,30 @@ function QuestSystem.PlayerJoin(aIndex)
     db:clear()
 end
 
-function QuestSystem.OpenContinueQuest(player)
-    local packetString = string.format("%s_%s", QUEST_SYSTEM_PACKET_CONTINUE_QUEST_NAME, player:getName())
-    CreatePacket(packetString, QUEST_SYSTEM_PACKET)
+function QuestSystemNpc.OpenFinishedQuest(player)
+    local packetString = string.format("%s_%s", QUEST_SYSTEM_NPC_PACKET_FINISHED_QUEST_NAME, player:getName())
+    CreatePacket(packetString, QUEST_SYSTEM_NPC_PACKET)
     SendPacket(packetString, player:getIndex())
     ClearPacket(packetString)
 end
 
-function QuestSystem.PlayerLogout(aIndex)
-    if QuestSystemPlayersInfo[aIndex] ~= nil
+function QuestSystemNpc.OpenDismissQuest(player, QuestIdentification)
+    local packetString = string.format("%s_%s", QUEST_SYSTEM_NPC_PACKET_DISMISS_QUEST_NAME, player:getName())
+    CreatePacket(packetString, QUEST_SYSTEM_NPC_PACKET)
+    SetDwordPacket(packetString, QuestIdentification)
+    SendPacket(packetString, player:getIndex())
+    ClearPacket(packetString)
+end
+
+function QuestSystemNpc.PlayerLogout(aIndex)
+    if QuestSystemNpcPlayersInfo[aIndex] ~= nil
     then
-        QuestSystemPlayersInfo[aIndex] = nil
+        QuestSystemNpcPlayersInfo[aIndex] = nil
     end
 end
 
-function QuestSystem.PlayerDie(PlayerIndex, TargetIndex)
-    local playerQuest = QuestSystemPlayersInfo[PlayerIndex]
+function QuestSystemNpc.PlayerDie(PlayerIndex, TargetIndex)
+    local playerQuest = QuestSystemNpcPlayersInfo[PlayerIndex]
 
     if playerQuest ~= nil
     then
@@ -766,17 +759,17 @@ function QuestSystem.PlayerDie(PlayerIndex, TargetIndex)
             return
         end
 
-        local getQuestInfo = QuestSystem.GetQuestIdentification(playerQuest.QuestIdentification)
+        local getQuestInfo = QuestSystemNpc.GetQuestIdentification(playerQuest.QuestIdentification)
 
         if getQuestInfo ~= nil
         then
             if getQuestInfo.Kills > 0 and playerQuest.Kills < getQuestInfo.Kills
             then
-                if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+                if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
                 then
-                    DataBase.SetAddValue('QUEST_SYSTEM', 'Kills', 1, 'AccountID', playerQuest.PlayerAccount)
+                    DataBase.SetAddValue('QUEST_SYSTEM_NPC', 'Kills', 1, 'AccountID', playerQuest.PlayerAccount)
                 else
-                    DataBase.SetAddValue('QUEST_SYSTEM', 'Kills', 1, 'Name', playerQuest.PlayerName)
+                    DataBase.SetAddValue('QUEST_SYSTEM_NPC', 'Kills', 1, 'Name', playerQuest.PlayerName)
                 end
 
                 playerQuest.Kills = playerQuest.Kills + 1
@@ -785,8 +778,8 @@ function QuestSystem.PlayerDie(PlayerIndex, TargetIndex)
     end
 end
 
-function QuestSystem.MonsterDie(PlayerIndex, MonsterIndex)
-    local playerQuest = QuestSystemPlayersInfo[PlayerIndex]
+function QuestSystemNpc.MonsterDie(PlayerIndex, MonsterIndex)
+    local playerQuest = QuestSystemNpcPlayersInfo[PlayerIndex]
 
     if playerQuest ~= nil
     then
@@ -795,7 +788,7 @@ function QuestSystem.MonsterDie(PlayerIndex, MonsterIndex)
             return
         end
 
-        local getQuestInfo = QUEST_SYSTEM_REQUIREMENTS_MONSTER[playerQuest.QuestIdentification]
+        local getQuestInfo = QUEST_SYSTEM_NPC_REQUIREMENTS_MONSTER[playerQuest.QuestIdentification]
 
         if getQuestInfo ~= nil
         then
@@ -815,20 +808,20 @@ function QuestSystem.MonsterDie(PlayerIndex, MonsterIndex)
                 then
                     if playerQuest.KillsMonster[count].value < monsterInfo.Quantity
                     then
-                        if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+                        if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
                         then
-                            DataBase.SetAddValue('QUEST_SYSTEM', string.format('KillsMonster%d', count), 1, 'AccountID', playerQuest.PlayerAccount)
+                            DataBase.SetAddValue('QUEST_SYSTEM_NPC', string.format('KillsMonster%d', count), 1, 'AccountID', playerQuest.PlayerAccount)
                         else
-                            DataBase.SetAddValue('QUEST_SYSTEM', string.format('KillsMonster%d', count), 1, 'Name', playerQuest.PlayerName)
+                            DataBase.SetAddValue('QUEST_SYSTEM_NPC', string.format('KillsMonster%d', count), 1, 'Name', playerQuest.PlayerName)
                         end
 
                         playerQuest.KillsMonster[count].value = playerQuest.KillsMonster[count].value + 1
 
-                        quest = QuestSystem.GetQuestIdentification(playerQuest.QuestIdentification)
+                        quest = QuestSystemNpc.GetQuestIdentification(playerQuest.QuestIdentification)
 
                         if quest ~= nil
                         then
-                            SendMessage(string.format(QUEST_SYSTEM_MESSAGES[playerQuest.Language][9], quest.QuestName, monster:getName(), playerQuest.KillsMonster[count].value, monsterInfo.Quantity), PlayerIndex, 1)
+                            SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[playerQuest.Language][9], quest.QuestName, monster:getName(), playerQuest.KillsMonster[count].value, monsterInfo.Quantity), PlayerIndex, 1)
                         end
                     end
                     break
@@ -842,23 +835,39 @@ function QuestSystem.MonsterDie(PlayerIndex, MonsterIndex)
     end
 end
 
-function QuestSystem.CreatePlayerCache()
+function QuestSystemNpc.CreatePlayerCache()
     for i = OBJECT_START_USER, MAX_OBJECT do
         if gObjIsConnectedGP(i) ~= 0
 		then
-            QuestSystem.PlayerJoin(i)
+            QuestSystemNpc.PlayerJoin(i)
         end
+    end
+
+    for i = OBJECT_START_MONSTER, MAX_OBJECT_MONSTER do
+        local monster = User.new(i)
+
+        if monster:getConnected() > 0
+        then
+            for i = 1, #QUEST_SYSTEM_NPC_LOCATION_INFO do
+                if monster:getClass() == QUEST_SYSTEM_NPC_LOCATION_INFO[i].Class
+                then
+                    monster:setType(3)
+                end
+            end
+        end
+
+        monster = nil
     end
 end
 
-function QuestSystem.CheckQuestFinished(account, name)
+function QuestSystemNpc.CheckQuestFinished(account, name)
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("SELECT Finished FROM [dbo].[QUEST_SYSTEM] WHERE AccountID='%s'", account)
+        query = string.format("SELECT Finished FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s'", account)
     else
-        query = string.format("SELECT Finished FROM [dbo].[QUEST_SYSTEM] WHERE AccountID='%s' and Name='%s'", account, name)
+        query = string.format("SELECT Finished FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s' and Name='%s'", account, name)
     end
 
     local value = 0
@@ -876,14 +885,23 @@ function QuestSystem.CheckQuestFinished(account, name)
     return value
 end
 
-function QuestSystem.InsertPlayer(account, name, questIdentification)
+function QuestSystemNpc.InsertPlayer(account, name, questIdentification)
+    local query = string.format("INSERT INTO [dbo].[QUEST_SYSTEM_NPC] ([AccountID],[Name],[QuestIdentification]) VALUES ('%s','%s','%d')", account, name, questIdentification)
+
+    local db = DataBase.getDb()
+    db:exec(query)
+    db:fetch()
+    db:clear()
+end
+
+function QuestSystemNpc.DeleteQuestInfo(account, name)
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("INSERT INTO [dbo].[QUEST_SYSTEM] ([AccountID],[QuestIdentification]) VALUES ('%s','%d')", account, questIdentification)
+        query = string.format("DELETE FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s'", account)
     else
-        query = string.format("INSERT INTO [dbo].[QUEST_SYSTEM] ([AccountID],[Name],[QuestIdentification]) VALUES ('%s','%s','%d')", account, name, questIdentification)
+        query = string.format("DELETE FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s' and Name='%s'", account, name)
     end
 
     local db = DataBase.getDb()
@@ -892,37 +910,95 @@ function QuestSystem.InsertPlayer(account, name, questIdentification)
     db:clear()
 end
 
-function QuestSystem.ResetQuestInfo(account, name, questID)
+function QuestSystemNpc.GetDbQuestIdentification(account, name)
     local query = ""
 
-    if QUEST_SYSTEM_ONLY_ACCOUNT == 1
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
     then
-        query = string.format("UPDATE [dbo].[QUEST_SYSTEM] SET [QuestIdentification] = %d, [Kills] = 0, [KillsMonster1] = 0, [KillsMonster2] = 0, [KillsMonster3] = 0, [KillsMonster4] = 0, [KillsMonster5] = 0, [KillsMonster6] = 0, [KillsMonster7] = 0, [KillsMonster8] = 0, [KillsMonster9] = 0, [Finished] = 0 WHERE AccountID='%s'", questID, account)
+        query = string.format("SELECT QuestIdentification FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s'", account)
     else
-        query = string.format("UPDATE [dbo].[QUEST_SYSTEM] SET [QuestIdentification] = %d, [Kills] = 0, [KillsMonster1] = 0, [KillsMonster2] = 0, [KillsMonster3] = 0, [KillsMonster4] = 0, [KillsMonster5] = 0, [KillsMonster6] = 0, [KillsMonster7] = 0, [KillsMonster8] = 0, [KillsMonster9] = 0, [Finished] = 0 WHERE AccountID='%s' and Name='%s'", questID, account, name)
+        query = string.format("SELECT QuestIdentification FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s' and Name='%s'", account, name)
     end
 
-    local db = DataBase.getDb()
-    db:exec(query)
-    db:fetch()
+    local value = 0
+
+    if db:exec(query) ~= 0
+    then
+        if db:fetch() ~= SQL_NO_DATA
+        then
+            value = db:getInt('QuestIdentification')
+        end
+    end
+
     db:clear()
+
+    return value
 end
 
-function QuestSystem.Init()
-    if QUEST_SYSTEM_SWITCH ~= 1
+function QuestSystemNpc.CheckQuestExist(account, name)
+    local query = ""
+
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
+    then
+        query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s'", account)
+    else
+        query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s' and Name='%s'", account, name)
+    end
+
+    local value = 0
+
+    if db:exec(query) ~= 0
+    then
+        if db:fetch() ~= SQL_NO_DATA
+        then
+            value = db:getInt('count')
+        end
+    end
+
+    db:clear()
+
+    return value
+end
+
+function QuestSystemNpc.NpcTalk(NpcIndex, PlayerIndex)
+    local npc = User.new(NpcIndex)
+
+    for i = 1, #QUEST_SYSTEM_NPC_LOCATION_INFO do
+        local NpcInfo = QUEST_SYSTEM_NPC_LOCATION_INFO[i]
+
+        if npc:getClass() == NpcInfo.Class
+        then
+            if npc:getMapNumber() == NpcInfo.Map and npc:getX() == NpcInfo.CoordX and npc:getY() == NpcInfo.CoordY
+            then
+                local player = User.new(PlayerIndex)
+
+                QuestSystemNpc.OpenQuest(player, NpcInfo.QuestIdentification, 1)
+
+                player = nil
+                return 1
+            end
+        end
+    end
+
+    npc = nil
+end
+
+function QuestSystemNpc.Init()
+    if QUEST_SYSTEM_NPC_SWITCH ~= 1
     then
         return
     end
 
-    GameServerFunctions.GameServerProtocol(QuestSystem.Protocol)
-    GameServerFunctions.EnterCharacter(QuestSystem.PlayerJoin)
-    GameServerFunctions.PlayerLogout(QuestSystem.PlayerLogout)
-    GameServerFunctions.PlayerDie(QuestSystem.PlayerDie)
-    GameServerFunctions.MonsterDie(QuestSystem.MonsterDie)
+    GameServerFunctions.GameServerProtocol(QuestSystemNpc.Protocol)
+    GameServerFunctions.EnterCharacter(QuestSystemNpc.PlayerJoin)
+    GameServerFunctions.PlayerLogout(QuestSystemNpc.PlayerLogout)
+    GameServerFunctions.PlayerDie(QuestSystemNpc.PlayerDie)
+    GameServerFunctions.MonsterDie(QuestSystemNpc.MonsterDie)
+    GameServerFunctions.NpcTalk(QuestSystemNpc.NpcTalk)
 
-    QuestSystem.CreatePlayerCache()
+    QuestSystemNpc.CreatePlayerCache()
 end
 
-QuestSystem.Init()
+QuestSystemNpc.Init()
 
-return QuestSystem
+return QuestSystemNpc
