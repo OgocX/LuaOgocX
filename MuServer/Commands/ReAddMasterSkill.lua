@@ -23,7 +23,7 @@ function ReAddMasterSkill.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < READD_MASTER_SKILL_VIP
+	if player:getVip() < READD_MASTER_SKILL_VIP
 	then
 		SendMessage(string.format(READD_MASTER_SKILL_MESSAGES[Language][3]), aIndex, 1)
 		return
@@ -31,13 +31,13 @@ function ReAddMasterSkill.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < READD_MASTER_SKILL_RESETS
+	if player:getReset() < READD_MASTER_SKILL_RESETS
 	then
 		SendMessage(string.format(READD_MASTER_SKILL_MESSAGES[Language][4], READD_MASTER_SKILL_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < READD_MASTER_SKILL_MRESETS
+	if player:getMasterReset() < READD_MASTER_SKILL_MRESETS
 	then
 		SendMessage(string.format(READD_MASTER_SKILL_MESSAGES[Language][5], READD_MASTER_SKILL_MRESETS), aIndex, 1)
 		return

@@ -22,7 +22,7 @@ function CounterItem.AddValue(aIndex, slot, value)
 		return
 	end
 	
-	InsertCounter(aIndex, slot, value)
+	InserCounter(aIndex, slot, value)
 	UpdateCounter(aIndex)
 	
 	pInv = nil
@@ -43,8 +43,8 @@ function CounterItem.DecreaseValue(aIndex, slot, value)
 		return
 	end
 	
-	DecreaseCounter(aIndex, slot, value)
-	UpdateCounter(aIndex)
+	InserCounter(aIndex, slot, value)
+	DecreaseCounter(aIndex)
 	
 	pInv = nil
 	player = nil

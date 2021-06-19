@@ -74,6 +74,13 @@ function JewelBank.Close()
 end
 
 function JewelBank.Open()
+	local nome = UserGetName()
+	CreatePacket(string.format("JBOpe_%s",nome), JewelBank_Packet)
+	SendPacket(string.format("JBOpe_%s",nome))
+	ClearPacket(string.format("JBOpe_%s",nome))
+end
+
+function JewelBank.Open2()
 	if	CheckWindowOpen(UIFriendList)		== 1	then	return							end
 	if	CheckWindowOpen(UIMoveList)			== 1	then	return							end
 	if	CheckWindowOpen(UIParty)			== 1	then	CloseWindow(UIParty)			end
@@ -347,7 +354,7 @@ function JewelBank.Protocol(Packet, PacketName)
 				JewelBank_Saldo[listid] = valor
 			end
 			ClearPacket(PacketName)
-			JewelBank.Open()
+			JewelBank.Open2()
 			return true
 		end
 		
@@ -373,10 +380,7 @@ function JewelBank.KeyListener(key)
 				if UICustomInterface == JewelBank_WindowId then
 					JewelBank.Close()
 				else
-					local nome = UserGetName()
-					CreatePacket(string.format("JBOpe_%s",nome), JewelBank_Packet)
-					SendPacket(string.format("JBOpe_%s",nome))
-					ClearPacket(string.format("JBOpe_%s",nome))
+					JewelBank.Open()
 					return
 				end
 				return

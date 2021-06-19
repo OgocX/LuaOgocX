@@ -1,6 +1,7 @@
 --[[
 Command Configs
 ]]--
+KILL_COMMAND_GAME_MASTER_LEVEL = 1
 KILL_COMMAND_OPEN = "/abrirmatamata"
 KILL_COMMAND_GO = "/novaarena"
 KILL_COMMAND_INIT = "/iniciarmatamata"

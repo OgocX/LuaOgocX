@@ -3,7 +3,7 @@ StartEvent = {}
 function StartEvent.Command(aIndex, Arguments)
 	local player = User.new(aIndex)
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), START_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -25,6 +25,8 @@ function StartEvent.Command(aIndex, Arguments)
 	end
 	
 	SendMessage(string.format('System %s try to start', arg), aIndex, 1)
+
+	player = nil
 end
 
 function StartEvent.Init()

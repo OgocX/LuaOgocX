@@ -55,7 +55,7 @@ function Post.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < POST_VIP
+	if player:getVip() < POST_VIP
 	then
 		SendMessage(string.format(POST_MESSAGES[Language][4]), aIndex, 1)
 		return
@@ -63,13 +63,13 @@ function Post.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < POST_RESET
+	if player:getReset() < POST_RESET
 	then
 		SendMessage(string.format(POST_MESSAGES[Language][5], POST_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < POST_MRESET
+	if player:getMasterReset() < POST_MRESET
 	then
 		SendMessage(string.format(POST_MESSAGES[Language][6], POST_MRESET), aIndex, 1)
 		return

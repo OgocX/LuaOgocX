@@ -2,6 +2,7 @@
 Commands Config
 ]]--
 SOBRE_COMMAND_OPEN = "/abrirsobre"
+OPEN_SOBRE_GAME_MASTER_LEVEL = 1
 SOBRE_COMMAND_GO = "/sobre"
 SOBRE_SWITCH = 1
 SOBRE_MAP = 1

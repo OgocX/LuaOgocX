@@ -5,7 +5,6 @@ Arquivo de sistema de Resets
 Reset = {}
 
 local RESET_NPC_CREATE = {}
-local AUTO_RESET_PLAYERS = {}
 
 function ResetNpcTalk(Npc, Player)
 	if RESET_NPC_SWITCH == 0
@@ -30,12 +29,12 @@ function Reset.MonsterReload()
 		return
 	end
 	
-	for i, key in ipairs(RESET_NPC_CREATE) do
-		local npc = User.new(RESET_NPC_CREATE[key].NpcIndex)
+	for i in pairs(RESET_NPC_CREATE) do
+		local npc = User.new(RESET_NPC_CREATE[i].NpcIndex)
 		
 		if npc:getConnected() > 0
 		then
-			gObjDel(RESET_NPC_CREATE[key].NpcIndex)
+			gObjDel(RESET_NPC_CREATE[i].NpcIndex)
 		end
 	end
 
@@ -59,113 +58,7 @@ function Reset.ReloadLuaMonster()
 	RESET_NPC_CREATE = {}
 end
 
-function Reset_Running_AutoReset()
-	for name, tab in ipairs(AUTO_RESET_PLAYERS) do
-		local index = AUTO_RESET_PLAYERS[name].aIndex
-		
-		local player = User.new(index)
-		
-		if player:getConnected() ~= 3
-		then
-			AUTO_RESET_PLAYERS[name] = nil
-		end
-	end
-end
-
-function Reset.AutoResetCommand(aIndex, Arguments)
-	if AUTO_RESET_SWITCH == 0
-	then
-		return
-	end
-	
-	local player = User.new(aIndex)
-	local Language = player:getLanguage()
-	
-	if player:getLevel() < AUTO_RESET_LEVEL
-	then
-		SendMessage(string.format(RESET_MESSAGES[Language][1], AUTO_RESET_LEVEL), aIndex, 1)
-		return
-	end
-	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < AUTO_RESET_VIP
-	then
-		SendMessage(string.format(RESET_MESSAGES[Language][2]), aIndex, 1)
-		return
-	end
-	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < AUTO_RESET_RESETS
-	then
-		SendMessage(string.format(RESET_MESSAGES[Language][3], AUTO_RESET_RESETS), aIndex, 1)
-		return
-	end
-	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < AUTO_RESET_MRESETS
-	then
-		SendMessage(string.format(RESET_MESSAGES[Language][4], AUTO_RESET_MRESETS), aIndex, 1)
-		return
-	end
-	
-	local prefix = command:getString(Arguments, 1, 0)
-	
-	if string.lower(prefix) == "off"
-	then
-		if AUTO_RESET_PLAYERS[Name]
-		then
-			AUTO_RESET_PLAYERS[Name] = nil
-			
-			SendMessage(string.format(RESET_MESSAGES[Language][5]), aIndex, 1)
-		end
-		return
-	end
-
-	if AUTO_RESET_PLAYERS[Name]
-	then
-		AUTO_RESET_PLAYERS[Name] = {aIndex = aIndex, Active = 1}
-	else
-		AUTO_RESET_PLAYERS[Name] = {aIndex = aIndex, Active = 1}
-	end
-	
-	SendMessage(string.format(RESET_MESSAGES[Language][6]), aIndex, 1)
-	
-	
-end
-
-function Reset.AutoResetProc(aIndex)
-	if AUTO_RESET_SWITCH == 0
-	then
-		return
-	end
-	local player = User.new(aIndex)
-	
-	local Name = player:getName()
-	
-	if AUTO_RESET_PLAYERS[Name]
-	then
-		if AUTO_RESET_PLAYERS[Name].Active == 1
-		then
-			local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
-			
-			if RESET_TYPE == 0
-			then
-				local level = RESET_ACUMULATIVE_LEVEL[vip]
-					
-				if player:getLevel() >= level
-				then
-					return Reset.Acumulative(player)
-				end
-			elseif RESET_TYPE == 1
-			then
-				return Reset.Tabulated(player)
-			end
-		end
-	end
-end
-
 function Reset.Init()
-	Timer.Interval(1, Reset_Running_AutoReset)
-
 	if RESET_NPC_SWITCH == 0
 	then
 		return
@@ -222,9 +115,7 @@ function Reset.Npc(Npc, Player)
 	else
 		ChatTargetSend(Npc, RESET_MESSAGES[Language][8], Player)
 		
-		local player = User.new(Player)
-		local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
-		SendMessage(string.format(RESET_MESSAGES[Language][9], Resets), Player, 0)
+		SendMessage(string.format(RESET_MESSAGES[Language][9], pl:getReset()), Player, 0)
 	end
 	
 	pl = nil
@@ -255,7 +146,7 @@ function Reset.Make(player)
 
 	if MAX_RESET ~= -1
 	then
-		local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+		local Resets = player:getReset()
 		
 		if Resets >= MAX_RESET
 		then
@@ -279,7 +170,7 @@ function Reset.Acumulative(player)
 
 	if MAX_RESET ~= -1
 	then
-		local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+		local Resets = player:getReset()
 		
 		if Resets >= MAX_RESET
 		then
@@ -288,7 +179,7 @@ function Reset.Acumulative(player)
 		end
 	end
 
-	local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
+	local vip = player:getVip()
 	local level = RESET_ACUMULATIVE_LEVEL[vip]
 	
 	if player:getLevel() < level
@@ -318,11 +209,10 @@ function Reset.Acumulative(player)
 	for i = 0 , #COLUMN_RESET do
 		DataBase.SetAddValue(TABLE_RESET, COLUMN_RESET[i], RESET_ACUMULATIVE_RESETS[vip], WHERE_RESET, player:getName())
 	end
+
+	player:setReset(player:getReset() + RESET_ACUMULATIVE_RESETS[vip])
 	
-	local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
-	SendMessage(string.format(RESET_MESSAGES[Language][9], Resets), aIndex, 0)
-	
-	player:setReset(Resets)
+	SendMessage(string.format(RESET_MESSAGES[Language][9], player:getReset()), aIndex, 0)
 
 	local rel = RESET_ACUMULATIVE_RELOGAR[vip]
 	
@@ -346,8 +236,6 @@ function Reset.Acumulative(player)
 		if ret == 1
 		then
 			Teleport(aIndex, retmap, retx, rety)
-		else
-			Teleport(aIndex, player:getMapNumber(), player:getX(), player:getY())
 		end
 	end
 	
@@ -438,7 +326,7 @@ end
 function Reset.Tabulated(player)
 	local aIndex = player:getIndex()
 	local Language = player:getLanguage()
-	local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+	local Resets = player:getReset()
 
 	if MAX_RESET ~= -1
 	then
@@ -449,7 +337,7 @@ function Reset.Tabulated(player)
 		end
 	end
 	
-	local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
+	local vip = player:getVip()
 	local leveluser = player:getLevel()
 	
 	local level = Reset.Tabulated_GetResetLevel(Resets, vip)
@@ -457,7 +345,7 @@ function Reset.Tabulated(player)
 	if leveluser < level
 	then
 		SendMessage(string.format(RESET_MESSAGES[Language][13], level), aIndex, 1)
-	return 0
+		return 0
 	end
 	
 	local moneyuser = player:getMoney()
@@ -500,11 +388,10 @@ function Reset.Tabulated(player)
 	for i = 0 , #COLUMN_RESET do
 		DataBase.SetAddValue(TABLE_RESET, COLUMN_RESET[i], RESET_TABLE_RESETS[vip], WHERE_RESET, player:getName())
 	end
+
+	player:setReset(player:getReset() + RESET_TABLE_RESETS[vip])
 	
-	local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
-	SendMessage(string.format(RESET_MESSAGES[Language][9], Resets), aIndex, 0)
-	
-	player:setReset(Resets)
+	SendMessage(string.format(RESET_MESSAGES[Language][9], player:getReset()), aIndex, 0)
 	
 	local rel = RESET_TABLE_RELOGAR[vip]
 	
@@ -528,28 +415,16 @@ function Reset.Tabulated(player)
 		if ret == 1
 		then
 			Teleport(aIndex, retmap, retx, rety)
-		else
-			Teleport(aIndex, player:getMapNumber(), player:getX(), player:getY())
 		end
 	end
 	
 	return 1
 end
 
-function Reset.PlayerLogout(aIndex, Name)
-	if AUTO_RESET_PLAYERS[Name]
-	then
-		AUTO_RESET_PLAYERS[Name] = nil
-	end
-end
-
 Reset.Init()
 Commands.Register(RESET_COMMAND, Reset.Command)
-Commands.Register(AUTO_RESET_COMMAND, Reset.AutoResetCommand)
 GameServerFunctions.NpcTalk(ResetNpcTalk)
-GameServerFunctions.PlayerLevelUp(Reset.AutoResetProc)
 GameServerFunctions.MonsterReload(Reset.MonsterReload)
 GameServerFunctions.ReloadLuaMonster(Reset.ReloadLuaMonster)
-GameServerFunctions.PlayerLogout(Reset.PlayerLogout)
 
 return Reset

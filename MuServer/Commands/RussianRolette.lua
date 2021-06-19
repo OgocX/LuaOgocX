@@ -6,6 +6,7 @@ local RussianRoletteOpen = false
 local RussianRoletteStarted = false
 local RussianRoletteIdTimerCheck = -1
 local RussianRoletteIdTimer = -1
+local RussianRoletteIdFireOnPlayer = -1
 local RussianRoletteTimer = 0
 
 function RussianRolette.TimeStart()
@@ -55,6 +56,11 @@ function RussianRolette.FinishEvent()
 	then
 		Timer.Cancel(RussianRoletteIdTimerCheck)
 	end
+
+	if RussianRoletteIdFireOnPlayer ~= -1
+	then
+		Timer.Cancel(RussianRoletteIdFireOnPlayer)
+	end
 	
 	RussianRolettePlayers = {}
 
@@ -94,9 +100,7 @@ function RussianRolette.HitPlayer(playerInfo)
 	SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[playerInfo.Language][27]), playerInfo.PlayerIndex, 1)
 	
 	KillPlayer(playerInfo.PlayerIndex)
-	
-	--Teleport(playerInfo.PlayerIndex, RUSSIAN_ROLETTE_TELEPORT_LOSE_MAP, RUSSIAN_ROLETTE_TELEPORT_LOSE_X, RUSSIAN_ROLETTE_TELEPORT_LOSE_Y)
-	
+
 	local Index = playerInfo.PlayerIndex
 
 	RussianRolettePlayers[Index] = nil
@@ -137,7 +141,7 @@ function RussianRolette.FireOnPlayer()
 				Message.SendMessageGlobalMultLangArgs(RUSSIAN_ROLETTE_MESSAGES, 13, 0)
 				Message.SendMessageGlobalMultLangArgs(RUSSIAN_ROLETTE_MESSAGES, 12, 0)
 				
-				SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[playerInfo.Language][31]), playerInfo.PlayerIndex, 1)
+				SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[player.Language][31]), player.PlayerIndex, 1)
 			end
 		end
 	else
@@ -146,6 +150,8 @@ function RussianRolette.FireOnPlayer()
 	end
 	
 	UsersLucky = nil
+
+	RussianRoletteIdFireOnPlayer = -1
 end
 
 function RussianRolette.TimeRunning()
@@ -175,7 +181,7 @@ function RussianRolette.TimeRunning()
 		Message.SendMessageGlobalMultLangArgs(RUSSIAN_ROLETTE_MESSAGES, 13, 0)
 		Message.SendMessageGlobalMultLangArgs(RUSSIAN_ROLETTE_MESSAGES, 16, 0)
 		
-		Timer.TimeOut(2, RussianRolette.FireOnPlayer)
+		RussianRoletteIdFireOnPlayer = Timer.TimeOut(2, RussianRolette.FireOnPlayer)
 	end
 end
 
@@ -196,8 +202,15 @@ function RussianRolette.CheckFinalists(usersInEvent)
 			for i = 1, #RUSSIAN_ROLETTE_REWARD_TABLES do
 				local reward = RUSSIAN_ROLETTE_REWARD_TABLES[i]
 				
+				if reward == nil
+				then
+					goto continue
+				end
+
 				DataBase.SetAddValue(reward.Table, reward.Column, reward.Amount, reward.Where, playerInfo.PlayerAccount)
 				SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[playerInfo.Language][31], reward.Amount, reward.CoinName), playerInfo.PlayerIndex, 1)
+
+				::continue::
 			end
 			return 1
 		end
@@ -301,6 +314,7 @@ function RussianRolette.StartEvent()
 	RussianRoletteStarted = false
 	RussianRoletteIdTimerCheck = -1
 	RussianRoletteIdTimer = -1
+	RussianRoletteIdFireOnPlayer = -1
 	
 	--Set command open
 	RussianRoletteOpen = true
@@ -339,13 +353,13 @@ function RussianRolette.CommandEnter(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < RUSSIAN_ROLETTE_RESET
+	if player:getReset() < RUSSIAN_ROLETTE_RESET
 	then
 		SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[Language][6], RUSSIAN_ROLETTE_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < RUSSIAN_ROLETTE_MRESET
+	if player:getMasterReset() < RUSSIAN_ROLETTE_MRESET
 	then
 		SendMessage(string.format(RUSSIAN_ROLETTE_MESSAGES[Language][7], RUSSIAN_ROLETTE_MRESET), aIndex, 1)
 		return
@@ -381,7 +395,7 @@ function RussianRolette.CommandStart(aIndex, Arguments)
 	
 	local player = User.new(aIndex)
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), RUSSIAN_ROLLETE_COMMAND_OPEN_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end

@@ -25,21 +25,19 @@ function Hours.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < HORAS_VIP
+	if player:getVip() < HORAS_VIP
 	then
 		SendMessage(string.format(HOUR_MESSAGE[Language][3]), aIndex, 1)
 		return
 	end
 	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < HORAS_RESETS
+	if player:getReset() < HORAS_RESETS
 	then
 		SendMessage(string.format(HOUR_MESSAGE[Language][4], HORAS_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < HORAS_MRESETS
+	if player:getMasterReset() < HORAS_MRESETS
 	then
 		SendMessage(string.format(HOUR_MESSAGE[Language][5], HORAS_MRESETS), aIndex, 1)
 		return
@@ -52,7 +50,7 @@ function Hours.Command(aIndex, Arguments)
 	
 	SendMessage(string.format(os.date(HOUR_MESSAGE[Language][6])), aIndex, 1)
 	
-	
+	player = nil
 end
 
 Commands.Register(HORAS_COMMAND, Hours.Command)

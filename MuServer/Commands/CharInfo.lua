@@ -10,7 +10,7 @@ function CharInfo.Command(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < CHARINFO_VIP
+	if player:getVip() < CHARINFO_VIP
 	then
 		SendMessage(string.format(CHAR_INFO_MESSAGES[Language][1]), aIndex, 1)
 		return
@@ -33,7 +33,7 @@ function CharInfo.Command(aIndex, Arguments)
 	
 	local target_player = User.new(TargetIndex)
 	
-	local Resets = DataBase.GetValue("Character", COLUMN_RESET[0], "Name", Name)
+	local Resets = target_player:getReset()
 	local MResets = DataBase.GetValue("Character", COLUMN_MRESET[0], "Name", Name)
 	
 	SendMessage(string.format(CHAR_INFO_MESSAGES[Language][3], Name, Resets, MResets, target_player:getLevel()), aIndex, 1)

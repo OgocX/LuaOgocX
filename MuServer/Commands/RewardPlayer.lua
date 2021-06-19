@@ -4,7 +4,7 @@ function RewardPlayer.Command(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), REWARD_PLAYERS_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end

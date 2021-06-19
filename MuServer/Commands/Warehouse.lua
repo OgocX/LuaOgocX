@@ -40,7 +40,7 @@ function Warehouse.CommandWareHouse(aIndex, Arguments)
 		return
 	end
 	
-	local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
+	local vip = player:getVip()
 	
 	if vip < MULT_VAULT_VIP
 	then
@@ -50,13 +50,13 @@ function Warehouse.CommandWareHouse(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < MULT_VAULT_RESETS
+	if player:getReset() < MULT_VAULT_RESETS
 	then
 		SendMessage(string.format(WAREHOUSE_MESSAGES[Language][6], MULT_VAULT_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < MULT_VAULT_MRESETS
+	if player:getMasterReset() < MULT_VAULT_MRESETS
 	then
 		SendMessage(string.format(WAREHOUSE_MESSAGES[Language][7], MULT_VAULT_MRESETS), aIndex, 1)
 		return
@@ -152,7 +152,7 @@ function Warehouse.CommandOpenVault(aIndex, Arguments)
 		return
 	end
 	
-	local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
+	local vip = player:getVip()
 	
 	if vip < OPEN_VAULT_VIP
 	then
@@ -162,13 +162,13 @@ function Warehouse.CommandOpenVault(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < OPEN_VAULT_RESETS
+	if player:getReset() < OPEN_VAULT_RESETS
 	then
 		SendMessage(string.format(OPEN_WAREHOUSE_MESSAGES[Language][5], OPEN_VAULT_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < OPEN_VAULT_MRESETS
+	if player:getMasterReset() < OPEN_VAULT_MRESETS
 	then
 		SendMessage(string.format(OPEN_WAREHOUSE_MESSAGES[Language][6], OPEN_VAULT_MRESETS), aIndex, 1)
 		return

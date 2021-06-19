@@ -3,7 +3,7 @@ OpenFolder("Definitions")
 --descriptions
 CUSTOM_DESCRIPTIONS_INFO = {}
 
-CUSTOM_DESCRIPTIONS_INFO[GET_ITEM(12, 200)] = {
+CUSTOM_DESCRIPTIONS_INFO[GET_ITEM(12, 201)] = {
 { Description = 'Testando descrição 1', Level = -1, Bold = 0, Color = 20 },
 { Description = 'Testando descrição 2', Level = -1, Bold = 1, Color = 21 },
 }
@@ -12,7 +12,6 @@ CUSTOM_DESCRIPTIONS_INFO[GET_ITEM(12, 200)] = {
 CUSTOM_COLOR_DESCRIPTION = {
 { colorID = 20, R = 0.8, G = 0.1, B = 0.1 },
 { colorID = 21, R = 0.2, G = 0.8, B = 0.1 },
-{ colorID = 23, R = 1.0, G = 0.6, B = 0.0 },
 }
 
 --back ground for text description and text 
@@ -89,7 +88,7 @@ function SetDescriptions(line, ItemIndex, ItemObject)
 	end
 
 	--example if you want create
-	--[[if ItemIndex == GET_ITEM(12, 200)
+	if ItemIndex == GET_ITEM(12, 200)
 	then
 		line = createDescMacro(line, "font normal", 1, 0)
 		line = createDescMacro(line, "font bold", 1, 1)
@@ -104,7 +103,7 @@ function SetDescriptions(line, ItemIndex, ItemObject)
 		line = createDescMacro(line, "Testando nova cor 20", 20, 0)
 		line = createDescMacro(line, "Testando nova cor 21", 21, 0)
 		line = createDescMacro(line, "Testando nova cor 22", 22, 0)
-	end--]]
+	end
 
 	return line
 end

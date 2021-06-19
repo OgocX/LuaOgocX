@@ -14,11 +14,13 @@ ADD_MONEY = 1000000
 ADD_RESET = 0
 ADD_MRESET = 0
 ADD_VIP = 0
-STR_MAXPOINTS = 32767
-AGI_MAXPOINTS = 32767
-VIT_MAXPOINTS = 32767
-ENE_MAXPOINTS = 32767
-CMD_MAXPOINTS = 32767
+
+ADD_COMMAND_MAX_POINTS = {}
+
+ADD_COMMAND_MAX_POINTS[0] = 65535 -- free
+ADD_COMMAND_MAX_POINTS[1] = 65535 -- vip 1
+ADD_COMMAND_MAX_POINTS[2] = 65535 -- vip 2
+ADD_COMMAND_MAX_POINTS[3] = 65535 -- vip 3
 
 -- Configurações comandos ReAdd
 RE_ADD_COMMAND = "/readd"
@@ -52,6 +54,7 @@ ADD_POINTS_MESSAGES["Por"] = {
 [12] = "[Sistema] O Máximo de pontos em Comando é %d",
 [13] = "[Sistema] Você precisa ter no minímo %d pontos em cada status",
 [14] = "[Sistema] Pontos redistribuídos com sucesso!",
+[15] = "[Sistema] O Máximo de pontos em Agilidade é %d",
 }
 
 ADD_POINTS_MESSAGES["Eng"] = {
@@ -69,6 +72,7 @@ ADD_POINTS_MESSAGES["Eng"] = {
 [12] = "[System] Maximum points in Command is %d",
 [13] = "[System] You must have at least %d points in each status",
 [14] = "[System] Points redistributed successfully!",
+[15] = "[System] Max Agility points is %d",
 }
 
 ADD_POINTS_MESSAGES["Spn"] = {
@@ -86,4 +90,5 @@ ADD_POINTS_MESSAGES["Spn"] = {
 [12] = "[Sistema] El máximo de puntos en Command es %d",
 [13] = "[Sistema] Debes tener al menos %d puntos en cada estado",
 [14] = "¡[Sistema] Puntos redistribuidos correctamente!",
+[15] = "[Sistema] Los puntos máximos de agilidad son %d",
 }

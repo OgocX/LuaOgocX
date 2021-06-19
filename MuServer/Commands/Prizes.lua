@@ -13,9 +13,9 @@ function Prizes.CommandAdd(aIndex, Command, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), PRIZES_GAME_MASTER_LEVEL) == 0
 	then
-		return false
+		return
 	end
 
 	local cmd = Command

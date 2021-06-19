@@ -163,7 +163,7 @@ function MataMata.CommandOpen(aIndex, Arguments)
 	
 	local player = User.new(aIndex)
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), KILL_COMMAND_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -213,7 +213,7 @@ function MataMata.CommandGo(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < KILL_VIP
+	if player:getVip() < KILL_VIP
 	then
 		SendMessage(string.format(MATA_MATA_MESSAGE[Language][11]), aIndex, 1)
 		return
@@ -221,13 +221,13 @@ function MataMata.CommandGo(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < KILL_RESETS
+	if player:getReset() < KILL_RESETS
 	then
 		SendMessage(string.format(MATA_MATA_MESSAGE[Language][12], KILL_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < KILL_MRESETS
+	if player:getMasterReset() < KILL_MRESETS
 	then
 		SendMessage(string.format(MATA_MATA_MESSAGE[Language][13], KILL_MRESETS), aIndex, 1)
 		return

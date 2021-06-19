@@ -31,7 +31,7 @@ function Evo.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < EVO_VIP
+	if player:getVip() < EVO_VIP
 	then
 		SendMessage(string.format(EVO_MESSAGE[Language][4]), aIndex, 1)
 		return
@@ -39,13 +39,13 @@ function Evo.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 	
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < EVO_RESETS
+	if player:getReset() < EVO_RESETS
 	then
 		SendMessage(string.format(EVO_MESSAGE[Language][5], EVO_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < EVO_MRESETS
+	if player:getMasterReset() < EVO_MRESETS
 	then
 		SendMessage(string.format(EVO_MESSAGE[Language][6], EVO_MRESETS), aIndex, 1)
 		return

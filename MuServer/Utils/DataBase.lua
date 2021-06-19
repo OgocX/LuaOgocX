@@ -23,6 +23,8 @@ function DataBase.Connect(iType,ODBC,User,Password)
 		LogAddC(2,string.format("Connected to database"))
 		
 		DataBase.Init()
+
+		DataBase.CallRunAfterLoad()
 	end
 end
 
@@ -181,6 +183,18 @@ end
 function DataBase.CreateColumn(table, column, definition)
 	db:exec(string.format("IF NOT EXISTS( SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '%s' AND COLUMN_NAME = '%s') ALTER TABLE %s ADD %s %s", table, column, table, column, definition))
 	db:clear()
+end
+
+local DataBase_Handles = {}
+
+function DataBase.CallRunAfterLoad()
+	for i in pairs(DataBase_Handles) do
+		DataBase_Handles[i].callback()	
+	end
+end
+
+function DataBase.RunAfterLoad(callback)
+	DataBase_Handles[callback] = { callback = callback }
 end
 
 return DataBase

@@ -71,7 +71,7 @@ function QuestSystem.OpenQuest(player)
 
                 if questInfo.Reset ~= 0
                 then
-                    Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+                    Resets = player:getReset()
                 end
 
                 if questInfo.MReset ~= 0
@@ -313,7 +313,7 @@ function QuestSystem.GetReward(player)
 
                 if questInfo.Reset ~= 0
                 then
-                    Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+                    Resets = player:getReset()
                 end
 
                 if questInfo.MReset ~= 0

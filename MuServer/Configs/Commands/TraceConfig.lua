@@ -3,6 +3,7 @@ Commands Configs
 ]]--
 TRACE_COMMAND = "/trace"
 TRACE_SWITCH = 1
+TRACE_GAME_MASTER_LEVEL = 1
 
 --[[
 Message Configs

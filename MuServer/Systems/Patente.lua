@@ -19,7 +19,7 @@ function PatentPlayer.SetPatentPlayer(index)
 	local player = User.new(index)
 	
 	local Name = player:getName()
-	local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name)
+	local Resets = player:getReset()
 	
 	for key in ipairs(PATENTE_PLAYER_INFO) do
 		info = PATENTE_PLAYER_INFO[key]

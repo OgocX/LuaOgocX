@@ -30,21 +30,19 @@ function ChangeClass.Command(aIndex, Arguments, Type)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < COMMAND_CHANGE_CLASS_VIP
+	if player:getVip() < COMMAND_CHANGE_CLASS_VIP
 	then
 		SendMessage(string.format(CHANGE_CLASS_MESSAGES[Language][4]), aIndex, 1)
 		return
 	end
 	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < COMMAND_CHANGE_CLASS_RESETS
+	if player:getReset() < COMMAND_CHANGE_CLASS_RESETS
 	then
 		SendMessage(string.format(CHANGE_CLASS_MESSAGES[Language][5], COMMAND_CHANGE_CLASS_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < COMMAND_CHANGE_CLASS_MRESETS
+	if player:getMasterReset() < COMMAND_CHANGE_CLASS_MRESETS
 	then
 		SendMessage(string.format(CHANGE_CLASS_MESSAGES[Language][6], COMMAND_CHANGE_CLASS_MRESETS), aIndex, 1)
 		return
@@ -191,6 +189,8 @@ function ChangeClass.Command(aIndex, Arguments, Type)
 		ViewportCreate(aIndex)
 		CalCharacter(aIndex)
 	end
+
+	player = nil
 end
 
 Commands.Register(COMMAND_CHANGE_CLASS_SM, ChangeClass.Command, 1)

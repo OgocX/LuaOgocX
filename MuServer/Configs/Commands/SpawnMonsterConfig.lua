@@ -1,0 +1,7 @@
+--[[
+    Config Command
+]]
+
+SPAWN_MONSTER_SWITCH = 1
+SPAWN_MONSTER_SYNTAX = '/spawn'
+SPAWN_MONSTER_GAME_MASTER_LEVEL = 1

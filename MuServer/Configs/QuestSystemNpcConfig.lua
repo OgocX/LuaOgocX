@@ -8,6 +8,9 @@ QUEST_SYSTEM_NPC_REMOVE_COIN2 = 1
 QUEST_SYSTEM_NPC_REMOVE_COIN3 = 1
 QUEST_SYSTEM_NPC_REMOVE_COIN4 = 1
 
+
+QUEST_SYSTEM_NPC_ONLY_ONE_QUEST = 0 -- if = 1, when player start a quest and cancel or finish he can't start again
+
 --Npc Identification
 QUEST_SYSTEM_NPC_LOCATION_INFO = {}
 

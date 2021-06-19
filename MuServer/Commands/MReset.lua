@@ -29,12 +29,12 @@ function MReset.MonsterReload()
 		return
 	end
 
-	for i, key in ipairs(MRESET_NPC_CREATE) do
-		local player = User.new(MRESET_NPC_CREATE[key].NpcIndex)
+	for i in pairs(MRESET_NPC_CREATE) do
+		local player = User.new(MRESET_NPC_CREATE[i].NpcIndex)
 		
 		if player:getConnected() > 0
 		then
-			gObjDel(MRESET_NPC_CREATE[key].NpcIndex)
+			gObjDel(MRESET_NPC_CREATE[i].NpcIndex)
 		end
 	end
 
@@ -64,10 +64,10 @@ function MReset.Init()
 		return
 	end
 	
-	for i, key in ipairs(MRESET_NPC_CREATE) do
-		if UserGetConnected(MRESET_NPC_CREATE[key].NpcIndex) >= 2
+	for i in pairs(MRESET_NPC_CREATE) do
+		if UserGetConnected(MRESET_NPC_CREATE[i].NpcIndex) >= 2
 		then
-			gObjDel(MRESET_NPC_CREATE[key].NpcIndex)
+			gObjDel(MRESET_NPC_CREATE[i].NpcIndex)
 		end
 	end
 	
@@ -106,7 +106,7 @@ function MReset.Npc(Npc, Player)
 	
 	local pl = User.new(Player)
 	
-	if MReset.Command(Player) == 0
+	if MReset.Command(Player, 'null') == 0
 	then
 		ChatTargetSend(Npc, MRESETS_MESSAGES[pl:getLanguage()][9], Player)
 	else
@@ -116,7 +116,7 @@ function MReset.Npc(Npc, Player)
 	pl = nil
 end
 
-function MReset.Command(aIndex)
+function MReset.Command(aIndex, Arguments)
 	if MRESET_SWITCH == 0
 	then
 		return
@@ -125,7 +125,7 @@ function MReset.Command(aIndex)
 	local player = User.new(aIndex)
 	local Language =  player:getLanguage()
 	
-	local vip = DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID())
+	local vip = player:getVip()
 	local level = MRESET_LEVEL[vip]
 	
 	if player:getLevel() < level
@@ -181,7 +181,7 @@ function MReset.Command(aIndex)
 		end
 	end
 	
-	local Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+	local Resets = player:getReset()
 	local MinReses = MRESET_MIN_RESETS[vip]
 	if Resets < MinReses
 	then
@@ -238,6 +238,8 @@ function MReset.Command(aIndex)
 	for i = 0 , #COLUMN_MRESET do
 		DataBase.SetAddValue(TABLE_MRESET, COLUMN_MRESET[i], MRESET_COUNTS[vip], WHERE_MRESET, player:getName())
 	end
+
+	player:setMasterReset(player:getMasterReset() + MRESET_COUNTS[vip])
 	
 	if ChargeResets == 1
 	then

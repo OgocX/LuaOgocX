@@ -1,4 +1,5 @@
 local AutoPost = {}
+
 local AUTO_POST_USER_DATE = {}
 
 function AutoPost.Command(aIndex, Arguments)
@@ -13,15 +14,15 @@ function AutoPost.Command(aIndex, Arguments)
 	
 	if string.lower(prefix) == "off"
 	then
-		if AUTO_POST_USER_DATE[player:getName()]
+		if AUTO_POST_USER_DATE[player:getIndex()]
 		then
 			SendMessage(string.format(AUTO_POST_MESSAGES[Language][1]), aIndex, 1)
-			AUTO_POST_USER_DATE[player:getName()] = nil
+			AUTO_POST_USER_DATE[player:getIndex()] = nil
 		end
 		return
 	end
 	
-	if AUTO_POST_USER_DATE[player:getName()]
+	if AUTO_POST_USER_DATE[player:getIndex()]
 	then
 		SendMessage(string.format(AUTO_POST_MESSAGES[Language][2], AUTO_POST_COMMAND), aIndex, 1)
 		return
@@ -41,21 +42,19 @@ function AutoPost.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < AUTO_POST_VIP
+	if player:getVip() < AUTO_POST_VIP
 	then
 		SendMessage(string.format(AUTO_POST_MESSAGES[Language][5]), aIndex, 1)
 		return
 	end
 	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < AUTO_POST_RESET
+	if player:getReset() < AUTO_POST_RESET
 	then
 		SendMessage(string.format(AUTO_POST_MESSAGES[Language][6], AUTO_POST_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < AUTO_POST_MRESET
+	if player:getMasterReset() < AUTO_POST_MRESET
 	then
 		SendMessage(string.format(AUTO_POST_MESSAGES[Language][7], AUTO_POST_MRESET), aIndex, 1)
 		return
@@ -68,37 +67,31 @@ function AutoPost.Command(aIndex, Arguments)
 	
 	local post_string = command:getString(Arguments, 1, 1)
 	
-	AUTO_POST_USER_DATE[player:getName()] = {index = aIndex, timer = AUTO_POST_TIMER, text = post_string}
+	AUTO_POST_USER_DATE[player:getIndex()] = {playerName = player:getName(), timer = AUTO_POST_TIMER, text = post_string}
 	
 	SendMessageGlobal(string.format(AUTO_POST_STRING, player:getName(), post_string), AUTO_POST_COLOR)
-	
-	
+
+	player = nil
 end
 
 function AutoPost.MainProc()
-	for name, tab in pairs(AUTO_POST_USER_DATE) do
-		local u = AUTO_POST_USER_DATE[name]
-		local player = User.new(u.index)
-		
-		if player:getConnected() == 3
+	for key in pairs(AUTO_POST_USER_DATE) do
+		local autoPost = AUTO_POST_USER_DATE[key]
+
+		autoPost.timer = autoPost.timer - 1
+
+		if autoPost.timer <= 0
 		then
-			u.timer = u.timer - 1
-			
-			if u.timer <= 0
-			then
-				SendMessageGlobal(string.format(AUTO_POST_STRING, player:getName(), u.text), AUTO_POST_COLOR)
-				u.timer = AUTO_POST_TIMER
-			end
+			SendMessageGlobal(string.format(AUTO_POST_STRING, autoPost.playerName, autoPost.text), AUTO_POST_COLOR)
+			autoPost.timer = AUTO_POST_TIMER
 		end
 	end
 end
 
 function AutoPost.PlayerLoggout(aIndex, Name)
-	local player = User.new(aIndex)
-
-	if AUTO_POST_USER_DATE[player:getName()]
+	if AUTO_POST_USER_DATE[aIndex]
 	then
-		AUTO_POST_USER_DATE[player:getName()] = nil
+		AUTO_POST_USER_DATE[aIndex] = nil
 	end
 end
 

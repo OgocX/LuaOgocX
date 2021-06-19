@@ -20,6 +20,12 @@ function ClearInventory.Command(aIndex, Arguments)
 		SendMessage(string.format(CLEAR_INVENTORY_MESSAGES[Language][1], CLEAR_INVENTORY_LEVEL), aIndex, 1)
 		return
 	end
+
+	if player:getLock() > 0
+	then
+		SendMessage(string.format(LOCK_COMMAND_MESSAGES[Language][5]), aIndex, 1)
+        return
+	end
 	
 	local money = player:getMoney()
 	
@@ -29,7 +35,7 @@ function ClearInventory.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < CLEAR_INVENTORY_VIP
+	if player:getVip() < CLEAR_INVENTORY_VIP
 	then
 		SendMessage(string.format(CLEAR_INVENTORY_MESSAGES[Language][3]), aIndex, 1)
 		return
@@ -37,13 +43,13 @@ function ClearInventory.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < CLEAR_INVENTORY_RESET
+	if player:getReset() < CLEAR_INVENTORY_RESET
 	then
 		SendMessage(string.format(CLEAR_INVENTORY_MESSAGES[Language][4], CLEAR_INVENTORY_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < CLEAR_INVENTORY_MRESET
+	if player:getMasterReset() < CLEAR_INVENTORY_MRESET
 	then
 		SendMessage(string.format(CLEAR_INVENTORY_MESSAGES[Language][5], CLEAR_INVENTORY_MRESET), aIndex, 1)
 		return

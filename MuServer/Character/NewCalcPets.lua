@@ -32,7 +32,7 @@ function SetNewsCalcPet(aIndex)
 			
 			if NEW_CALC_PETS[i].BlockSucess > 0
 			then
-				player:setSucessBlock(math.floor(player:getSucessBlock() + NEW_CALC_PETS[i].BlockSucess))
+				player:setSuccessBlock(math.floor(player:getSuccessBlock() + NEW_CALC_PETS[i].BlockSucess))
 			end
 			
 			if NEW_CALC_PETS[i].AddLife > 0

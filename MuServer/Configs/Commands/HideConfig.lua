@@ -1,0 +1,7 @@
+--[[
+    Command Config
+]]
+
+HIDE_COMMAND_SWITCH = 1
+HIDE_COMMAND_SYNTAX = '/hide'
+HIDE_COMMAND_GAME_MASTER_LEVEL = 1

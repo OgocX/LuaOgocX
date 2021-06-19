@@ -17,7 +17,7 @@ function ZenSystem.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < ZEN_VIP
+	if player:getVip() < ZEN_VIP
 	then
 		SendMessage(string.format(ZEN_MESSAGES[Language][2]), aIndex, 1)
 		return
@@ -25,13 +25,13 @@ function ZenSystem.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < ZEN_RESETS
+	if player:getReset() < ZEN_RESETS
 	then
 		SendMessage(string.format(ZEN_MESSAGES[Language][3], ZEN_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < ZEN_MRESETS
+	if player:getMasterReset() < ZEN_MRESETS
 	then
 		SendMessage(string.format(ZEN_MESSAGES[Language][4], ZEN_MRESETS), aIndex, 1)
 		return

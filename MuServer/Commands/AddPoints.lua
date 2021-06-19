@@ -10,6 +10,18 @@ function AddPoints.Command(aIndex, Arguments, Type)
 	
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
+
+	if AUTO_ADD_POINT_COMMAND_SWITCH ~= 0
+	then
+		local prefix = command:getString(Arguments, 1, 0)
+
+		if string.lower(prefix) == "auto"
+		then
+			AutoAddPoints.AutoCommand(player, Arguments, Type)
+			return
+		end
+	end
+
 	local Points = command:getNumber(Arguments, 1)
 	
 	if Points < ADD_MINPOINTS
@@ -32,39 +44,39 @@ function AddPoints.Command(aIndex, Arguments, Type)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < ADD_VIP
+	if player:getVip() < ADD_VIP
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][4]), aIndex, 1)
 		return
 	end
 	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < ADD_RESET
+	if player:getReset() < ADD_RESET
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][5], ADD_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < ADD_MRESET
+	if player:getMasterReset() < ADD_MRESET
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][6], ADD_MRESET), aIndex, 1)
 		return
 	end
+
+	local maxPoint = ADD_COMMAND_MAX_POINTS[player:getVip()]
 	
 	if Type == 1
 	then
 		local Strength = player:getStrength()
 	
-		if Strength >= STR_MAXPOINTS
+		if Strength >= maxPoint
 		then
-			SendMessage(string.format("[Sistema] O Máximo de pontos em força é %d", STR_MAXPOINTS), aIndex, 1)
+			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][15], maxPoint), aIndex, 1)
 			return
 		end
 		
-		if Strength + Points > STR_MAXPOINTS
+		if Strength + Points > maxPoint
 		then
-			Points = STR_MAXPOINTS - Strength
+			Points = maxPoint - Strength
 		end
 		
 		local LevelUpPoints = player:getLevelUpPoint()
@@ -89,15 +101,15 @@ function AddPoints.Command(aIndex, Arguments, Type)
 	then
 		local Dexterity = player:getDexterity()
 	
-		if Dexterity >= AGI_MAXPOINTS
+		if Dexterity >= maxPoint
 		then
-			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][9], AGI_MAXPOINTS), aIndex, 1)
+			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][9], maxPoint), aIndex, 1)
 			return
 		end
 		
-		if Dexterity + Points > AGI_MAXPOINTS
+		if Dexterity + Points > maxPoint
 		then
-			Points = AGI_MAXPOINTS - Dexterity
+			Points = maxPoint - Dexterity
 		end
 		
 		local LevelUpPoints = player:getLevelUpPoint()
@@ -122,15 +134,15 @@ function AddPoints.Command(aIndex, Arguments, Type)
 	then
 		local Vitality = player:getVitality()
 	
-		if Vitality >= VIT_MAXPOINTS
+		if Vitality >= maxPoint
 		then
-			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][10], VIT_MAXPOINTS), aIndex, 1)
+			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][10], maxPoint), aIndex, 1)
 			return
 		end
 		
-		if Vitality + Points > VIT_MAXPOINTS
+		if Vitality + Points > maxPoint
 		then
-			Points = VIT_MAXPOINTS - Vitality
+			Points = maxPoint - Vitality
 		end
 		
 		local LevelUpPoints = player:getLevelUpPoint()
@@ -157,15 +169,15 @@ function AddPoints.Command(aIndex, Arguments, Type)
 	then
 		local Energy = player:getEnergy()
 	
-		if Energy >= ENE_MAXPOINTS
+		if Energy >= maxPoint
 		then
-			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][11], ENE_MAXPOINTS), aIndex, 1)
+			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][11], maxPoint), aIndex, 1)
 			return
 		end
 		
-		if Energy + Points > ENE_MAXPOINTS
+		if Energy + Points > maxPoint
 		then
-			Points = ENE_MAXPOINTS - Energy
+			Points = maxPoint - Energy
 		end
 		
 		local LevelUpPoints = player:getLevelUpPoint()
@@ -192,15 +204,15 @@ function AddPoints.Command(aIndex, Arguments, Type)
 	then
 		local LeaderShip = player:getLeaderShip()
 	
-		if LeaderShip >= CMD_MAXPOINTS
+		if LeaderShip >= maxPoint
 		then
-			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][12], CMD_MAXPOINTS), aIndex, 1)
+			SendMessage(string.format(ADD_POINTS_MESSAGES[Language][12], maxPoint), aIndex, 1)
 			return
 		end
 		
-		if LeaderShip + Points > CMD_MAXPOINTS
+		if LeaderShip + Points > maxPoint
 		then
-			Points = CMD_MAXPOINTS - LeaderShip
+			Points = maxPoint - LeaderShip
 		end
 		
 		local LevelUpPoints = player:getLevelUpPoint()
@@ -250,21 +262,19 @@ function AddPoints.CommandReAdd(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < RE_ADD_VIP
+	if player:getVip() < RE_ADD_VIP
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][4]), aIndex, 1)
 		return
 	end
 	
-	local Name = player:getName()
-
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < RE_ADD_RESET
+	if player:getReset() < RE_ADD_RESET
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][5], RE_ADD_RESET), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < RE_ADD_MRESET
+	if player:getMasterReset() < RE_ADD_MRESET
 	then
 		SendMessage(string.format(ADD_POINTS_MESSAGES[Language][6], RE_ADD_MRESET), aIndex, 1)
 		return
@@ -303,6 +313,8 @@ function AddPoints.CommandReAdd(aIndex, Arguments)
 	SetBP(aIndex)
 	CalCharacter(aIndex)
 	RefreshCharacter(aIndex)
+
+	player = nil
 end
 
 Commands.Register(STR_COMMAND, AddPoints.Command, 1)

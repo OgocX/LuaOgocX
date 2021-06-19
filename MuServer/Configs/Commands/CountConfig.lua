@@ -4,6 +4,7 @@ Command Config
 COUNT_COMMAND_SWITCH = 1
 COUNT_COMMAND = "/contar"
 COUNT_TIME = 3
+COUNT_GAME_MASTER_LEVEL = 1
 
 
 --[[

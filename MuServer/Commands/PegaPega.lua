@@ -249,7 +249,7 @@ function PegaPega.CommandGo(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < CATCH_VIP
+	if player:getVip() < CATCH_VIP
 	then
 		SendMessage(string.format(CATCH_MESSAGE[Language][20]), aIndex, 1)
 		return
@@ -257,13 +257,13 @@ function PegaPega.CommandGo(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < CATCH_RESETS
+	if player:getReset() < CATCH_RESETS
 	then
 		SendMessage(string.format(CATCH_MESSAGE[Language][21], CATCH_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < CATCH_MRESETS
+	if player:getMasterReset() < CATCH_MRESETS
 	then
 		SendMessage(string.format(CATCH_MESSAGE[Language][22], CATCH_MRESETS), aIndex, 1)
 		return

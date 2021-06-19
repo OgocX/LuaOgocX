@@ -43,6 +43,8 @@ function MenuWindow.Render()
 
     EnableAlphaTest()
 
+    glColor4f(1.0, 1.0, 1.0, 1.0)
+
     RenderImage(MenuWindowImage2, m_PosX, 0, 36, 18)
 
     if (MousePosX() >= m_PosX and MousePosX() <= m_PosX + 16)

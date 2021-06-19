@@ -2,7 +2,7 @@
 Configs
 ]]--
 
-LOG_IN_AND_WIN_SWITCH = 1
+LOG_IN_AND_WIN_SWITCH = 0
 
 --Days player will get reward, obs: min is 5 days!
 --don't have limit max of days you can put every number

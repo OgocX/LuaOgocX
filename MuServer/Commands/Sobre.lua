@@ -42,7 +42,7 @@ function Sobrevivencia.CommandOpen(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), OPEN_SOBRE_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -63,7 +63,7 @@ function Sobrevivencia.CommandOpen(aIndex, Arguments)
 	
 	Message.SendMessageGlobalMultLangArgs(SOBRE_MESSAGES, 4, 1, player:getName(), SOBRE_COMMAND_GO)
 	
-	
+	player = nil
 end
 
 function Sobrevivencia.CommandGo(aIndex, Arguments)
@@ -82,7 +82,7 @@ function Sobrevivencia.CommandGo(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < SOBRE_VIP
+	if player:getVip() < SOBRE_VIP
 	then
 		SendMessage(string.format(SOBRE_MESSAGES[Language][7]), aIndex, 1)
 		return
@@ -90,13 +90,13 @@ function Sobrevivencia.CommandGo(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < SOBRE_RESETS
+	if player:getReset() < SOBRE_RESETS
 	then
 		SendMessage(string.format(SOBRE_MESSAGES[Language][8], SOBRE_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < SOBRE_MRESETS
+	if player:getMasterReset() < SOBRE_MRESETS
 	then
 		SendMessage(string.format(SOBRE_MESSAGES[Language][9], SOBRE_MRESETS), aIndex, 1)
 		return

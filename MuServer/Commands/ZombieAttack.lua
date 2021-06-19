@@ -539,7 +539,7 @@ function ZombieAttack.CommandOpen(aIndex, Arguments)
     local player = User.new(aIndex)
 	local Language = player:getLanguage()
 
-    if player:getAuthority() == 1
+    if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), ZOMBIE_ATTACK_OPEN_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -553,6 +553,8 @@ function ZombieAttack.CommandOpen(aIndex, Arguments)
     Message.SendMessageGlobalMultLangArgs(ZOMBIE_ATTACK_MESSAGES, 20, 1, player:getName())
 
     ZombieAttack.StartEvent()
+
+    player = nil
 end
 
 function ZombieAttack.GetCountUsers()

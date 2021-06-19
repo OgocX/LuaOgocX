@@ -7,24 +7,8 @@ function Message.SendMessageGlobalMultLang(messageSource, messageKey, messageTyp
 		then
 			goto continue
 		end
-		
-		local player = User.new(i)
-		
-		if player:getConnected() < 3
-		then
-			goto continue
-		end
-		
-		local Language = player:getLanguage()
-		
-		if #Language <= 0
-		then
-			goto continue
-		end
-		
-		SendMessagePlayer(i, messageType, messageSource[Language][messageKey])
-		
-		player = nil
+
+		SendMessagePlayer(i, messageType, messageSource[GetLanguageObject(i)][messageKey])
 		
 		::continue::
 	end
@@ -33,8 +17,13 @@ function Message.SendMessageGlobalMultLang(messageSource, messageKey, messageTyp
 end
 
 function Message.SendMessageGlobalMultLangArgs(messageSource, messageKey, messageType, ...)
-	local arg = {...}
-	
+	local args = ...
+
+	if type(args) ~= 'table'
+	then
+		args = {...}
+	end
+
 	for i = OBJECT_START_USER, MAX_OBJECT
 	do
 		if gObjIsConnectedGP(i) == 0
@@ -42,23 +31,7 @@ function Message.SendMessageGlobalMultLangArgs(messageSource, messageKey, messag
 			goto continue
 		end
 		
-		local player = User.new(i)
-		
-		if player:getConnected() < 3
-		then
-			goto continue
-		end
-		
-		local Language = player:getLanguage()
-		
-		if #Language <= 0
-		then
-			goto continue
-		end
-		
-		SendMessagePlayer(i, messageType, string.format(messageSource[Language][messageKey], unpack(arg)))
-		
-		player = nil
+		SendMessagePlayer(i, messageType, messageSource[GetLanguageObject(i)][messageKey]:format(unpack(args)))
 		
 		::continue::
 	end
@@ -67,9 +40,12 @@ function Message.SendMessageGlobalMultLangArgs(messageSource, messageKey, messag
 end
 
 function Message.SendGlobalMultLangeDirect(messageSource, messageType, ...)
-	local arg = {...}
-	
-	local unpack_arg = unpack(arg)
+	local args = ...
+
+	if type(args) ~= 'table'
+	then
+		args = {...}
+	end
 	
 	for i = OBJECT_START_USER, MAX_OBJECT
 	do
@@ -78,21 +54,7 @@ function Message.SendGlobalMultLangeDirect(messageSource, messageType, ...)
 			goto continue
 		end
 		
-		local player = User.new(i)
-		
-		if player:getConnected() < 3
-		then
-			goto continue
-		end
-		
-		local Language = player:getLanguage()
-		
-		if #Language <= 0
-		then
-			goto continue
-		end
-		
-		SendMessagePlayer(i, messageType, string.format(messageSource[Language], unpack_arg))
+		SendMessagePlayer(i, messageType, messageSource[GetLanguageObject(i)]:format(unpack(args)))
 		
 		::continue::
 	end
@@ -108,26 +70,12 @@ function Message.SendGlobalMultLangTips(messageSource, messageKey, messageSecond
 			goto continue
 		end
 		
-		local player = User.new(i)
-		
-		if player:getConnected() < 3
-		then
-			goto continue
-		end
-		
-		local Language = player:getLanguage()
-		
-		if #Language <= 0
-		then
-			goto continue
-		end
+		local Language = GetLanguageObject(i)
 		
 		if #messageSource[Language][messageKey][messageSecondKey] > 0
 		then
-			SendMessagePlayer(i, messageType, string.format(messageSource[Language][messageKey][messageSecondKey]))
+			SendMessagePlayer(i, messageType, messageSource[Language][messageKey][messageSecondKey])
 		end
-		
-		player = nil
 		
 		::continue::
 	end

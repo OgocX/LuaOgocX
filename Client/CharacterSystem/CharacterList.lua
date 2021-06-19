@@ -131,7 +131,7 @@ function RenderCharacterStatus(posX, posY, index)
 
 	SetTextColor(255, 255, 255, 255)
 
-	RenderText3(posX + 15, posY - 3, GetClassName(CharacterGetClass(index)), 150, 0)
+	RenderText3(posX + 15, posY - 3, GetClassName(CharacterGetFullClass(index)), 150, 0)
 
 	RenderText3(posX + 138, posY - 3, GetGuildType(index), 150, 7)
 end

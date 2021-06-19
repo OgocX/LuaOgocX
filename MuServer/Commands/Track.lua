@@ -11,7 +11,7 @@ function Track.Command(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), TRACK_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -27,7 +27,7 @@ function Track.Command(aIndex, Arguments)
 	
 	Teleport(TargetIndex,player:getMapNumber(), player:getX(), player:getY())
 	
-	
+	player = nil
 end
 
 Commands.Register(TRACK_COMMAND, Track.Command)

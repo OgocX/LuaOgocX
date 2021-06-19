@@ -3,6 +3,7 @@ Commands Configs
 ]]--
 TRACK_COMMAND = "/track"
 TRACK_SWITCH = 1
+TRACK_GAME_MASTER_LEVEL = 1
 
 --[[
 Message Configs

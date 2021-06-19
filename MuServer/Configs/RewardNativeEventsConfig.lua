@@ -41,19 +41,19 @@ REWARD_NATIVE_EVENTS_ITENS = {}
 
 --BC
 REWARD_NATIVE_EVENTS_ITENS[1] = {
-{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 0, Name = 'Jewel of Soul', Count = 1},
+{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 30, Name = 'Jewel of Soul', Count = 1},
 
 }
 
 --CC
 REWARD_NATIVE_EVENTS_ITENS[1] = {
-{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 0, Name = 'Jewel of Soul', Count = 1},
+{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 30, Name = 'Jewel of Soul', Count = 1},
 
 }
 
 --DS
 REWARD_NATIVE_EVENTS_ITENS[1] = {
-{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 0, Name = 'Jewel of Soul', Count = 1},
+{ ItemIndex = GET_ITEM(14, 14), Level = 0, Op1 = 0, Op2 = 0, Life = 0, Exc = 0, Ancient = 0, JoH = 0, SocketBonus = 255, Sock1 = 255, Sock2 = 255, Sock3 = 255, Sock4 = 255, Sock5 = 255, DaysExpire = 30, Name = 'Jewel of Soul', Count = 1},
 
 }
 

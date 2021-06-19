@@ -11,14 +11,6 @@ RESET_NPC_SWITCH = 0
 RESET_NPC = { {Class = 249, Map = 0, CoordX = 125, CoordY = 125, Dir = 3},
 {Class = 249, Map = 2, CoordX = 240, CoordY = 130, Dir = 2} }
 
--- Configurações auto reset
-AUTO_RESET_COMMAND = "/autoreset"
-AUTO_RESET_SWITCH = 1
-AUTO_RESET_LEVEL = 1
-AUTO_RESET_VIP = 0
-AUTO_RESET_RESETS = 0
-AUTO_RESET_MRESETS = 0
-
 --Configurações reset acumulativo
 RESET_ACUMULATIVE_LEVEL = {}
 RESET_ACUMULATIVE_LEVEL[0] = 300

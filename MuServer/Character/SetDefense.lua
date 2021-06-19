@@ -94,12 +94,12 @@ function SetDefense.ApplyDefenseSet(aIndex)
 		then
 			if SET_DEFENSE_CONFIG[i].Defense > 0
 			then
-				player:setDefense(math.floor(player:getDefense() * SET_DEFENSE_CONFIG[i].Defense))
+				player:setDefensePvP(math.floor(player:getDefensePvP() * SET_DEFENSE_CONFIG[i].Defense))
 			end
 			
 			if SET_DEFENSE_CONFIG[i].SucessBlock > 0
 			then
-				player:setSucessBlock(math.floor(math.abs(player:getSucessBlock() * SET_DEFENSE_CONFIG[i].SucessBlock) * 10))
+				player:setSuccessBlockPvP(math.floor(math.abs(player:getSuccessBlockPvP() * SET_DEFENSE_CONFIG[i].SucessBlock) * 10))
 			end
 		end
 	end

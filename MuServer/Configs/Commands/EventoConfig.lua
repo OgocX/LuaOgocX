@@ -2,6 +2,7 @@
 Configs Command
 ]]--
 EVENTO_COMMAND_OPEN = "/abrirevento"
+EVENTO_OPEN_GAME_MASTER_LEVEL = 1
 EVENTO_COMMAND_GO = "/evento"
 EVENTO_SWITCH = 1
 EVENTO_LEVEL = 1

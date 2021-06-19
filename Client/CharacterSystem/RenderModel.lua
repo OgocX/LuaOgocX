@@ -16,7 +16,7 @@ function StartLoadImages()
 end
 
 function RenderModelBody(BMDStruct, ObjectStruct, ItemIndex)
-	--[[if (ItemIndex == GET_ITEM_MODEL(12, 202))
+	if (ItemIndex == GET_ITEM_MODEL(12, 202))
 	then
 		local Bmd = BMD.new(BMDStruct)
 		local Obj = Object.new(ObjectStruct)
@@ -132,25 +132,25 @@ function RenderModelBody(BMDStruct, ObjectStruct, ItemIndex)
 		Obj = nil
 		collectgarbage()
 		return 1
-	end--]]
+	end
 	
 	return 0
 end
 
 function RenderModelBodyColor(BMDStruct, ObjectStruct, ItemIndex)
-	--[[if (ItemIndex == GET_ITEM_MODEL(12, 202))
+	if (ItemIndex == GET_ITEM_MODEL(12, 202))
 	then
 		return 1
-	end--]]
+	end
 	
 	return 0
 end
 
 function RenderModelBodyColor2(BMDStruct, ObjectStruct, ItemIndex)
-	--[[if (ItemIndex == GET_ITEM_MODEL(12, 202))
+	if (ItemIndex == GET_ITEM_MODEL(12, 202))
 	then
 		return 1
-	end--]]
+	end
 	
 	return 0
 end

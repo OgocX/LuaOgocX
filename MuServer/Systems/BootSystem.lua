@@ -100,7 +100,7 @@ function BootSystem.CharacterMove(aIndex, map, x, y)
 		
 		player:setRegenMapY(y)
 		
-		player:setRegen(0)
+		player:setRegenTime(0)
 		
 		ViewportCreate(aIndex)
 		return 1

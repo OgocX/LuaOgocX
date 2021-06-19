@@ -4,14 +4,9 @@
 DropPeriodic = {}
 
 function DropPeriodic.Command(aIndex, Arguments)
-	if DROP_PERIODIC_COMMAND_SWITCH == 0
-	then
-		return
-	end
-	
 	local player = User.new(aIndex)
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), DROP_PERIODIC_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -25,9 +20,12 @@ function DropPeriodic.Command(aIndex, Arguments)
 	local exc = command:getNumber(Arguments, 7)
 	local timeDay = command:getNumber(Arguments, 8)
 	
-	ItemSerialCreatePeriodic(aIndex, 236, 0, 0, GET_ITEM(section, index), level, 255, luck, skill, opt, exc, timeDay)
+	ItemSerialCreatePeriodic(aIndex, player:getMapNumber(), player:getX(), player:getY(), GET_ITEM(section, index), level, 255, luck, skill, opt, exc, timeDay)
 end
 
-Commands.Register(DROP_PERIODIC_COMMAND, DropPeriodic.Command)
+if DROP_PERIODIC_COMMAND_SWITCH ~= 0
+then
+	Commands.Register(DROP_PERIODIC_COMMAND, DropPeriodic.Command)
+end
 
 return DropPeriodic

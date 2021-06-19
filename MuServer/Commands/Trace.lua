@@ -11,7 +11,7 @@ function Trace.Command(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), TRACE_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end
@@ -29,7 +29,7 @@ function Trace.Command(aIndex, Arguments)
 	
 	Teleport(aIndex,player_target:getMapNumber(), player_target:getX(), player_target:getY())
 	
-	
+	player = nil
 end
 
 Commands.Register(TRACE_COMMAND, Trace.Command)

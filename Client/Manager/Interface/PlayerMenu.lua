@@ -2,7 +2,7 @@
 system config
 --]]
 
-local PLAYER_MENU_SWITCH = 1
+local PLAYER_MENU_SWITCH = 0
 local PLAYER_MENU_WIDTH = 80
 local PLAYER_MENU_HEIGHT = 102
 

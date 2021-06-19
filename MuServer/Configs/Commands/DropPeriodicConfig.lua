@@ -5,6 +5,7 @@ Command Config
 --Configurations
 DROP_PERIODIC_COMMAND_SWITCH = 1
 DROP_PERIODIC_COMMAND = '/dropp'
+DROP_PERIODIC_GAME_MASTER_LEVEL = 1
 
 --Using command:
 

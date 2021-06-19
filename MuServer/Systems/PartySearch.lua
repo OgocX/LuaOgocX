@@ -47,14 +47,11 @@ function PartySearch.OpenPartyList(player)
         SetBytePacket(packetIdentification, info.ClassDL)
         SetBytePacket(packetIdentification, info.ClassSUM)
         SetBytePacket(packetIdentification, info.ClassRF)
-
         local pass = 0
-
-        if #info.Password > 0 and info.Password ~= 'detected_nil'
+        if #info.Password > 0
         then
             pass = 1
         end
-
         SetBytePacket(packetIdentification, pass)
     end
 
@@ -92,7 +89,6 @@ function PartySearch.CreatePartySettings(player, PacketName)
     if PartySearchList[player:getName()] ~= nil
     then
         PartySearchList[player:getName()] = nil
-        PartySearch.DeleteFile(player:getName())
     end
 
     PartySearchList[player:getName()] = { 
@@ -115,12 +111,10 @@ function PartySearch.CreatePartySettings(player, PacketName)
         Password = GetCharPacketLength(PacketName, -1, 10)
     }
 
-    PartySearch.DeleteFile(player:getName())
     PartySearch.CreateFile(PartySearchList[player:getName()])
 end
 
 function PartySearch.JoinParty(player, PacketName)
-
     local Language = player:getLanguage()
 	
 	if player:getInterfaceUse() ~= 0 or player:getInterfaceType() ~= 0 or player:getState() == 32 or player:getDieRegen() ~= 0 or player:getTeleport() ~= 0
@@ -144,21 +138,18 @@ function PartySearch.JoinParty(player, PacketName)
 		return
     end
 
-    local PartyInfo = PartySearchList[PartyName]
-
-    if PartyInfo == nil
+    if PartySearchList[PartyName] == nil
     then
         SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][4]), player:getIndex(), 1)
 		return
     end
 
-    if PartyInfo.Password ~= 'detected_nil'
+    local PartyInfo = PartySearchList[PartyName]
+
+    if PartyInfo.Password ~= Password
     then
-        if PartyInfo.Password ~= Password
-        then
-            SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][7]), player:getIndex(), 1)
-            return
-        end
+        SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][7]), player:getIndex(), 1)
+		return
     end
 
     local TargetIndex = GetIndex(PartyName)
@@ -171,7 +162,7 @@ function PartySearch.JoinParty(player, PacketName)
 
     local target = User.new(TargetIndex)
 
-    if target:getPartyNumber() >= 0
+    if target:getPartyNumber() > 0
     then  
         if player:getPartyNumber() == target:getPartyNumber()
         then
@@ -180,7 +171,7 @@ function PartySearch.JoinParty(player, PacketName)
         end
     end
 
-    if player:getLevel() > PartyInfo.Level
+    if target:getLevel() > PartyInfo.Level
     then
         SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][12]), player:getIndex(), 1)
             return
@@ -195,43 +186,43 @@ function PartySearch.JoinParty(player, PacketName)
         end
         return
     else
-        if PartyInfo.ClassSM == 0 and player:getClass() == CLASS_DW
+        if PartyInfo.ClassSM == 0 and target:getClass() == CLASS_DW
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassDK == 0 and player:getClass() == CLASS_DK
+        if PartyInfo.ClassDK == 0 and target:getClass() == CLASS_DK
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassELF == 0 and player:getClass() == CLASS_FE
+        if PartyInfo.ClassELF == 0 and target:getClass() == CLASS_FE
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassMG == 0 and player:getClass() == CLASS_MG
+        if PartyInfo.ClassMG == 0 and target:getClass() == CLASS_MG
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassDL == 0 and player:getClass() == CLASS_DL
+        if PartyInfo.ClassDL == 0 and target:getClass() == CLASS_DL
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassSUM == 0 and player:getClass() == CLASS_SU
+        if PartyInfo.ClassSUM == 0 and target:getClass() == CLASS_SU
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
         end
 
-        if PartyInfo.ClassRF == 0 and player:getClass() == CLASS_RF
+        if PartyInfo.ClassRF == 0 and target:getClass() == CLASS_RF
         then
             SendMessage(string.format(PARTY_SEARCH_MESSAGES[Language][11]), player:getIndex(), 1)
             return
@@ -256,7 +247,7 @@ function PartySearch.JoinParty(player, PacketName)
         end
     end
 
-    if target:getPartyNumber() >= 0
+    if target:getPartyNumber() > 0
     then
         if GetMemberCountParty(target:getPartyNumber()) >= 5
         then
@@ -271,10 +262,9 @@ function PartySearch.JoinParty(player, PacketName)
             GCPartyResultSend(player:getIndex(), 2)
             GCPartyResultSend(target:getIndex(), 2)
         else
-            PartyInfo.Count = GetMemberCountParty(target:getPartyNumber())
+            PartySearchList[PartyName].Count = GetMemberCountParty(target:getPartyNumber())
 
-            PartySearch.DeleteFile(PartyName)
-            PartySearch.CreateFile(PartyInfo)
+            PartySearch.CreateFile(partyInfo)
 
             if PartySearchList[player:getName()] ~= nil
             then
@@ -289,10 +279,9 @@ function PartySearch.JoinParty(player, PacketName)
             GCPartyResultSend(target:getIndex(), 2)
             DestroyParty(target:getPartyNumber())
         else
-            PartyInfo.Count = GetMemberCountParty(target:getPartyNumber())
+            PartySearchList[PartyName].Count = GetMemberCountParty(target:getPartyNumber())
 
-            PartySearch.DeleteFile(PartyName)
-            PartySearch.CreateFile(PartyInfo)
+            PartySearch.CreateFile(partyInfo)
 
             if PartySearchList[player:getName()] ~= nil
             then
@@ -363,27 +352,17 @@ function PartySearch.CreateDiretory()
 end
 
 function PartySearch.CreateFile(partyInfo)
-    if partyInfo == nil
-    then
-        return
-    end
-
     path = "..\\Data\\Scripts\\Cache\\PartySearch\\" .. partyInfo.Name .. ".txt"
+
+    LogAdd(string.format("Here creating file %s", path))
 
     file = io.open(path, "a")
 
-    local Pass = partyInfo.Password
-
-    if (#Pass <= 0)
-    then
-        Pass = 'detected_nil'
-    end
-
-    writeString = string.format("%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s", 
+    writeString = string.format("%s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s", 
     partyInfo.Name,partyInfo.Map,partyInfo.X,partyInfo.Y,
     partyInfo.Count,partyInfo.Level,partyInfo.OnlyClass,partyInfo.OnlyGuild,
     partyInfo.OnlyAlliance,partyInfo.ClassSM,partyInfo.ClassBK,partyInfo.ClassELF,partyInfo.ClassMG,partyInfo.ClassDL,
-    partyInfo.ClassSUM,partyInfo.ClassRF,Pass)
+    partyInfo.ClassSUM,partyInfo.ClassRF,partyInfo.Password)
 
     file:write(writeString, "\n")
 
@@ -394,14 +373,6 @@ function PartySearch.DeleteFile(partyName)
     path = "..\\Data\\Scripts\\Cache\\PartySearch\\" .. partyName .. ".txt"
 
     os.remove(path) 
-end
-
-function PartySearch.Split(s, delimiter)
-    result = {};
-    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-        table.insert(result, match);
-    end
-    return result;
 end
 
 function PartySearch.ProcessCacheFile(path)
@@ -416,30 +387,40 @@ function PartySearch.ProcessCacheFile(path)
 
     file:close()
 
-    split_string = PartySearch.Split(content, ",")
+    --insert in list
+    fileArray = {}
 
-    local partyName = split_string[1]
+    count = 1
+
+    for word in string.gmatch(content, '([^,]+)') do
+        fileArray[count] = word
+        count = count + 1
+    end
+
+    local partyName = tostring(fileArray[1])
+
+    LogAdd(partyName)
 
     if #partyName > 0
     then
         PartySearchList[partyName] = { 
             Name = partyName,
-            Map = tonumber(split_string[2]),
-            X = tonumber(split_string[3]),
-            Y = tonumber(split_string[4]),
-            Count = tonumber(split_string[5]),
-            Level = tonumber(split_string[6]),
-            OnlyClass = tonumber(split_string[7]),
-            OnlyGuild = tonumber(split_string[8]),
-            OnlyAlliance = tonumber(split_string[9]),
-            ClassSM = tonumber(split_string[10]),
-            ClassBK = tonumber(split_string[11]),
-            ClassELF = tonumber(split_string[12]),
-            ClassMG = tonumber(split_string[13]),
-            ClassDL = tonumber(split_string[14]),
-            ClassSUM = tonumber(split_string[15]),
-            ClassRF = tonumber(split_string[16]),
-            Password = split_string[17]:sub(1, -3)
+            Map = tonumber(fileArray[2]),
+            X = tonumber(fileArray[3]),
+            Y = tonumber(fileArray[4]),
+            Count = tonumber(fileArray[5]),
+            Level = tonumber(fileArray[6]),
+            OnlyClass = tonumber(fileArray[7]),
+            OnlyGuild = tonumber(fileArray[8]),
+            OnlyAlliance = tonumber(fileArray[9]),
+            ClassSM = tonumber(fileArray[10]),
+            ClassBK = tonumber(fileArray[11]),
+            ClassELF = tonumber(fileArray[12]),
+            ClassMG = tonumber(fileArray[13]),
+            ClassDL = tonumber(fileArray[14]),
+            ClassSUM = tonumber(fileArray[15]),
+            ClassRF = tonumber(fileArray[16]),
+            Password = tostring(fileArray[17])
         }
     end
 end

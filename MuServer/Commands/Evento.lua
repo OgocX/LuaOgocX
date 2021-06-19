@@ -88,7 +88,7 @@ function Evento.CommandGo(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < EVENTO_VIP
+	if player:getVip() < EVENTO_VIP
 	then
 		SendMessage(string.format(EVENTO_MESSAGE[Language][7]), aIndex, 1)
 		return
@@ -96,13 +96,13 @@ function Evento.CommandGo(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < EVENTO_RESETS
+	if player:getReset() < EVENTO_RESETS
 	then
 		SendMessage(string.format(EVENTO_MESSAGE[Language][8], EVENTO_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < EVENTO_MRESETS
+	if player:getMasterReset() < EVENTO_MRESETS
 	then
 		SendMessage(string.format(EVENTO_MESSAGE[Language][9], EVENTO_MRESETS), aIndex, 1)
 		return

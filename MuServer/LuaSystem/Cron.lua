@@ -3,7 +3,7 @@
 Timer = {}
 
 local Handles = {}
-local id = 1
+local id = 0
 
 unpack = unpack and unpack or table.unpack
 
@@ -95,11 +95,6 @@ function Timer.Cancel(id)
 	then
 		return
 	end
-
-	if #Handles == 0
-	then
-		return
-	end
 	
 	if Handles[id] ~= nil
 	then
@@ -118,10 +113,7 @@ function Timer.Update()
 		then
 			if Handles[i].update(Handles[i]) == true
 			then
-				if Handles[i].number ~= nil
-				then
-					Timer.Cancel(Handles[i].number)
-				end
+				Handles[i] = nil
 			end
 		end
 		

@@ -5,6 +5,7 @@ Command Config
 --/premiar <nick> <number config> <coins amount>
 REWARD_PLAYERS_SWITCH = 0
 REWARD_PLAYERS_COMMAND = '/premiar'
+REWARD_PLAYERS_GAME_MASTER_LEVEL = 1
 REWARD_ANNOUNCE_GLOBAL = 1
 
 REWARD_PLAYERS_CONFIGS = { }

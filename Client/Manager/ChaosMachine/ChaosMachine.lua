@@ -8,21 +8,21 @@ local CHAOS_MACHINE_CONFIG_COMB_SELECTION = {
 local CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS = { }
 
 CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS[1] = {
-	{ Level = -1, Quantity = 3, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(14, 14), ItemName = "Jewel of Soul" },
-	{ Level = -1, Quantity = 8, ItemIndex = GET_ITEM(14, 13), ItemName = "Jewel of Bless" },
-	{ Level = -1, Quantity = 4, ItemIndex = GET_ITEM(14, 16), ItemName = "Jewel of Life" },
-	{ Level = -1, Quantity = 3, ItemIndex = GET_ITEM(14, 22), ItemName = "Jewel of Creation" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(0, 0), ItemName = "Kriss" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(7, 0), ItemName = "Bronze Helm" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(8, 0), ItemName = "Bronze Armor" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(9, 0), ItemName = "Bronze Pants" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(10, 0), ItemName = "Bronze Gloves" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(11, 0), ItemName = "Bronze Boots" },
+	{ Level = -1, Exc = -1, Quantity = 3, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(14, 14), ItemName = "Jewel of Soul" },
+	{ Level = -1, Exc = -1, Quantity = 8, ItemIndex = GET_ITEM(14, 13), ItemName = "Jewel of Bless" },
+	{ Level = -1, Exc = -1, Quantity = 4, ItemIndex = GET_ITEM(14, 16), ItemName = "Jewel of Life" },
+	{ Level = -1, Exc = -1, Quantity = 3, ItemIndex = GET_ITEM(14, 22), ItemName = "Jewel of Creation" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(0, 0), ItemName = "Kriss" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(7, 0), ItemName = "Bronze Helm" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(8, 0), ItemName = "Bronze Armor" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(9, 0), ItemName = "Bronze Pants" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(10, 0), ItemName = "Bronze Gloves" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(11, 0), ItemName = "Bronze Boots" },
 }
 
 CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS[2] = {
-	{ Level = -1, Quantity = 1, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
+	{ Level = -1, Exc = -1, Quantity = 1, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
 }
 
 --[[
@@ -291,7 +291,7 @@ function ChaosMachineRenderCombItensNeed(x, y)
 		if line >= ChaosMachineScrollBarCurrentLine and line < ChaosMachineScrollBarMaxRenderLine
 		then
 			local itens = ChaosMachineItensIngredients[i].Ingredients
-			local itensQuantity = getCountItensByIndexLevel(itens.ItemIndex, itens.Level)
+			local itensQuantity = getCountItensByIndexLevel(itens.ItemIndex, itens.Level, itens.Exc)
 			
 			if itensQuantity ==  itens.Quantity
 			then
@@ -710,7 +710,7 @@ function ChaosMachineMixResult(result)
 	ChaosMachineCombinationStatus = result
 end
 
-function ChaosMachineCheckItens(ItemIndex, Quantity, Level)
+function ChaosMachineCheckItens(ItemIndex, Quantity, Level, Exc)
 	local itemFind = 0
 	local itemQuantity = 0
 	
@@ -722,6 +722,7 @@ function ChaosMachineCheckItens(ItemIndex, Quantity, Level)
 		if item ~= nil
 		then
 			if ItemIndex == item:getIndex() and (Level == -1 or item:getLevel() == Level)
+				and (Exc == -1 or bit.band(item:getOption1(), 63) > 0)
 			then
 				itemFind = 1
 				itemQuantity = itemQuantity + 1
@@ -750,7 +751,7 @@ function ChaosMachineCheckCanMix()
 		
 		if itens ~= nil
 		then
-			if ChaosMachineCheckItens(itens.ItemIndex, itens.Quantity, itens.Level) == 0
+			if ChaosMachineCheckItens(itens.ItemIndex, itens.Quantity, itens.Level, itens.Exc) == 0
 			then
 				itemMissing = itemMissing + 1
 			end
@@ -793,7 +794,7 @@ function ChaosMachineCheckCanMoveItem(ItemIndex)
 		SendMessageClient(CHAOS_MACHINE_TEXTS[GetLanguage()][14])
 	end
 	
-	return 1
+	return 0
 end
 
 function ChaosMachineOpenning()

@@ -6,6 +6,20 @@ function GET_ITEM(x, y)
 	return (x * 512) + y
 end
 
+function OBJECT_RANGE(x)
+	if x < 0
+	then
+		return 0
+	end
+
+	if x > MAX_OBJECT
+	then
+		return 0
+	end
+
+	return 1
+end
+
 OBJECT_START_USER = 13000
 MAX_OBJECT = 13999
 OBJECT_START_MONSTER = 0

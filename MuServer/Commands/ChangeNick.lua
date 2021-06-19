@@ -7,6 +7,11 @@ ColunsAccountCharacter[2] = 'GameID2'
 ColunsAccountCharacter[3] = 'GameID3'
 ColunsAccountCharacter[4] = 'GameID4'
 ColunsAccountCharacter[5] = 'GameID5'
+ColunsAccountCharacter[6] = 'GameID6'
+ColunsAccountCharacter[7] = 'GameID7'
+ColunsAccountCharacter[8] = 'GameID8'
+ColunsAccountCharacter[9] = 'GameID9'
+ColunsAccountCharacter[10] = 'GameID10'
 
 function ChangeNick.checkNameExist(name)
 	local str = string.format("Select count(*) as countFind FROM Character WHERE Name='%s'", name)
@@ -165,7 +170,7 @@ function ChangeNick.Command(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < CHANGE_NICK_VIP
+	if player:getVip() < CHANGE_NICK_VIP
 	then
 		SendMessage(string.format(CHANGE_NICK_MESSAGE[Language][3]), aIndex, 1)
 		return
@@ -179,13 +184,13 @@ function ChangeNick.Command(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < CHANGE_NICK_RESETS
+	if player:getReset() < CHANGE_NICK_RESETS
 	then
 		SendMessage(string.format(CHANGE_NICK_MESSAGE[Language][4], CHANGE_NICK_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < CHANGE_NICK_MRESETS
+	if player:getMasterReset() < CHANGE_NICK_MRESETS
 	then
 		SendMessage(string.format(CHANGE_NICK_MESSAGE[Language][5], CHANGE_NICK_MRESETS), aIndex, 1)
 		return

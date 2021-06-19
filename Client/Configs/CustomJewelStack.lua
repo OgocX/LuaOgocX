@@ -1,6 +1,7 @@
 OpenFolder("Definitions")
 
 CUSTOM_JEWEL_STACK = {
+{ ItemIndex = GET_ITEM(14, 13) },
 { ItemIndex = GET_ITEM(14, 14) },
 }
 

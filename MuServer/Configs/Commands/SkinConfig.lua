@@ -3,6 +3,7 @@ Commands Configs
 ]]--
 SKIN_COMMAND = "/skin"
 SKIN_SWITCH = 1
+SKIN_GAME_MASTER_LEVEL = 1
 
 --[[
 Message Configs

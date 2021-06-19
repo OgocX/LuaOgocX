@@ -36,7 +36,7 @@ function RewardNativeEvents.ReceiveEventReward(aIndex, EventType)
 			end
 			
 			for i = 1, ItemInfo.Count do
-				NpcRescueItem.InsertItem(player:getAccountID(), ItemInfo.ItemIndex, ItemInfo.Level, ItemInfo.Op1, ItemInfo.Op2, ItemInfo.Life, ItemInfo.Exc, ItemInfo.Ancient, ItemInfo.JoH, ItemInfo.SocketBonus, ItemInfo.Sock1, ItemInfo.Sock2, ItemInfo.Sock3, ItemInfo.Sock4, ItemInfo.Sock5, ItemInfo.DaysExpire)
+				NpcRescueItem.InsertItem(player:getAccountID(), ItemInfo.ItemIndex, ItemInfo.Level, ItemInfo.Op1, ItemInfo.Op2, ItemInfo.Life, ItemInfo.Exc, ItemInfo.Ancient, ItemInfo.JoH, ItemInfo.SocketBonus, ItemInfo.Sock1, ItemInfo.Sock2, ItemInfo.Sock3, ItemInfo.Sock4, ItemInfo.Sock5, ItemInfo.DaysExpire, 0)
 			end
 			
 			SendMessage(string.format(REWARD_NATIVE_EVENTS_MESSAGES[Language][2], ItemInfo.Count, ItemInfo.Name), aIndex, 1)

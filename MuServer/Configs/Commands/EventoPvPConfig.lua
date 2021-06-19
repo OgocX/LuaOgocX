@@ -2,14 +2,18 @@
 
 EVENT_PVP_COMMAND_OPEN = "/abrireventopvp"
 EVENT_PVP_COMMAND_GO = "/eventopvp"
+EVENT_PVP_GAME_MASTER_LEVEL = 1
 --Day -> Só vai rodar no dia que você selecionar
 -->Day of Week -> Dia da semana que vai rodar numero dos dias: (0 Domingo), (1 Segunda), (2 Terça), (3 Quarta), (4 Quinta), (5 Sexta), (6 Sábado)
 --Caso todos os 2 Day e DayOfWeek esteja -1, então vai valer apenas a Hour e Minute.
-EVENT_PVP_CRON = {Day = -1, DayOfWeek = -1, Hour = 14, Minute = 55}
+EVENT_PVP_CRON = { 
+    {Day = -1, DayOfWeek = -1, Hour = 14, Minute = 55},
+    {Day = -1, DayOfWeek = -1, Hour = 18, Minute = 55},
+}
 EVENT_PVP_TIMER_FOR_START = 5 --Tempo que vai avisar no global a cada 1 minuto que o evento vai abrir obs: 5 = 5 minutos...
 EVENT_PVP_TIMER_COMMAND_OPEN = 60 --Tempo em segundos que vai aparecer no global o comando aberto
-EVENT_PVP_DURATION = 10 --Tempo em minutos de duração do evento
-EVENT_PVP_MIN_USERS = 3 -- Mínimo de players para o evento funcionar, caso todos saiam do evento após começar e não tenha a quantia ele é finalizado automaticamente! (-1 = Sem quantia)
+EVENT_PVP_DURATION = 1 --Tempo em minutos de duração do evento
+EVENT_PVP_MIN_USERS = 1 -- Mínimo de players para o evento funcionar, caso todos saiam do evento após começar e não tenha a quantia ele é finalizado automaticamente! (-1 = Sem quantia)
 EVENT_PVP_TIMER_KILLS = 30 --Tempo em segundos que vai aparecer no canto da tela os kills que a pessoa possui
 EVENT_PVP_POINTS_KILL = 3 --Pontos ganhos ao matar alguém
 EVENT_PVP_DECREASE_POINTS = 1 --Caso queira que remova ponto quando morre
@@ -22,6 +26,7 @@ EVENT_PVP_MAP = 6
 EVENT_PVP_COORD_X = 60
 EVENT_PVP_COORD_Y = 160
 
+EVENT_PVP_CHECK_INVASOR = 0
 EVENT_PVP_COORD_CHECK_X_1 = 54
 EVENT_PVP_COORD_CHECK_X_2 = 120
 EVENT_PVP_COORD_CHECK_Y_1 = 70
@@ -75,9 +80,9 @@ EVENT_PVP_MESSAGE["Por"] = {
 [5] = "digite %s para ir ao evento",
 [6] = "=====================",
 [7] = "~ Resultado EventoPvP ~",
-[8] = "1º %s - (%d) points",
-[9] = "2º %s - (%d) points",
-[10] = "3º %s - (%d) points",
+[8] = "1st %s - (%d) pontos",
+[9] = "2nd %s - (%d) pontos",
+[10] = "3rd %s - (%d) pontos",
 [11] = "=====================",
 [12] = "[EventoPvP] Finalizado!",
 [13] = "[EventoPvP] Cancelado!",
@@ -145,7 +150,7 @@ EVENT_PVP_MESSAGE["Spn"] = {
 [7] = "~ Evento ResultPvP ~",
 [8] = "1st %s - (%d) puntos",
 [9] = "2nd %s - (%d) puntos",
-[10] = "3.º %s - (%d) puntos",
+[10] = "3rd %s - (%d) puntos",
 [11] = "=====================",
 [12] = "[Evento PVP] ¡Finalizado!",
 [13] = "¡[Evento PVP] cancelado!",

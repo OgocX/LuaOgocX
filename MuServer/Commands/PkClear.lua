@@ -24,6 +24,20 @@ function PkClearNpcTalk(Npc, Player)
 end
 
 function PkClearSystem.MonsterReload()
+	if PKCLEAR_NPC_SWITCH == 0
+	then
+		return
+	end
+	
+	for i in pairs(PKCLEAR_NPC_CREATE) do
+		local npc = User.new(PKCLEAR_NPC_CREATE[i].NpcIndex)
+		
+		if npc:getConnected() > 0
+		then
+			gObjDel(PKCLEAR_NPC_CREATE[i].NpcIndex)
+		end
+	end
+
 	PKCLEAR_NPC_CREATE = {}
 	
 	for i in ipairs(PKCLEAR_NPC) do
@@ -37,12 +51,12 @@ function PkClearSystem.Init()
 		return
 	end
 	
-	for i, key in ipairs(PKCLEAR_NPC_CREATE) do
-		local npc = User.new(PKCLEAR_NPC_CREATE[key].NpcIndex)
+	for i in pairs(PKCLEAR_NPC_CREATE) do
+		local npc = User.new(PKCLEAR_NPC_CREATE[i].NpcIndex)
 		
 		if npc:getConnected() >= 2
 		then
-			gObjDel(PKCLEAR_NPC_CREATE[key].NpcIndex)
+			gObjDel(PKCLEAR_NPC_CREATE[i].NpcIndex)
 		end
 	end
 	
@@ -102,7 +116,7 @@ function PkClearSystem.PkClearNpc(Npc, aIndex)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < PKCLEAR_VIP
+	if player:getVip() < PKCLEAR_VIP
 	then
 		ChatTargetSend(Npc, string.format(PK_CLEAR_MESSAGES[Language][4]), aIndex)
 		return
@@ -110,13 +124,13 @@ function PkClearSystem.PkClearNpc(Npc, aIndex)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < PKCLEAR_RESETS
+	if player:getReset() < PKCLEAR_RESETS
 	then
 		ChatTargetSend(Npc, string.format(PK_CLEAR_MESSAGES[Language][5], PKCLEAR_RESETS), aIndex)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < PKCLEAR_MRESETS
+	if player:getMasterReset() < PKCLEAR_MRESETS
 	then
 		ChatTargetSend(Npc, string.format(PK_CLEAR_MESSAGES[Language][6], PKCLEAR_MRESETS), aIndex)
 		return
@@ -169,7 +183,7 @@ function PkClearSystem.LimparPk(aIndex, Arguments)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_VIP, COLUMN_VIP, WHERE_VIP, player:getAccountID()) < PKCLEAR_VIP
+	if player:getVip() < PKCLEAR_VIP
 	then
 		SendMessage(string.format(PK_CLEAR_MESSAGES[Language][4]), aIndex, 1)
 		return
@@ -177,13 +191,13 @@ function PkClearSystem.LimparPk(aIndex, Arguments)
 	
 	local Name = player:getName()
 
-	if DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, Name) < PKCLEAR_RESETS
+	if player:getReset() < PKCLEAR_RESETS
 	then
 		SendMessage(string.format(PK_CLEAR_MESSAGES[Language][5], PKCLEAR_RESETS), aIndex, 1)
 		return
 	end
 	
-	if DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name) < PKCLEAR_MRESETS
+	if player:getMasterReset() < PKCLEAR_MRESETS
 	then
 		SendMessage(string.format(PK_CLEAR_MESSAGES[Language][6], PKCLEAR_MRESETS), aIndex, 1)
 		return

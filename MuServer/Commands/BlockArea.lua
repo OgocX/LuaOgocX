@@ -14,7 +14,7 @@ function BlockArea.CommandOpen(aIndex, Arguments)
 	local player = User.new(aIndex)
 	local Language = player:getLanguage()
 	
-	if player:getAuthority() == 1
+	if player:getAuthority() ~= 32 and CheckGameMasterLevel(player:getAccountID(), player:getName(), BLOCK_AREA_GAME_MASTER_LEVEL) == 0
 	then
 		return
 	end

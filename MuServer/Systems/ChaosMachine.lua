@@ -12,39 +12,39 @@ local CHAOS_MACHINE_CONFIG_COMB_SELECTION = {
 local CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS = { }
 
 CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS[1] = {
-	{ Level = -1, Quantity = 3, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(14, 14), ItemName = "Jewel of Soul" },
-	{ Level = -1, Quantity = 8, ItemIndex = GET_ITEM(14, 13), ItemName = "Jewel of Bless" },
-	{ Level = -1, Quantity = 4, ItemIndex = GET_ITEM(14, 16), ItemName = "Jewel of Life" },
-	{ Level = -1, Quantity = 3, ItemIndex = GET_ITEM(14, 22), ItemName = "Jewel of Creation" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(0, 0), ItemName = "Kriss" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(7, 0), ItemName = "Bronze Helm" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(8, 0), ItemName = "Bronze Armor" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(9, 0), ItemName = "Bronze Pants" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(10, 0), ItemName = "Bronze Gloves" },
-	{ Level = -1, Quantity = 2, ItemIndex = GET_ITEM(11, 0), ItemName = "Bronze Boots" },
+	{ Level = -1, Exc = -1, Quantity = 3, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(14, 14), ItemName = "Jewel of Soul" },
+	{ Level = -1, Exc = -1, Quantity = 8, ItemIndex = GET_ITEM(14, 13), ItemName = "Jewel of Bless" },
+	{ Level = -1, Exc = -1, Quantity = 4, ItemIndex = GET_ITEM(14, 16), ItemName = "Jewel of Life" },
+	{ Level = -1, Exc = -1, Quantity = 3, ItemIndex = GET_ITEM(14, 22), ItemName = "Jewel of Creation" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(0, 0), ItemName = "Kriss" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(7, 0), ItemName = "Bronze Helm" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(8, 0), ItemName = "Bronze Armor" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(9, 0), ItemName = "Bronze Pants" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(10, 0), ItemName = "Bronze Gloves" },
+	{ Level = -1, Exc = -1, Quantity = 2, ItemIndex = GET_ITEM(11, 0), ItemName = "Bronze Boots" },
 }
 
 CHAOS_MACHINE_CONFIG_COMB_INGREDIENTS[2] = {
-	{ Level = -1, Quantity = 1, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
+	{ Level = -1, Exc = -1, Quantity = 1, ItemIndex = GET_ITEM(12, 15), ItemName = "Jewel of Chaos" },
 }
 
 local CHAOS_MACHINE_CONFIG_COMB_ITEM_REWARD = { }
 
 CHAOS_MACHINE_CONFIG_COMB_ITEM_REWARD[1] = {
-	{ ItemIndex = GET_ITEM(7, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(8, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(9, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(10, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(11, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
+	{ ItemIndex = GET_ITEM(7, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(8, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(9, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(10, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(11, 29), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
 }
 
 CHAOS_MACHINE_CONFIG_COMB_ITEM_REWARD[2] = {
-	{ ItemIndex = GET_ITEM(7, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(8, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(9, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(10, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
-	{ ItemIndex = GET_ITEM(11, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63},
+	{ ItemIndex = GET_ITEM(7, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(8, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(9, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(10, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
+	{ ItemIndex = GET_ITEM(11, 30), Level = 15, Skill = 1, Luck = 1, Life = 7, Exc = 63, Op380 = 1, Ancient = 0, JoH = 0, Socket = 0, timer = 0},
 }
 
 CHAOS_MACHINE_MESSAGES = { }
@@ -122,32 +122,50 @@ function ChaosMachineGenesis.SetRewardItens(key)
 	end
 end
 
-function ChaosMachineGenesis.CheckItens(aIndex, ItemIndex, Quantity, Level)
+function ChaosMachineGenesis.CheckItens(item, ItemIndex, Quantity, Level, Exc)
 	local itemFind = 0
 	local itemQuantity = 0
-	
-	local item = ChaosBoxGenesis.new(aIndex)
-	
-	for i = 0, 119 do
-		if item ~= nil
-		then
-			if ItemIndex == item:getIndex(i) and (Level == -1 or item:getLevel(i) == Level)
-			then
-				itemFind = 1
 
-				if GetStackItem(item:getIndex(i)) ~= 0
-				then
-					itemQuantity = itemQuantity + item:getDurability(i)
-				else
-					itemQuantity = itemQuantity + 1
-				end
-			end
-		end
+	if item == nil
+	then
+		return 0
 	end
 	
-	item = nil
+	for i = 0, 119 do
+		if item:isItem(i) == 0
+		then
+			goto continue
+		end
+
+		if item:getIndex(i) ~= ItemIndex
+		then
+			goto continue
+		end
+
+		if Exc ~= -1
+		then
+			if item:getItemTable(i, 1) <= 0
+			then
+				goto continue
+			end
+		end
+
+		if (Level == -1 or item:getLevel(i) == Level)
+		then
+			itemFind = 1
+
+			if GetStackItem(item:getIndex(i)) ~= 0
+			then
+				itemQuantity = itemQuantity + item:getDurability(i)
+			else
+				itemQuantity = itemQuantity + 1
+			end
+		end
+
+		::continue::
+	end
 	
-	--clear stack from client
+	--clear stack from muserver
 	collectgarbage()
 	
 	if itemFind == 1 and itemQuantity == Quantity
@@ -160,18 +178,22 @@ end
 
 function ChaosMachineGenesis.CheckCanMix(player)
 	local itemMissing = 0
+
+	local chaosMachineGenesis = ChaosBoxGenesis.new(player:getIndex())
 	
 	for i in ipairs(ChaosMachineIngredients) do
 		local itens = ChaosMachineIngredients[i].Ingredients
 		
 		if itens ~= nil
 		then
-			if ChaosMachineGenesis.CheckItens(player:getIndex(), itens.ItemIndex, itens.Quantity, itens.Level) == 0
+			if ChaosMachineGenesis.CheckItens(chaosMachineGenesis, itens.ItemIndex, itens.Quantity, itens.Level, itens.Exc) == 0
 			then
 				itemMissing = itemMissing + 1
 			end
 		end
 	end
+
+	chaosMachineGenesis = nil
 	
 	if itemMissing == 0
 	then
@@ -224,7 +246,7 @@ function ChaosMachineGenesis.CombSucess(player)
 			
 			if serial ~= -1
 			then
-				ChaosBoxGenesisCreateItem(player:getIndex(), itens.ItemIndex, itens.Level, itens.Skill, itens.Luck, itens.Life, itens.Exc, serial)
+				ChaosBoxGenesisCreateItem(player:getIndex(), itens.ItemIndex, itens.Level, itens.Skill, itens.Luck, itens.Life, itens.Exc, itens.Op380, itens.Ancient, itens.JoH, itens.Socket, itens.timer, serial)
 			end
 		end
 	end

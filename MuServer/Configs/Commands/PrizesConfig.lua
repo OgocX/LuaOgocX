@@ -3,6 +3,7 @@ Commands Configs
 ]]--
 --Configurações Prizes in-game
 PRIZES_SWITCH = 1
+PRIZES_GAME_MASTER_LEVEL = 1
 --Comando, Table Event, Column Event, Where Event, Table Amount, Column Amount, Where Amount, Nome, Quantia de Players, Pontos p1, Amounts p1, pontos p2, amounts p2, pontos p3, amounts p3
 PRIZES_COMMANDS = {
 {Command = '/addtradewins', TableE = 'Character', ColumnE = 'tradewins', WhereE = 'Name', TableA = 'MEMB_INFO', ColumnA = 'cash', WhereA = 'memb___id', Name = 'Trade Wins', Players = 1, Points_1 = 1, Amounts_1 = 5, Points_2 = 0, Amounts_2 = 0, Points_3 = 0, Amounts_3 = 0},

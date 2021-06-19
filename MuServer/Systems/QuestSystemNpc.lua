@@ -23,6 +23,17 @@ function QuestSystemNpc.OpenQuest(player, NpcQuestIdentification, CheckAnotherQu
         end
     end
 
+    if QUEST_SYSTEM_NPC_ONLY_ONE_QUEST == 1
+    then
+        local questUsed = QuestSystemNpc.CheckQuestUsed(player:getAccountID(), player:getName(), NpcQuestIdentification)
+
+        if questUsed > 0
+        then
+            QuestSystemNpc.OpenFinishedQuest(player)
+            return
+        end
+    end
+
     if CheckAnotherQuest == 1
     then
         if PlayerQuest ~= 0
@@ -94,7 +105,7 @@ function QuestSystemNpc.OpenQuest(player, NpcQuestIdentification, CheckAnotherQu
 
                 if questInfo.Reset ~= 0
                 then
-                    Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+                    Resets = player:getReset()
                 end
 
                 if questInfo.MReset ~= 0
@@ -236,6 +247,16 @@ function QuestSystemNpc.StartQuest(player, QuestIdentification)
         end
     end
 
+    if QUEST_SYSTEM_NPC_ONLY_ONE_QUEST == 1
+    then
+        local questUsed = QuestSystemNpc.CheckQuestUsed(player:getAccountID(), player:getName(), QuestIdentification)
+
+        if questUsed > 0
+        then
+            return
+        end
+    end
+
     local getFirstQuest = QuestSystemNpc.GetQuestIdentification(QuestIdentification)
 
     if getFirstQuest == nil
@@ -252,6 +273,8 @@ function QuestSystemNpc.StartQuest(player, QuestIdentification)
     end
 
     QuestSystemNpc.InsertPlayer(player:getAccountID(), player:getName(), getFirstQuest.QuestIdentification)
+
+    QuestSystemNpc.InsertQuestUsed(player:getAccountID(), player:getName(), getFirstQuest.QuestIdentification)
 
     SendMessage(string.format(QUEST_SYSTEM_NPC_MESSAGES[Language][3], getFirstQuest.QuestName), player:getIndex(), 1)
 
@@ -347,7 +370,7 @@ function QuestSystemNpc.GetReward(player)
 
                 if questInfo.Reset ~= 0
                 then
-                    Resets = DataBase.GetValue(TABLE_RESET, COLUMN_RESET[0], WHERE_RESET, player:getName())
+                    Resets = player:getReset()
                 end
 
                 if questInfo.MReset ~= 0
@@ -943,6 +966,40 @@ function QuestSystemNpc.CheckQuestExist(account, name)
         query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s'", account)
     else
         query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC] WHERE AccountID='%s' and Name='%s'", account, name)
+    end
+
+    local value = 0
+
+    if db:exec(query) ~= 0
+    then
+        if db:fetch() ~= SQL_NO_DATA
+        then
+            value = db:getInt('count')
+        end
+    end
+
+    db:clear()
+
+    return value
+end
+
+function QuestSystemNpc.InsertQuestUsed(account, name, questIdentification)
+    local query = string.format("INSERT INTO [dbo].[QUEST_SYSTEM_NPC_USED] ([AccountID],[Name],[QuestIdentification]) VALUES ('%s','%s','%d')", account, name, questIdentification)
+
+    local db = DataBase.getDb()
+    db:exec(query)
+    db:fetch()
+    db:clear()
+end
+
+function QuestSystemNpc.CheckQuestUsed(account, name, questIdentification)
+    local query = ""
+
+    if QUEST_SYSTEM_NPC_ONLY_ACCOUNT == 1
+    then
+        query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC_USED] WHERE AccountID='%s' and questIdentification = '%d'", account, questIdentification)
+    else
+        query = string.format("SELECT count(*) as count FROM [dbo].[QUEST_SYSTEM_NPC_USED] WHERE AccountID='%s' and Name='%s' and questIdentification = '%d'", account, name, questIdentification)
     end
 
     local value = 0

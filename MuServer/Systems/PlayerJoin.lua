@@ -4,29 +4,39 @@ PlayerJoin = {}
 
 function PlayerJoin.CheckPlayerStatus(player)
 	local Mod = 0
+	local maxPoint = ADD_COMMAND_MAX_POINTS[player:getVip()]
 
-	if player:getStrength() > STR_MAXPOINTS
+	if player:getStrength() > maxPoint
 	then
-		player:setStrength(STR_MAXPOINTS)
+		player:setStrength(maxPoint)
 		Mod = 1
 	end
 	
-	if player:getDexterity() > AGI_MAXPOINTS
+	if player:getDexterity() > maxPoint
 	then
-		player:setDexterity(AGI_MAXPOINTS)
+		player:setDexterity(maxPoint)
 		Mod = 1
 	end
 	
-	if player:getVitality() > VIT_MAXPOINTS
+	if player:getVitality() > maxPoint
 	then
-		player:setVitality(VIT_MAXPOINTS)
+		player:setVitality(maxPoint)
 		Mod = 1
 	end
 	
-	if player:getEnergy() > ENE_MAXPOINTS
+	if player:getEnergy() > maxPoint
 	then
-		player:setEnergy(ENE_MAXPOINTS)
+		player:setEnergy(maxPoint)
 		Mod = 1
+	end
+
+	if player:getClass() == CLASS_DL
+	then
+		if player:getLeaderShip() > maxPoint
+		then
+			player:setLeaderShip(maxPoint)
+			Mod = 1
+		end
 	end
 	
 	if Mod == 1
@@ -55,7 +65,7 @@ function PlayerJoin.EnterCharacter(aIndex)
 		return
 	end
 	
-	if SERVER_RESETS_MAX ~= -1 and Resets < SERVER_RESETS_MAX
+	if SERVER_RESETS_MAX ~= -1 and Resets > SERVER_RESETS_MAX
 	then
 		SendMessage(string.format(LOGIN_PLAYER_MESSAGES[Language][2], SERVER_RESETS_MAX), aIndex, 1)
 		SendMessage(string.format(LOGIN_PLAYER_MESSAGES[Language][2], SERVER_RESETS_MAX), aIndex, 0)
@@ -63,6 +73,12 @@ function PlayerJoin.EnterCharacter(aIndex)
 		CloseChar(aIndex, 2)
 		return
 	end
+
+	player:setReset(Resets)
+
+	local MResets = DataBase.GetValue(TABLE_MRESET, COLUMN_MRESET[0], WHERE_MRESET, Name)
+	
+	player:setMasterReset(MResets)
 	
 	local lastwarehouse = DataBase.GetValue(TABLE_LAST_VAULT_ID_WAREHOUSE, COLUMN_LAST_VAULT_ID_WAREHOUSE, WHERE_LAST_VAULT_ID_WAREHOUSE, Account)
 	
